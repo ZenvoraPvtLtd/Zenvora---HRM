@@ -120,7 +120,7 @@ const Register = () => {
             <button
               type="button"
               onClick={toggle}
-              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${t.toggleBtn}`}
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 cursor-pointer ${t.toggleBtn}`}
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -129,7 +129,7 @@ const Register = () => {
 
           {/* Heading */}
           <div className="mb-8">
-            <h2 className={`text-4xl font-bold mb-2 ${t.heading}`}>Create Account 🚀</h2>
+            <h2 className={`text-4xl font-bold mb-2 ${t.heading}`}>Create Account</h2>
             <p className={t.subtext}>Join Zenvora and start your journey</p>
           </div>
 
@@ -222,7 +222,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors ${t.eyeBtn}`}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors cursor-pointer ${t.eyeBtn}`}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -267,7 +267,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors ${t.eyeBtn}`}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors cursor-pointer ${t.eyeBtn}`}
                 >
                   {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -297,7 +297,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {loading ? "Creating Account..." : (
                 <>
