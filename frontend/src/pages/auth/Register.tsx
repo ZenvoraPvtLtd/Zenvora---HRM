@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 import {
   Mail,
@@ -10,24 +11,35 @@ import {
   Eye,
   EyeOff,
   ShieldCheck,
-  Zap,
   Cloud,
-  Headphones,
   ChevronDown,
   Sun,
   Moon,
 } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext";
+import Button from "../../components/button/Button";
+import IconButton from "../../components/button/IconButton";
+import HoverableCard from "../../components/card/HoverableCard";
+import { featureCards } from "./constants";
 
-interface RegisterFormInputs {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  password: string;
-  confirmPassword: string;
-  agreeTerms: boolean;
-}
+const validationSchema = Yup.object({
+  fullName: Yup.string().required("Full name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phoneNumber: Yup.string().required("Phone number is required"),
+  role: Yup.string().required("Please select a role"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords do not match")
+    .required("Please confirm your password"),
+  agreeTerms: Yup.boolean().oneOf(
+    [true],
+    "You must agree to the terms",
+  ),
+});
 
 function getPasswordStrength(password: string): {
   label: string;
@@ -66,44 +78,44 @@ function getPasswordStrength(password: string): {
 const Register = () => {
   const navigate = useNavigate();
   const { theme, isDark, toggle } = useTheme();
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordValue, setPasswordValue] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<RegisterFormInputs>({
-    defaultValues: { role: "" },
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      role: "",
+      password: "",
+      confirmPassword: "",
+      agreeTerms: false,
+    },
+    validationSchema,
+    onSubmit: async (values, { resetForm, setSubmitting }) => {
+      try {
+        const payload = {
+          fullName: values.fullName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          role: values.role,
+          password: values.password,
+        };
+        const response = await axios.post("/api/auth/register", payload);
+        console.log(response.data);
+        alert("Registration Successful");
+        resetForm();
+        navigate("/login");
+      } catch (error: any) {
+        console.log(error);
+        alert(error?.response?.data?.message || "Registration Failed");
+      } finally {
+        setSubmitting(false);
+      }
+    },
   });
 
-  const strength = getPasswordStrength(passwordValue);
-
-  const onSubmit = async (data: RegisterFormInputs) => {
-    try {
-      setLoading(true);
-      const payload = {
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        role: data.role,
-        password: data.password,
-      };
-      const response = await axios.post("/api/auth/register", payload);
-      console.log(response.data);
-      alert("Registration Successful");
-      reset();
-      navigate("/login");
-    } catch (error: any) {
-      console.log(error);
-      alert(error?.response?.data?.message || "Registration Failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const strength = getPasswordStrength(formik.values.password);
 
   return (
     <div
@@ -140,14 +152,12 @@ const Register = () => {
               </p>
             </div>
 
-            <button
-              type="button"
+            <IconButton
               onClick={toggle}
-              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 cursor-pointer ${theme.toggleBtn}`}
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
+            </IconButton>
           </div>
 
           {/* Heading */}
@@ -159,7 +169,7 @@ const Register = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={formik.handleSubmit} className="space-y-5">
             {/* Full Name */}
             <div>
               <label className={`text-sm mb-2 block ${theme.label}`}>
@@ -171,17 +181,19 @@ const Register = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("fullName", {
-                    required: "Full name is required",
-                  })}
+                  id="fullName"
+                  name="fullName"
                   type="text"
                   placeholder="John Doe"
+                  value={formik.values.fullName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
               </div>
-              {errors.fullName && (
+              {formik.touched.fullName && formik.errors.fullName && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.fullName.message}
+                  {formik.errors.fullName}
                 </p>
               )}
             </div>
@@ -197,21 +209,19 @@ const Register = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Invalid email address",
-                    },
-                  })}
+                  id="email"
+                  name="email"
                   type="email"
                   placeholder="you@example.com"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
               </div>
-              {errors.email && (
+              {formik.touched.email && formik.errors.email && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.email.message}
+                  {formik.errors.email}
                 </p>
               )}
             </div>
@@ -227,17 +237,19 @@ const Register = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("phoneNumber", {
-                    required: "Phone number is required",
-                  })}
+                  id="phoneNumber"
+                  name="phoneNumber"
                   type="tel"
                   placeholder="+91 98765 43210"
+                  value={formik.values.phoneNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
               </div>
-              {errors.phoneNumber && (
+              {formik.touched.phoneNumber && formik.errors.phoneNumber && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.phoneNumber.message}
+                  {formik.errors.phoneNumber}
                 </p>
               )}
             </div>
@@ -249,7 +261,11 @@ const Register = () => {
               </label>
               <div className="relative">
                 <select
-                  {...register("role", { required: "Please select a role" })}
+                  id="role"
+                  name="role"
+                  value={formik.values.role}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full appearance-none border rounded-xl px-4 py-3 outline-none transition-all cursor-pointer ${theme.select}`}
                   style={{ colorScheme: isDark ? "dark" : "light" }}
                 >
@@ -274,9 +290,9 @@ const Register = () => {
                   className={`absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none ${theme.inputIcon}`}
                 />
               </div>
-              {errors.role && (
+              {formik.touched.role && formik.errors.role && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.role.message}
+                  {formik.errors.role}
                 </p>
               )}
             </div>
@@ -292,16 +308,13 @@ const Register = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
-                    onChange: (e) => setPasswordValue(e.targetheme.value),
-                  })}
+                  id="password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a strong password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
                 <button
@@ -312,14 +325,14 @@ const Register = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && (
+              {formik.touched.password && formik.errors.password && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.password.message}
+                  {formik.errors.password}
                 </p>
               )}
 
               {/* Password Strength */}
-              {passwordValue && (
+              {formik.values.password && (
                 <div className="mt-2">
                   <div className="flex items-center justify-between mb-1">
                     <span className={`text-xs ${theme.label}`}>
@@ -354,13 +367,13 @@ const Register = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("confirmPassword", {
-                    required: "Please confirm your password",
-                    validate: (val) =>
-                      val === passwordValue || "Passwords do not match",
-                  })}
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
                 <button
@@ -375,21 +388,24 @@ const Register = () => {
                   )}
                 </button>
               </div>
-              {errors.confirmPassword && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <p className="text-red-400 text-xs mt-1">
+                    {formik.errors.confirmPassword}
+                  </p>
+                )}
             </div>
 
             {/* Terms */}
             <div>
               <label className="flex items-start gap-2 cursor-pointer">
                 <input
-                  {...register("agreeTerms", {
-                    required: "You must agree to the terms",
-                  })}
+                  id="agreeTerms"
+                  name="agreeTerms"
                   type="checkbox"
+                  checked={formik.values.agreeTerms}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="mt-0.5 w-4 h-4 rounded accent-purple-500 shrink-0"
                 />
                 <span className={`text-sm ${theme.termsText}`}>
@@ -403,41 +419,21 @@ const Register = () => {
                   </span>
                 </span>
               </label>
-              {errors.agreeTerms && (
+              {formik.touched.agreeTerms && formik.errors.agreeTerms && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.agreeTerms.message}
+                  {formik.errors.agreeTerms}
                 </p>
               )}
             </div>
 
             {/* Submit */}
-            <button
+            <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              loading={formik.isSubmitting}
+              loadingText="Creating Account..."
             >
-              {loading ? (
-                "Creating Accountheme..."
-              ) : (
-                <>
-                  Create Account
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </>
-              )}
-            </button>
+              Create Account
+            </Button>
           </form>
 
           {/* Footer */}
@@ -454,38 +450,13 @@ const Register = () => {
 
         {/* Bottom Feature Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          {[
-            {
-              icon: <ShieldCheck size={20} />,
-              title: "Secure & Safe",
-              desc: "Your data is 100% secure with us",
-            },
-            {
-              icon: <Zap size={20} />,
-              title: "Lightning Fast",
-              desc: "Experience ultra fast performance",
-            },
-            {
-              icon: <Cloud size={20} />,
-              title: "Cloud Sync",
-              desc: "Access your data anywhere",
-            },
-            {
-              icon: <Headphones size={20} />,
-              title: "24/7 Support",
-              desc: "We're here to help anytime",
-            },
-          ].map(({ icon, title, desc }) => (
-            <div
+          {featureCards.map(({ icon, title, desc }) => (
+            <HoverableCard
               key={title}
-              className={`${theme.featureCard} border rounded-2xl p-4 hover:-translate-y-0.5 transition-all duration-300`}
-            >
-              <div className="text-purple-500 mb-2">{icon}</div>
-              <h3 className={`font-semibold text-sm ${theme.featureTitle}`}>
-                {title}
-              </h3>
-              <p className={`text-xs ${theme.featureDesc}`}>{desc}</p>
-            </div>
+              icon={icon}
+              title={title}
+              description={desc}
+            />
           ))}
         </div>
 

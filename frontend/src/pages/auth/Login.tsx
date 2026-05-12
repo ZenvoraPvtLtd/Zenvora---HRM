@@ -1,39 +1,41 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
   Mail,
   Lock,
   Eye,
   EyeOff,
   ShieldCheck,
-  Zap,
   Cloud,
-  Headphones,
   Sun,
   Moon,
 } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
-
-interface LoginFormInputs {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
+import { useTheme } from "../../context/ThemeContext";
+import Button from "../../components/button/Button";
+import IconButton from "../../components/button/IconButton";
+import HoverableCard from "../../components/card/HoverableCard";
+import { featureCards } from "./constants";
 
 const Login = () => {
   const { theme, isDark, toggle } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormInputs>();
-
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log("Login data:", data);
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+    onSubmit: (values) => {
+      console.log("Login data:", values);
+    },
+  });
 
   return (
     <div
@@ -70,14 +72,12 @@ const Login = () => {
               </p>
             </div>
 
-            <button
-              type="button"
+            <IconButton
               onClick={toggle}
-              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 cursor-pointer ${theme.toggleBtn}`}
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
+            </IconButton>
           </div>
 
           {/* Heading */}
@@ -147,7 +147,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={formik.handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
               <label className={`text-sm mb-2 block ${theme.label}`}>
@@ -159,21 +159,19 @@ const Login = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Invalid email",
-                    },
-                  })}
+                  id="email"
+                  name="email"
                   type="email"
                   placeholder="you@example.com"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
               </div>
-              {errors.email && (
+              {formik.touched.email && formik.errors.email && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.email.message}
+                  {formik.errors.email}
                 </p>
               )}
             </div>
@@ -195,11 +193,13 @@ const Login = () => {
                   className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme.inputIcon}`}
                 />
                 <input
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
+                  id="password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
                 />
                 <button
@@ -210,9 +210,9 @@ const Login = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && (
+              {formik.touched.password && formik.errors.password && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.password.message}
+                  {formik.errors.password}
                 </p>
               )}
             </div>
@@ -221,8 +221,11 @@ const Login = () => {
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
-                  {...register("rememberMe")}
+                  id="rememberMe"
+                  name="rememberMe"
                   type="checkbox"
+                  checked={formik.values.rememberMe}
+                  onChange={formik.handleChange}
                   className="w-4 h-4 rounded accent-purple-500"
                 />
                 <span className={`text-sm ${theme.checkLabel}`}>
@@ -238,26 +241,7 @@ const Login = () => {
             </div>
 
             {/* Submit */}
-            <button
-              type="submit"
-              className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 cursor-pointer"
-            >
-              Sign In
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </button>
+            <Button type="submit">Sign In</Button>
           </form>
 
           {/* Security Badges */}
@@ -370,38 +354,13 @@ const Login = () => {
 
         {/* Bottom Feature Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          {[
-            {
-              icon: <ShieldCheck size={20} />,
-              title: "Secure & Safe",
-              desc: "Your data is 100% secure with us",
-            },
-            {
-              icon: <Zap size={20} />,
-              title: "Lightning Fast",
-              desc: "Experience ultra fast performance",
-            },
-            {
-              icon: <Cloud size={20} />,
-              title: "Cloud Sync",
-              desc: "Access your data anywhere",
-            },
-            {
-              icon: <Headphones size={20} />,
-              title: "24/7 Support",
-              desc: "We're here to help anytime",
-            },
-          ].map(({ icon, title, desc }) => (
-            <div
+          {featureCards.map(({ icon, title, desc }) => (
+            <HoverableCard
               key={title}
-              className={`${theme.featureCard} border rounded-2xl p-4 hover:-translate-y-0.5 transition-all duration-300`}
-            >
-              <div className="text-purple-500 mb-2">{icon}</div>
-              <h3 className={`font-semibold text-sm ${theme.featureTitle}`}>
-                {title}
-              </h3>
-              <p className={`text-xs ${theme.featureDesc}`}>{desc}</p>
-            </div>
+              icon={icon}
+              title={title}
+              description={desc}
+            />
           ))}
         </div>
 
