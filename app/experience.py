@@ -1,144 +1,231 @@
 import re
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 NUMBER_WORDS = {
-    'zero': 0,
-    'one': 1,
-    'two': 2,
-    'three': 3,
-    'four': 4,
-    'five': 5,
-    'six': 6,
-    'seven': 7,
-    'eight': 8,
-    'nine': 9,
-    'ten': 10,
-    'eleven': 11,
-    'twelve': 12,
-    'thirteen': 13,
-    'fourteen': 14,
-    'fifteen': 15,
-    'sixteen': 16,
-    'seventeen': 17,
-    'eighteen': 18,
-    'nineteen': 19,
-    'twenty': 20,
-    'thirty': 30,
-    'forty': 40,
-    'fifty': 50,
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+    "thirty": 30,
+    "forty": 40,
+    "fifty": 50,
 }
 
-WORD_NUMBER_REGEX = r'(?:' + r'|'.join(re.escape(word) for word in NUMBER_WORDS) + r')(?:[-\s](?:one|two|three|four|five|six|seven|eight|nine))?'
+EXPERIENCE_KEYWORDS = [
+    "experience",
+    "worked",
+    "developer",
+    "engineer",
+    "employment",
+    "internship",
+    "software",
+    "backend",
+    "frontend",
+    "role",
+    "professional",
+]
+
+WORD_NUMBER_REGEX = (
+    r"(?:"
+    + r"|".join(re.escape(word) for word in NUMBER_WORDS.keys())
+    + r")"
+)
+
+YEAR_PATTERN = r"(?:years?|yrs?|y)"
+MONTH_PATTERN = r"(?:months?|mos?)"
 
 EXPERIENCE_PATTERNS = [
     re.compile(
-        rf'(?P<years>\d+(?:\.\d+)?)\s*(?:\+|plus)?\s*(?:years?|yrs?|y)\b(?:\s*(?:and|&)?\s*(?P<months>\d+)\s*(?:months?|mos?|m)\b)?',
+        rf"(\d+(?:\.\d+)?)\s*(?:\+|plus)?\s*{YEAR_PATTERN}"
+        rf"(?:\s*(?:and|&|\+)?\s*(\d+(?:\.\d+)?)\s*{MONTH_PATTERN})?",
         re.IGNORECASE,
     ),
+
     re.compile(
-        rf'(?P<years_word>{WORD_NUMBER_REGEX})\s*(?:years?|yrs?|y)\b(?:\s*(?:and|&)?\s*(?P<months_word>{WORD_NUMBER_REGEX})\s*(?:months?|mos?|m)\b)?',
+        rf"({WORD_NUMBER_REGEX})\s*{YEAR_PATTERN}"
+        rf"(?:\s*(?:and|&|\+)?\s*({WORD_NUMBER_REGEX})\s*{MONTH_PATTERN})?",
         re.IGNORECASE,
     ),
+
     re.compile(
-        rf'(?P<years1>\d+(?:\.\d+)?)\s*[-–to]{1,3}\s*(?P<years2>\d+(?:\.\d+)?)\s*(?:years?|yrs?|y)\b',
+        rf"(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*{YEAR_PATTERN}",
         re.IGNORECASE,
     ),
-    re.compile(r'(?P<months>\d+)\s*(?:months?|mos?|m)\b', re.IGNORECASE),
+
+    re.compile(
+        rf"(\d+(?:\.\d+)?)\s*{MONTH_PATTERN}",
+        re.IGNORECASE,
+    ),
 ]
 
 
-def _word_to_number(word: str) -> Optional[float]:
-    if not word:
+def parse_number(value: str) -> Optional[float]:
+
+    if not value:
         return None
 
-    normalized = word.lower().replace('-', ' ').strip()
-    if normalized in NUMBER_WORDS:
-        return float(NUMBER_WORDS[normalized])
-
-    parts = normalized.split()
-    total = 0
-    for part in parts:
-        if part in NUMBER_WORDS:
-            total += NUMBER_WORDS[part]
-        else:
-            return None
-
-    return float(total)
-
-
-def _parse_number(text: str) -> Optional[float]:
-    if not text:
-        return None
+    value = value.lower().strip()
 
     try:
-        return float(text)
+        return float(value)
+
     except ValueError:
-        return _word_to_number(text)
+        return float(NUMBER_WORDS.get(value, 0))
 
 
-def _normalize_experience(years: Optional[float], months: Optional[float] = 0.0) -> Optional[float]:
+def has_experience_context(
+    text: str,
+    start_index: int,
+    window: int = 100
+) -> bool:
+
+    start = max(0, start_index - window)
+
+    context = text[start:start_index].lower()
+
+    return any(
+        keyword in context
+        for keyword in EXPERIENCE_KEYWORDS
+    )
+
+
+def normalize_experience(
+    years: Optional[float] = None,
+    months: Optional[float] = None
+) -> Optional[float]:
+
     if years is None and months is None:
         return None
 
-    years_value = years or 0.0
-    months_value = months or 0.0
-    total_years = years_value + months_value / 12.0
-    return round(total_years, 2)
+    total = (years or 0.0) + ((months or 0.0) / 12)
+
+    return round(total, 2)
 
 
-def extract_experience(text: str) -> List[str]:
-    """Extract normalized experience values from resume text."""
-    normalized_values = _extract_normalized_experience_values(text)
-    return [f'{value:g} years' for value in normalized_values]
+def extract_experience_values(text: str) -> List[float]:
 
-
-def _extract_normalized_experience_values(text: str) -> List[float]:
     text = text.lower()
-    detected_values: List[float] = []
 
-    for pattern in EXPERIENCE_PATTERNS:
+    detected_values = []
+
+    for index, pattern in enumerate(EXPERIENCE_PATTERNS):
+
         for match in pattern.finditer(text):
-            group_data = match.groupdict()
-            years = _parse_number(group_data.get('years') or '')
-            months = _parse_number(group_data.get('months') or '')
-            years_word = _parse_number(group_data.get('years_word') or '')
-            months_word = _parse_number(group_data.get('months_word') or '')
-            years1 = _parse_number(group_data.get('years1') or '')
-            years2 = _parse_number(group_data.get('years2') or '')
 
-            if years1 is not None and years2 is not None:
-                average_years = round((years1 + years2) / 2.0, 2)
-                detected_values.append(average_years)
+            if not has_experience_context(text, match.start()):
                 continue
 
-            if years is not None or years_word is not None:
-                detected_years = years if years is not None else years_word
-                detected_months = months if months is not None else months_word
-                normalized = _normalize_experience(detected_years, detected_months)
-                if normalized is not None:
-                    detected_values.append(normalized)
-                continue
+            groups = match.groups()
 
-            if months is not None and years is None and years_word is None:
-                normalized = _normalize_experience(0.0, months)
-                if normalized is not None:
-                    detected_values.append(normalized)
+            # Numeric years
+            if index == 0:
+
+                years = parse_number(groups[0])
+
+                months = (
+                    parse_number(groups[1])
+                    if len(groups) > 1 and groups[1]
+                    else None
+                )
+
+                value = normalize_experience(
+                    years,
+                    months
+                )
+
+                if value:
+                    detected_values.append(value)
+
+            # Word-based years
+            elif index == 1:
+
+                years = parse_number(groups[0])
+
+                months = (
+                    parse_number(groups[1])
+                    if len(groups) > 1 and groups[1]
+                    else None
+                )
+
+                value = normalize_experience(
+                    years,
+                    months
+                )
+
+                if value:
+                    detected_values.append(value)
+
+            # Range values
+            elif index == 2:
+
+                start_year = parse_number(groups[0])
+                end_year = parse_number(groups[1])
+
+                if start_year and end_year:
+
+                    average = round(
+                        (start_year + end_year) / 2,
+                        2
+                    )
+
+                    detected_values.append(average)
+
+            # Months only
+            elif index == 3:
+
+                months = parse_number(groups[0])
+
+                value = normalize_experience(
+                    months=months
+                )
+
+                if value:
+                    detected_values.append(value)
 
     return sorted(set(detected_values), reverse=True)
 
 
+def extract_experience(text: str) -> List[str]:
+
+    values = extract_experience_values(text)
+
+    return [
+        f"{value:g} years"
+        for value in values
+    ]
+
+
 def best_experience(text: str) -> Optional[float]:
-    """Return the strongest experience match from resume text."""
-    values = _extract_normalized_experience_values(text)
+
+    values = extract_experience_values(text)
+
     return values[0] if values else None
 
 
-if __name__ == '__main__':
-    sample_text = """
-    Worked as Python Developer with 3 years experience in backend systems.
-    Previously managed a team for one year and six months.
-    Supported projects for 2-3 years and another contract for 10 months.
+# Quick test
+if __name__ == "__main__":
+    test_text = """
+    Worked as Python Developer with 3 years experience.
+    Previously managed team for 1.5 years.
+    Internship 8 months.
     """
 
-    print('Detected experience:', extract_experience(sample_text))
-    print('Best experience:', best_experience(sample_text))
+    print("Detected experience:", extract_experience(test_text))
+    print("Best experience:", best_experience(test_text))
