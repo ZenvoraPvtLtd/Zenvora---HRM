@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 interface RegisterFormInputs {
   fullName: string;
   email: string;
+  phoneNumber: string;
   role: string;
   password: string;
   confirmPassword: string;
@@ -25,21 +26,20 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-5">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 py-4">
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg px-6 py-2">
         {/* Header */}
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-gray-600 text-sm">Join us today and get started</p>
+        <div className="text-center mb-2">
+          <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           {/* Full Name Field */}
           <div>
             <label
               htmlFor="fullName"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
             >
               Full Name
             </label>
@@ -67,7 +67,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
             >
               Email Address
             </label>
@@ -91,11 +91,39 @@ const Register: React.FC = () => {
             )}
           </div>
 
+          {/* Phone Number Field */}
+          <div>
+            <label
+              htmlFor="phoneNumber"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
+            >
+              Phone Number
+            </label>
+            <input
+              {...register("phoneNumber", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9]{10}$/,
+                  message: "Please enter a valid 10-digit phone number",
+                },
+              })}
+              type="tel"
+              id="phoneNumber"
+              placeholder="1234567890"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+            />
+            {errors.phoneNumber && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.phoneNumber.message}
+              </p>
+            )}
+          </div>
+
           {/* Role Selector */}
           <div>
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
             >
               Role
             </label>
@@ -120,7 +148,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
             >
               Password
             </label>
@@ -156,7 +184,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 mb-0.5"
             >
               Confirm Password
             </label>
@@ -178,35 +206,17 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Terms & Conditions */}
-          <label className="flex items-start pt-1">
-            <input
-              type="checkbox"
-              required
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-0.5"
-            />
-            <span className="ml-2 text-xs text-gray-600">
-              I agree to the{" "}
-              <a
-                href="#"
-                className="text-indigo-600 hover:text-indigo-700 font-medium"
-              >
-                Terms and Conditions
-              </a>
-            </span>
-          </label>
-
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 mt-2"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 mt-2 cursor-pointer"
           >
             Create Account
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-gray-600 text-xs mt-3">
+        <p className="text-center text-gray-600 text-sm mt-2">
           Already have an account?{" "}
           <Link
             to="/login"
