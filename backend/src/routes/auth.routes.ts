@@ -8,7 +8,11 @@ import {
 import { protect } from "../middlewares/auth.middleware";
 
 import { authorizeRoles } from "../middlewares/role.middleware";
-
+import {
+  
+  forgotPassword,
+  resetPassword,
+} from "../controllers/auth.controller";
 const router = express.Router();
 
 router.post("/register", register);
@@ -48,4 +52,14 @@ router.get(
   }
 );
 
+
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
+
+router.put(
+  "/reset-password/:token",
+  resetPassword
+);
 export default router;
