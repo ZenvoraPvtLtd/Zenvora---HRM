@@ -55,6 +55,8 @@ const Register = () => {
   const { theme, isDark } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiSuccess, setApiSuccess] = useState<string | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -82,6 +84,8 @@ const Register = () => {
       agreeTerms: Yup.boolean().oneOf([true], "You must agree to the terms"),
     }),
     onSubmit: async (values, { resetForm, setSubmitting }) => {
+      setApiError(null);
+      setApiSuccess(null);
       try {
         const payload = {
           fullName: values.fullName,
@@ -90,14 +94,12 @@ const Register = () => {
           role: values.role,
           password: values.password,
         };
-        const response = await axios.post("/api/auth/register", payload);
-        console.log(response.data);
-        alert("Registration Successful");
+        await axios.post("/api/auth/register", payload);
+        setApiSuccess("Account created successfully! Redirecting to login...");
         resetForm();
-        navigate("/login");
+        setTimeout(() => navigate("/login"), 1500);
       } catch (error: any) {
-        console.log(error);
-        alert(error?.response?.data?.message || "Registration Failed");
+        setApiError(error?.response?.data?.message || "Registration failed. Please try again.");
       } finally {
         setSubmitting(false);
       }
@@ -362,6 +364,18 @@ const Register = () => {
             </p>
           )}
         </div>
+
+        {/* API feedback */}
+        {apiError && (
+          <div className="rounded-xl px-4 py-3 text-sm bg-red-500/10 border border-red-500/30 text-red-400">
+            {apiError}
+          </div>
+        )}
+        {apiSuccess && (
+          <div className="rounded-xl px-4 py-3 text-sm bg-green-500/10 border border-green-500/30 text-green-400">
+            {apiSuccess}
+          </div>
+        )}
 
         {/* Submit */}
         <Button

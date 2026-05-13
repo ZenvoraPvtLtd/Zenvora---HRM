@@ -15,13 +15,14 @@ export const register = async (
   res: Response
 ) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { fullName, email, password, role, phoneNumber } = req.body;
 
     const user = await registerUser(
-      name,
+      fullName,
       email,
       password,
-      role
+      role,
+      phoneNumber
     );
 
     res.status(201).json({

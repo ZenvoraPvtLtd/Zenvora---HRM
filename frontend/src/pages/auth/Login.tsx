@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -21,8 +24,20 @@ const Login = () => {
       email: Yup.string().email("Invalid email").required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
-    onSubmit: (values) => {
-      console.log("Login data:", values);
+    onSubmit: async (values, { setSubmitting }) => {
+      setApiError(null);
+      try {
+        const response = await axios.post("/api/auth/login", {
+          email: values.email,
+          password: values.password,
+        });
+        localStorage.setItem("accessToken", response.data.accessToken);
+        navigate("/dashboard");
+      } catch (error: any) {
+        setApiError(error?.response?.data?.message || "Login failed. Please try again.");
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -116,12 +131,12 @@ const Login = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className={`text-sm ${theme.label}`}>Password</label>
-            <Link
+            {/* <Link
               to="/forgot-password"
               className={`text-sm font-medium ${theme.forgotLink}`}
             >
               Forgot?
-            </Link>
+            </Link> */}
           </div>
           <div className="relative">
             <Lock
@@ -174,8 +189,15 @@ const Login = () => {
           </Link>
         </div>
 
+        {/* API error */}
+        {apiError && (
+          <div className="rounded-xl px-4 py-3 text-sm bg-red-500/10 border border-red-500/30 text-red-400">
+            {apiError}
+          </div>
+        )}
+
         {/* Submit */}
-        <Button type="submit">Sign In</Button>
+        <Button type="submit" loading={formik.isSubmitting} loadingText="Signing In...">Sign In</Button>
       </form>
 
       {/* Security Badges */}

@@ -8,25 +8,24 @@ export const registerUser = async (
   name: string,
   email: string,
   password: string,
-  role: UserRole
+  role: UserRole,
+  phoneNumber?: string
 ) => {
-  // Check existing user
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
     throw new Error("User already exists");
   }
 
-  // Hash password
   const hashedPassword = await hashPassword(password);
 
-  // Create user
   const user = await User.create({
     name,
     email,
+    phoneNumber,
     password: hashedPassword,
     role,
-  provider: AuthProvider.LOCAL,
+    provider: AuthProvider.LOCAL,
   });
 
   return user;

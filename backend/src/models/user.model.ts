@@ -16,6 +16,7 @@ export enum AuthProvider {
 export interface IUser extends Document {
   name: string;
   email: string;
+  phoneNumber?: string;
   password?: string;
 
   role: UserRole;
@@ -41,6 +42,11 @@ const userSchema = new Schema<IUser>(
       required: true,
       unique: true,
       lowercase: true,
+      trim: true,
+    },
+
+    phoneNumber: {
+      type: String,
       trim: true,
     },
 
