@@ -178,121 +178,111 @@ export const forgotPassword = async (
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
     /* ===============================
-       DEVELOPMENT MODE: LOG TO CONSOLE
+       SEND RESET EMAIL WHEN CREDENTIALS EXIST
     =============================== */
 
-    if (process.env.NODE_ENV !== "production") {
-      console.log("🔐 PASSWORD RESET REQUEST");
-      console.log("📧 Email:", email);
-      console.log("🔗 Reset URL:", resetUrl);
-      console.log("⏰ Expires in 15 minutes");
-      console.log("═".repeat(50));
+    // Always send email if SMTP credentials are configured.
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+        });
 
-      return res.status(200).json({
-        success: true,
-        message: "Password reset link generated. Check server console for the reset URL.",
-        resetUrl: resetUrl, // Include in development response
-      });
+        const mailOptions = {
+          from: `"${process.env.APP_NAME || 'ZenvoraHRM'}" <${process.env.EMAIL_USER}>`,
+          to: user.email,
+          subject: "Password Reset Request - ZenvoraHRM",
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Password Reset</title>
+            </head>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+                <h1 style="color: white; margin: 0; font-size: 24px;">🔐 Password Reset</h1>
+              </div>
+
+              <div style="background: white; border: 1px solid #ddd; border-radius: 0 0 10px 10px; padding: 30px;">
+                <h2 style="color: #333; margin-top: 0;">Reset Your Password</h2>
+
+                <p>Hello ${user.name || 'User'},</p>
+
+                <p>You have requested to reset your password for your ZenvoraHRM account. Click the button below to create a new password:</p>
+
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${resetUrl}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
+                </div>
+
+                <p style="color: #666; font-size: 14px;">
+                  <strong>Important:</strong> This link will expire in 15 minutes for security reasons.
+                </p>
+
+                <p style="color: #666; font-size: 14px;">
+                  If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
+                </p>
+
+                <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+                <p style="color: #999; font-size: 12px; text-align: center;">
+                  If the button doesn't work, copy and paste this URL into your browser:<br>
+                  <span style="word-break: break-all; color: #667eea;">${resetUrl}</span>
+                </p>
+
+                <p style="color: #999; font-size: 12px; text-align: center;">
+                  This email was sent by ZenvoraHRM. Please do not reply to this email.
+                </p>
+              </div>
+            </body>
+            </html>
+          `,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        return res.status(200).json({
+          success: true,
+          message: "Password reset link has been sent to your email address.",
+        });
+      } catch (emailError: any) {
+        console.error("Email sending failed:", emailError);
+
+        // Clean up the token if email fails
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save({ validateBeforeSave: false });
+
+        return res.status(500).json({
+          success: false,
+          message: "Failed to send reset email. Please try again later.",
+        });
+      }
     }
 
     /* ===============================
-       PRODUCTION MODE: SEND EMAIL
+       DEVELOPMENT MODE: LOG TO CONSOLE
     =============================== */
 
-    try {
-      // Check if email credentials are configured
-      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("Email credentials not configured");
-        return res.status(500).json({
-          success: false,
-          message: "Email service not configured. Please contact support.",
-        });
-      }
+    console.log("🔐 PASSWORD RESET REQUEST");
+    console.log("📧 Email:", email);
+    console.log("🔗 Reset URL:", resetUrl);
+    console.log("⏰ Expires in 15 minutes");
+    console.log("═".repeat(50));
 
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      });
-
-      const mailOptions = {
-        from: `"${process.env.APP_NAME || 'ZenvoraHRM'}" <${process.env.EMAIL_USER}>`,
-        to: user.email,
-        subject: "Password Reset Request - ZenvoraHRM",
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Password Reset</title>
-          </head>
-          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">🔐 Password Reset</h1>
-            </div>
-
-            <div style="background: white; border: 1px solid #ddd; border-radius: 0 0 10px 10px; padding: 30px;">
-              <h2 style="color: #333; margin-top: 0;">Reset Your Password</h2>
-
-              <p>Hello ${user.name || 'User'},</p>
-
-              <p>You have requested to reset your password for your ZenvoraHRM account. Click the button below to create a new password:</p>
-
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${resetUrl}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
-              </div>
-
-              <p style="color: #666; font-size: 14px;">
-                <strong>Important:</strong> This link will expire in 15 minutes for security reasons.
-              </p>
-
-              <p style="color: #666; font-size: 14px;">
-                If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
-              </p>
-
-              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-
-              <p style="color: #999; font-size: 12px; text-align: center;">
-                If the button doesn't work, copy and paste this URL into your browser:<br>
-                <span style="word-break: break-all; color: #667eea;">${resetUrl}</span>
-              </p>
-
-              <p style="color: #999; font-size: 12px; text-align: center;">
-                This email was sent by ZenvoraHRM. Please do not reply to this email.
-              </p>
-            </div>
-          </body>
-          </html>
-        `,
-      };
-
-      await transporter.sendMail(mailOptions);
-
-      res.status(200).json({
-        success: true,
-        message: "Password reset link has been sent to your email address.",
-      });
-
-    } catch (emailError: any) {
-      console.error("Email sending failed:", emailError);
-
-      // Clean up the token if email fails
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save({ validateBeforeSave: false });
-
-      res.status(500).json({
-        success: false,
-        message: "Failed to send reset email. Please try again later.",
-      });
-    }
-
+    return res.status(200).json({
+      success: true,
+      message: "Password reset link generated. Check server console for the reset URL.",
+      resetUrl: resetUrl, // Include in development response
+    });
   } catch (error: any) {
     console.error("Forgot password error:", error);
     res.status(500).json({
