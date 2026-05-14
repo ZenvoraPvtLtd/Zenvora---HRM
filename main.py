@@ -10,6 +10,11 @@ from database import collection
 from JDExtractor import build_jd_json
 from RankingEngine import generate_candidate_ranking
 
+
+from pydantic import BaseModel
+from JobMatcher import match_jobs
+from database import jobs_collection
+
 app = FastAPI()
 
 UPLOAD_DIR = "uploads"
@@ -18,6 +23,148 @@ os.makedirs(
     UPLOAD_DIR,
     exist_ok=True
 )
+
+
+
+
+# ============================================
+# JOB OPENING SCHEMA
+# ============================================
+
+class JobOpening(BaseModel):
+
+    job_title: str
+
+    required_skills: list[str]
+
+    experience_required: str
+
+    department: str
+
+    location: str
+
+    job_description: str
+
+
+# ============================================
+# CREATE JOB OPENING ENDPOINT
+# ============================================
+
+@app.post("/create_job_opening")
+async def create_job_opening(
+    job: JobOpening
+):
+
+    try:
+
+        job_data = job.dict()
+
+        result = jobs_collection.insert_one(
+            job_data
+        )
+
+        return {
+
+            "message":
+                "Job Opening Created Successfully",
+
+            "job_id":
+                str(result.inserted_id),
+
+            "job_data":
+                job_data
+        }
+
+    except Exception as e:
+
+        return JSONResponse(
+
+            status_code=500,
+
+            content={
+                "error": str(e)
+            }
+        )
+
+
+# ============================================
+# SMART JOB MATCH ENDPOINT
+# ============================================
+
+@app.post("/smart_job_match")
+async def smart_job_match(
+    file: UploadFile = File(...)
+):
+
+    try:
+
+        # -----------------------------
+        # Save Resume
+        # -----------------------------
+
+        file_path = (
+            f"{UPLOAD_DIR}/{file.filename}"
+        )
+
+        with open(file_path, "wb") as buffer:
+
+            shutil.copyfileobj(
+                file.file,
+                buffer
+            )
+
+        # -----------------------------
+        # Parse Resume
+        # -----------------------------
+
+        extracted_text = universal_parser(
+            file_path
+        )
+
+        parsed_data = build_json(
+            extracted_text
+        )
+
+        # -----------------------------
+        # Match Jobs
+        # -----------------------------
+
+        matched_jobs = match_jobs(
+            parsed_data
+        )
+
+        # -----------------------------
+        # Response
+        # -----------------------------
+
+        return {
+
+            "candidate_name":
+                parsed_data.get("name"),
+
+            "candidate_skills":
+                parsed_data.get("skills"),
+
+            "candidate_experience":
+                parsed_data.get("experience"),
+
+            "recommended_jobs":
+                matched_jobs
+        }
+
+    except Exception as e:
+
+        return JSONResponse(
+
+            status_code=500,
+
+            content={
+                "error": str(e),
+
+                "message":
+                    "Smart Job Matching Failed"
+            }
+        )
 
 
 from RiskAnalyzer import (
