@@ -16,24 +16,27 @@ export const JobForm = ({
   newJob, 
   setNewJob, 
   handleCreateJob, 
-  setIsCreatingJob 
+  setIsCreatingJob,
+  isEditing = false
 }: {
   newJob: JobFormData,
   setNewJob: (job: JobFormData) => void,
   handleCreateJob: (e: React.FormEvent) => void,
-  setIsCreatingJob: (creating: boolean) => void
+  setIsCreatingJob: (creating: boolean) => void,
+  isEditing?: boolean
 }) => {
   return (
     <div className="animate-fade-in" style={{ padding: '0 0.5rem', maxWidth: '800px', margin: '0 auto' }}>
-      <button 
-        onClick={() => setIsCreatingJob(false)}
-        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0 0 1.5rem 0', fontWeight: 500 }}
-      >
-        <ChevronLeft size={18} /> Back to Job Board
-      </button>
-
       <div className="card" style={{ padding: '2.5rem' }}>
-        <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem', marginTop: 0 }}>Create New Job Posting</h2>
+        <div 
+          role="button"
+          onClick={() => setIsCreatingJob(false)}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0 0 1.5rem 0', fontWeight: 500 }}
+        >
+          <ChevronLeft size={18} /> Back to Job Board
+        </div>
+
+        <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem', marginTop: 0 }}>{isEditing ? 'Edit Job Posting' : 'Create New Job Posting'}</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Fill in the details below to publish a new open position.</p>
 
         <form onSubmit={handleCreateJob} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -82,7 +85,7 @@ export const JobForm = ({
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
             <button type="button" onClick={() => setIsCreatingJob(false)} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-            <button type="submit" style={{ background: 'var(--text-purple)', border: 'none', color: 'white', padding: '0.75rem 2rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Publish Job</button>
+            <button type="submit" style={{ background: 'var(--text-purple)', border: 'none', color: 'white', padding: '0.75rem 2rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>{isEditing ? 'Save Changes' : 'Publish Job'}</button>
           </div>
         </form>
       </div>

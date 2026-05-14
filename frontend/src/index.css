@@ -73,13 +73,13 @@ button:hover {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
-  background-color: rgba(11, 10, 26, 0.8);
-  backdrop-filter: blur(16px);
-  border-right: 1px solid var(--border);
+  width: 80px;
+  background-color: var(--bg-secondary);
+  border-right: none;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1.5rem 0;
+  align-items: center;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -101,17 +101,17 @@ button:hover {
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  padding: 0.875rem 1rem;
-  border-radius: 0 0.75rem 0.75rem 0;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 0.75rem;
   color: var(--text-secondary);
   text-decoration: none;
-  font-weight: 500;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-bottom: 0.25rem;
-  border-left: 4px solid transparent;
-  margin-left: -1.5rem;
-  padding-left: calc(1.5rem + 1rem - 4px);
+  margin-bottom: 0.5rem;
+  border: none;
+  padding: 0;
+  margin-left: 0;
 }
 
 .nav-link:hover {
@@ -134,7 +134,7 @@ button:hover {
 /* Main Content */
 .main-wrapper {
   flex: 1;
-  margin-left: 280px; /* Same as sidebar width */
+  margin-left: 80px; /* Same as sidebar width */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -194,4 +194,10 @@ button:hover {
 
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Fix dropdown options visibility */
+select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }

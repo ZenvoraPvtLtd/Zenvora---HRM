@@ -38,12 +38,13 @@ export const JobDetail = ({
     <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
       {/* Left Side List */}
       <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <button 
+        <div 
+          role="button"
           onClick={() => setSelectedJobId(null)}
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0 0 0.5rem 0', fontWeight: 500 }}
         >
           <ChevronLeft size={18} /> Back to all jobs
-        </button>
+        </div>
         
         {jobs.map(job => (
           <div 

@@ -120,6 +120,7 @@ export default function JobsPage({ isCandidateView = false }: { isCandidateView?
   const [jobs, setJobs] = useState(initialJobsData);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const [isCreatingJob, setIsCreatingJob] = useState(false);
+  const [editingJobId, setEditingJobId] = useState<number | null>(null);
   const [applyingForJobId, setApplyingForJobId] = useState<number | null>(null);
 
   const [newJob, setNewJob] = useState({
@@ -128,26 +129,62 @@ export default function JobsPage({ isCandidateView = false }: { isCandidateView?
 
   const handleCreateJob = (e: React.FormEvent) => {
     e.preventDefault();
-    const newId = jobs.length > 0 ? Math.max(...jobs.map(j => j.id)) + 1 : 1;
-    const jobToAdd = {
-      id: newId,
-      title: newJob.title || 'Untitled Job',
-      company: newJob.company || 'Zenvora',
-      logoLetter: newJob.company ? newJob.company.charAt(0).toUpperCase() : 'Z',
-      logoBg: '#a855f7',
-      posted: 'Posted just now',
-      location: newJob.location || 'Remote',
-      experience: newJob.experience,
-      salary: newJob.salary || 'Competitive',
-      tags: ['Fulltime', newJob.field || 'General'],
-      field: newJob.field || 'Other',
-      description: newJob.description || 'No description provided.',
-      responsibilities: ['Responsibility 1', 'Responsibility 2'],
-      whoYouAre: ['Requirement 1', 'Requirement 2']
-    };
-    setJobs([jobToAdd, ...jobs]);
+    if (editingJobId) {
+      setJobs(jobs.map(j => j.id === editingJobId ? { ...j, ...newJob } : j));
+      setEditingJobId(null);
+    } else {
+      const newId = jobs.length > 0 ? Math.max(...jobs.map(j => j.id)) + 1 : 1;
+      const jobToAdd = {
+        id: newId,
+        title: newJob.title || 'Untitled Job',
+        company: newJob.company || 'Zenvora',
+        logoLetter: newJob.company ? newJob.company.charAt(0).toUpperCase() : 'Z',
+        logoBg: '#a855f7',
+        posted: 'Posted just now',
+        location: newJob.location || 'Remote',
+        experience: newJob.experience,
+        salary: newJob.salary || 'Competitive',
+        tags: ['Fulltime', newJob.field || 'General'],
+        field: newJob.field || 'Other',
+        description: newJob.description || 'No description provided.',
+        responsibilities: ['Responsibility 1', 'Responsibility 2'],
+        whoYouAre: ['Requirement 1', 'Requirement 2']
+      };
+      setJobs([jobToAdd, ...jobs]);
+    }
     setIsCreatingJob(false);
     setNewJob({ title: '', company: '', location: '', experience: 'Fresher', salary: '', field: '', description: '' });
+  };
+
+  const handleDeleteJob = (id: number) => {
+    if (window.confirm('Are you sure you want to delete this job?')) {
+      setJobs(jobs.filter(j => j.id !== id));
+    }
+  };
+
+  const handleEditJob = (id: number) => {
+    const jobToEdit = jobs.find(j => j.id === id);
+    if (jobToEdit) {
+      setNewJob({
+        title: jobToEdit.title,
+        company: jobToEdit.company,
+        location: jobToEdit.location,
+        experience: jobToEdit.experience,
+        salary: jobToEdit.salary,
+        field: jobToEdit.field,
+        description: jobToEdit.description
+      });
+      setEditingJobId(id);
+      setIsCreatingJob(true);
+    }
+  };
+
+  const closeJobForm = (val: boolean) => {
+    if (!val) {
+      setEditingJobId(null);
+      setNewJob({ title: '', company: '', location: '', experience: 'Fresher', salary: '', field: '', description: '' });
+    }
+    setIsCreatingJob(val);
   };
 
   if (isCreatingJob) {
@@ -156,7 +193,8 @@ export default function JobsPage({ isCandidateView = false }: { isCandidateView?
         newJob={newJob} 
         setNewJob={setNewJob} 
         handleCreateJob={handleCreateJob} 
-        setIsCreatingJob={setIsCreatingJob} 
+        setIsCreatingJob={closeJobForm} 
+        isEditing={!!editingJobId}
       />
     );
   }
@@ -203,8 +241,11 @@ export default function JobsPage({ isCandidateView = false }: { isCandidateView?
               <JobCard 
                 key={job.id} 
                 job={job} 
+                isAdmin={!isCandidateView}
                 onClick={() => setSelectedJobId(job.id)} 
                 onApply={() => setApplyingForJobId(job.id)}
+                onEdit={() => handleEditJob(job.id)}
+                onDelete={() => handleDeleteJob(job.id)}
               />
             ))}
           </div>

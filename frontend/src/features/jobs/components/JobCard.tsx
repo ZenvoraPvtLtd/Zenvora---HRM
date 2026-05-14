@@ -1,4 +1,4 @@
-import { Bookmark, MoreHorizontal, Briefcase, DollarSign, MapPin } from 'lucide-react';
+import { Bookmark, MoreHorizontal, Briefcase, DollarSign, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { JobLogo } from './JobLogo';
 
 export interface JobCardData {
@@ -12,14 +12,30 @@ export interface JobCardData {
   [key: string]: unknown;
 }
 
-export const JobCard = ({ job, onClick, onApply }: { job: JobCardData, onClick: () => void, onApply: () => void }) => {
+export const JobCard = ({ job, isAdmin = false, onClick, onApply, onEdit, onDelete }: { 
+  job: JobCardData, 
+  isAdmin?: boolean,
+  onClick: () => void, 
+  onApply: () => void,
+  onEdit?: () => void,
+  onDelete?: () => void
+}) => {
   return (
     <div className="card hover-effect" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
         <JobLogo letter={job.logoLetter} bg={job.logoBg} />
         <div style={{ display: 'flex', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-          <Bookmark size={18} style={{ cursor: 'pointer' }} />
-          <MoreHorizontal size={18} style={{ cursor: 'pointer' }} />
+          {isAdmin ? (
+            <>
+              <Pencil size={18} style={{ cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); onEdit?.(); }} />
+              <Trash2 size={18} style={{ cursor: 'pointer', color: '#ef4444' }} onClick={(e) => { e.stopPropagation(); onDelete?.(); }} />
+            </>
+          ) : (
+            <>
+              <Bookmark size={18} style={{ cursor: 'pointer' }} />
+              <MoreHorizontal size={18} style={{ cursor: 'pointer' }} />
+            </>
+          )}
         </div>
       </div>
 

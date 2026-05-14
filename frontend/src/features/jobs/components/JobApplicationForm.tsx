@@ -25,12 +25,13 @@ export const JobApplicationForm = ({
     <div className="animate-fade-in" style={{ padding: '0 0.5rem', maxWidth: '800px', margin: '0 auto' }}>
       <div className="card" style={{ padding: '2.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <button 
+          <div 
+            role="button"
             onClick={onCancel}
             style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontWeight: 500, padding: 0 }}
           >
             <ChevronLeft size={18} /> Back
-          </button>
+          </div>
           <button 
             onClick={onCancel}
             title="Cancel"
