@@ -42,7 +42,9 @@ const Login = () => {
         localStorage.setItem("accessToken", response.data.accessToken);
         navigate("/dashboard");
       } catch (error: any) {
-        setApiError(error?.response?.data?.message || "Login failed. Please try again.");
+        setApiError(
+          error?.response?.data?.message || "Login failed. Please try again.",
+        );
       } finally {
         setSubmitting(false);
       }
@@ -141,12 +143,6 @@ const Login = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className={`text-sm ${theme.label}`}>Password</label>
-            {/* <Link
-              to="/forgot-password"
-              className={`text-sm font-medium ${theme.forgotLink}`}
-            >
-              Forgot?
-            </Link> */}
           </div>
           <div className="relative">
             <Lock
@@ -207,7 +203,13 @@ const Login = () => {
         )}
 
         {/* Submit */}
-        <Button type="submit" loading={formik.isSubmitting} loadingText="Signing In...">Sign In</Button>
+        <Button
+          type="submit"
+          loading={formik.isSubmitting}
+          loadingText="Signing In..."
+        >
+          Sign In
+        </Button>
       </form>
 
       {/* Security Badges */}
