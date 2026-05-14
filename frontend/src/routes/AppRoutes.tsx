@@ -1,0 +1,17 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+import { JobRecommendations } from "../components/jobRecomendation/JobRecommendations";
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/jobs" element={<JobRecommendations/>} />
+    </Routes>
+  );
+};
+
+export default AppRoutes;
