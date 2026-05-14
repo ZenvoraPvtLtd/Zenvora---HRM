@@ -28,11 +28,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.2.0",
     "mongoose": "^9.6.2",
-<<<<<<< HEAD
-    "nodemailer": "^8.0.7",
-=======
     "multer": "^2.1.1",
->>>>>>> 53a0b0fb5dae36a2d28e8bcbf4f552b16a1db318
+    "nodemailer": "^8.0.7",
     "pass": "^0.2.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
