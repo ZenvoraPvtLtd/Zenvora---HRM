@@ -1,5 +1,12 @@
-import React from 'react';
-import { ChevronLeft, UploadCloud } from 'lucide-react';
+import { ChevronLeft, UploadCloud, X } from 'lucide-react';
+
+export interface JobApplicationData {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  [key: string]: unknown;
+}
 
 export const JobApplicationForm = ({ 
   jobId, 
@@ -7,7 +14,7 @@ export const JobApplicationForm = ({
   onCancel 
 }: { 
   jobId: number, 
-  jobs: any[], 
+  jobs: JobApplicationData[], 
   onCancel: () => void 
 }) => {
   const job = jobs.find(j => j.id === jobId);
@@ -16,14 +23,25 @@ export const JobApplicationForm = ({
 
   return (
     <div className="animate-fade-in" style={{ padding: '0 0.5rem', maxWidth: '800px', margin: '0 auto' }}>
-      <button 
-        onClick={onCancel}
-        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0 0 1.5rem 0', fontWeight: 500 }}
-      >
-        <ChevronLeft size={18} /> Back
-      </button>
-
       <div className="card" style={{ padding: '2.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <button 
+            onClick={onCancel}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontWeight: 500, padding: 0 }}
+          >
+            <ChevronLeft size={18} /> Back
+          </button>
+          <button 
+            onClick={onCancel}
+            title="Cancel"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.5rem', borderRadius: '50%', transition: 'background 0.2s' }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          >
+            <X size={16} />
+          </button>
+        </div>
+
         <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem', marginTop: 0 }}>Apply for {job.title}</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>at {job.company} • {job.location}</p>
 
@@ -48,6 +66,17 @@ export const JobApplicationForm = ({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Phone Number</label>
             <input required type="tel" placeholder="+1 (555) 000-0000" style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', background: 'var(--bg-primary)', color: 'white', outline: 'none' }} />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>LinkedIn Profile (Optional)</label>
+              <input type="url" placeholder="https://linkedin.com/in/johndoe" style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', background: 'var(--bg-primary)', color: 'white', outline: 'none' }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Portfolio URL (Optional)</label>
+              <input type="url" placeholder="https://johndoe.com" style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', background: 'var(--bg-primary)', color: 'white', outline: 'none' }} />
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

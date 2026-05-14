@@ -1,14 +1,25 @@
 import React from 'react';
 import { ChevronLeft } from 'lucide-react';
 
+export interface JobFormData {
+  title: string;
+  company: string;
+  location: string;
+  field: string;
+  experience: string;
+  salary: string;
+  description: string;
+  [key: string]: unknown;
+}
+
 export const JobForm = ({ 
   newJob, 
   setNewJob, 
   handleCreateJob, 
   setIsCreatingJob 
 }: {
-  newJob: any,
-  setNewJob: (job: any) => void,
+  newJob: JobFormData,
+  setNewJob: (job: JobFormData) => void,
   handleCreateJob: (e: React.FormEvent) => void,
   setIsCreatingJob: (creating: boolean) => void
 }) => {

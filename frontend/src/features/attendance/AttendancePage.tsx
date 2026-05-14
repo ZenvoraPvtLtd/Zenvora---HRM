@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Square, Clock, LogIn, LogOut, Search, Download, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Play, Square, Clock, LogIn, LogOut, Search, Download } from 'lucide-react';
 
 interface AttendanceRecord {
   id: string;
@@ -68,7 +68,7 @@ export default function Attendance() {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m ${seconds}s`;
     }
@@ -142,30 +142,30 @@ export default function Attendance() {
       <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '2.5rem', borderBottom: '1px solid var(--border)', padding: '0 2rem' }}>
-          <div 
+          <div
             onClick={() => setActiveTab('permission')}
-            style={{ 
-              padding: '1.25rem 0', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)', 
+            style={{
+              padding: '1.25rem 0', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)',
               borderBottom: activeTab === 'permission' ? '2px solid var(--text-purple)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
             Permission Request <span style={{ background: activeTab === 'permission' ? 'rgba(168, 85, 247, 0.1)' : 'rgba(255,255,255,0.05)', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>11</span>
           </div>
-          <div 
+          <div
             onClick={() => setActiveTab('schedule')}
-            style={{ 
-              padding: '1.25rem 0', color: activeTab === 'schedule' ? 'var(--text-purple)' : 'var(--text-secondary)', 
+            style={{
+              padding: '1.25rem 0', color: activeTab === 'schedule' ? 'var(--text-purple)' : 'var(--text-secondary)',
               borderBottom: activeTab === 'schedule' ? '2px solid var(--text-purple)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
             Work schedule
           </div>
-          <div 
+          <div
             onClick={() => setActiveTab('activity')}
-            style={{ 
-              padding: '1.25rem 0', color: activeTab === 'activity' ? 'var(--text-purple)' : 'var(--text-secondary)', 
+            style={{
+              padding: '1.25rem 0', color: activeTab === 'activity' ? 'var(--text-purple)' : 'var(--text-secondary)',
               borderBottom: activeTab === 'activity' ? '2px solid var(--text-purple)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
@@ -178,19 +178,19 @@ export default function Attendance() {
         <div style={{ padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ position: 'relative', width: '320px' }}>
             <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
-            <input 
-              type="text" 
-              placeholder="Search employee..." 
-              style={{ 
-                width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem', 
-                borderRadius: '0.5rem', border: '1px solid var(--border)', 
+            <input
+              type="text"
+              placeholder="Search employee..."
+              style={{
+                width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem',
+                borderRadius: '0.5rem', border: '1px solid var(--border)',
                 background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)',
                 outline: 'none', fontSize: '0.875rem'
-              }} 
+              }}
             />
           </div>
-          
-          <div style={{ 
+
+          <div style={{
             border: '1px solid var(--border)', color: 'var(--text-primary)',
             display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s',
           }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
@@ -204,18 +204,18 @@ export default function Attendance() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: '600' }}>
                 <th style={{ padding: '1rem 0', fontWeight: '600' }}><input type="checkbox" style={{ marginRight: '0.5rem' }} /> Employee Name</th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock - In & Out <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Break Time <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock Location <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Paid Time <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Overtime <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock - In & Out <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Break Time <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock Location <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Paid Time <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Overtime <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
                 <th style={{ padding: '1rem 0', fontWeight: '600', textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {records.map((record, index) => (
-                <tr key={record.id} style={{ 
-                  borderBottom: index !== records.length - 1 ? '1px solid var(--border)' : 'none', 
+                <tr key={record.id} style={{
+                  borderBottom: index !== records.length - 1 ? '1px solid var(--border)' : 'none',
                   transition: 'background-color 0.2s',
                   backgroundColor: record.isBreakActive ? 'rgba(168, 85, 247, 0.05)' : 'transparent'
                 }}>
@@ -234,7 +234,7 @@ export default function Attendance() {
                   <td style={{ padding: '1rem 0', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
                     {record.punchIn ? formatTime(record.punchIn) : '--:--'} to {record.punchOut ? formatTime(record.punchOut) : '--:--'}
                   </td>
-                  <td style={{ 
+                  <td style={{
                     padding: '1rem 0', fontSize: '0.875rem',
                     color: record.isBreakActive ? 'var(--text-purple)' : 'var(--text-primary)',
                     fontWeight: record.isBreakActive ? 600 : 'normal'
@@ -258,7 +258,7 @@ export default function Attendance() {
                   <td style={{ padding: '1rem 0' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                       {!record.punchIn && !record.punchOut ? (
-                        <div 
+                        <div
                           onClick={() => handlePunchIn(record.id)}
                           style={{ border: '1px solid var(--border)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', cursor: 'pointer' }}
                         >
@@ -266,7 +266,7 @@ export default function Attendance() {
                         </div>
                       ) : record.punchIn && !record.punchOut ? (
                         <>
-                          <div 
+                          <div
                             onClick={() => handleToggleBreak(record.id)}
                             style={{ border: '1px solid var(--border)', color: record.isBreakActive ? 'var(--text-purple)' : 'var(--text-primary)', borderColor: record.isBreakActive ? 'var(--text-purple)' : 'var(--border)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', cursor: 'pointer' }}
                           >
@@ -274,7 +274,7 @@ export default function Attendance() {
                             {record.isBreakActive ? 'End Break' : 'Break'}
                           </div>
                           {!record.isBreakActive && (
-                            <div 
+                            <div
                               onClick={() => handlePunchOut(record.id)}
                               style={{ border: '1px solid var(--border)', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', cursor: 'pointer' }}
                             >
@@ -295,7 +295,7 @@ export default function Attendance() {
           </table>
         </div>
       </div>
-      
+
       <style>{`
         @keyframes pulse {
           0% { opacity: 1; transform: scale(1); }

@@ -1,6 +1,29 @@
 import React, { useState } from 'react';
 import { Pencil, User, Mail, Phone, MapPin, Briefcase, Calendar, Check, X } from 'lucide-react';
 
+const InputField = ({ label, name, type = "text", value, isEditing, onChange }: any) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+    <label style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500' }}>{label}</label>
+    {isEditing ? (
+      <input 
+        type={type} 
+        name={name} 
+        value={value} 
+        onChange={onChange}
+        style={{ 
+          width: '100%', padding: '0.625rem', borderRadius: '0.5rem', 
+          border: '1px solid var(--accent)', background: 'rgba(99, 102, 241, 0.05)', 
+          color: 'var(--text-primary)', outline: 'none', fontSize: '0.875rem'
+        }} 
+      />
+    ) : (
+      <div style={{ color: 'var(--text-primary)', fontSize: '0.9375rem', padding: '0.5rem 0', fontWeight: '500' }}>
+        {value}
+      </div>
+    )}
+  </div>
+);
+
 export default function Profile() {
   const [userInfo, setUserInfo] = useState({
     firstName: 'Shreyas',
@@ -38,29 +61,6 @@ export default function Profile() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setTempInfo({ ...tempInfo, [e.target.name]: e.target.value });
   };
-
-  const InputField = ({ label, name, type = "text", value, isEditing }: any) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-      <label style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500' }}>{label}</label>
-      {isEditing ? (
-        <input 
-          type={type} 
-          name={name} 
-          value={value} 
-          onChange={handleChange}
-          style={{ 
-            width: '100%', padding: '0.625rem', borderRadius: '0.5rem', 
-            border: '1px solid var(--accent)', background: 'rgba(99, 102, 241, 0.05)', 
-            color: 'var(--text-primary)', outline: 'none', fontSize: '0.875rem'
-          }} 
-        />
-      ) : (
-        <div style={{ color: 'var(--text-primary)', fontSize: '0.9375rem', padding: '0.5rem 0', fontWeight: '500' }}>
-          {value}
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div className="animate-fade-in" style={{ padding: '0 0.5rem', maxWidth: '1000px', margin: '0 auto' }}>
@@ -129,8 +129,8 @@ export default function Profile() {
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-            <InputField label="First Name" name="firstName" value={editMode.personal ? tempInfo.firstName : userInfo.firstName} isEditing={editMode.personal} />
-            <InputField label="Last Name" name="lastName" value={editMode.personal ? tempInfo.lastName : userInfo.lastName} isEditing={editMode.personal} />
+            <InputField label="First Name" name="firstName" value={editMode.personal ? tempInfo.firstName : userInfo.firstName} isEditing={editMode.personal} onChange={handleChange} />
+            <InputField label="Last Name" name="lastName" value={editMode.personal ? tempInfo.lastName : userInfo.lastName} isEditing={editMode.personal} onChange={handleChange} />
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
@@ -186,15 +186,15 @@ export default function Profile() {
             <div style={{ display: 'grid', gap: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
                 <div style={{ padding: '0.75rem', background: 'var(--bg-primary)', borderRadius: '0.5rem', color: 'var(--text-secondary)' }}><Mail size={18} /></div>
-                <div style={{ flex: 1 }}><InputField label="Email Address" name="email" type="email" value={editMode.contact ? tempInfo.email : userInfo.email} isEditing={editMode.contact} /></div>
+                <div style={{ flex: 1 }}><InputField label="Email Address" name="email" type="email" value={editMode.contact ? tempInfo.email : userInfo.email} isEditing={editMode.contact} onChange={handleChange} /></div>
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
                 <div style={{ padding: '0.75rem', background: 'var(--bg-primary)', borderRadius: '0.5rem', color: 'var(--text-secondary)' }}><Phone size={18} /></div>
-                <div style={{ flex: 1 }}><InputField label="Phone Number" name="phone" value={editMode.contact ? tempInfo.phone : userInfo.phone} isEditing={editMode.contact} /></div>
+                <div style={{ flex: 1 }}><InputField label="Phone Number" name="phone" value={editMode.contact ? tempInfo.phone : userInfo.phone} isEditing={editMode.contact} onChange={handleChange} /></div>
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
                 <div style={{ padding: '0.75rem', background: 'var(--bg-primary)', borderRadius: '0.5rem', color: 'var(--text-secondary)' }}><MapPin size={18} /></div>
-                <div style={{ flex: 1 }}><InputField label="Location" name="location" value={editMode.contact ? tempInfo.location : userInfo.location} isEditing={editMode.contact} /></div>
+                <div style={{ flex: 1 }}><InputField label="Location" name="location" value={editMode.contact ? tempInfo.location : userInfo.location} isEditing={editMode.contact} onChange={handleChange} /></div>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Filter, Star, CheckCircle, XCircle, Clock, UserCheck, MessageSquare, Briefcase, Award } from 'lucide-react';
+import { useState } from 'react';
+import { Search, XCircle, Clock, UserCheck, MessageSquare, Briefcase, Award } from 'lucide-react';
 
 const initialReviews = [
   {
@@ -55,8 +55,8 @@ const initialReviews = [
   }
 ];
 
-export default function ResultsReviewPage() {
-  const [reviews, setReviews] = useState(initialReviews);
+function ResultsReviewPage() {
+  const [reviews] = useState(initialReviews);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('All');
 
@@ -94,28 +94,28 @@ export default function ResultsReviewPage() {
       <div className="card" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: '250px', position: 'relative' }}>
           <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
-          <input 
-            type="text" 
-            placeholder="Search candidate or role..." 
+          <input
+            type="text"
+            placeholder="Search candidate or role..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ 
-              width: '100%', padding: '0.75rem 1rem 0.75rem 2.5rem', 
-              borderRadius: '0.5rem', border: '1px solid var(--border)', 
+            style={{
+              width: '100%', padding: '0.75rem 1rem 0.75rem 2.5rem',
+              borderRadius: '0.5rem', border: '1px solid var(--border)',
               background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)', outline: 'none'
-            }} 
+            }}
           />
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           {['All', 'Hire', 'Hold', 'Reject'].map(type => (
-            <button 
+            <button
               key={type}
               onClick={() => setFilterType(type)}
-              style={{ 
-                background: filterType === type ? 'rgba(168, 85, 247, 0.1)' : 'transparent', 
-                color: filterType === type ? 'var(--text-purple)' : 'var(--text-secondary)', 
-                border: `1px solid ${filterType === type ? 'var(--accent)' : 'var(--border)'}`, 
-                padding: '0.5rem 1rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem' 
+              style={{
+                background: filterType === type ? 'rgba(168, 85, 247, 0.1)' : 'transparent',
+                color: filterType === type ? 'var(--text-purple)' : 'var(--text-secondary)',
+                border: `1px solid ${filterType === type ? 'var(--accent)' : 'var(--border)'}`,
+                padding: '0.5rem 1rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem'
               }}
             >
               {type}
@@ -128,7 +128,7 @@ export default function ResultsReviewPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(500px, 1fr))', gap: '1.5rem' }}>
         {filteredReviews.map(review => {
           const recStyle = getRecStyle(review.recommendation);
-          
+
           return (
             <div key={review.id} className="card hover-effect" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
               {/* Header */}
@@ -212,3 +212,4 @@ export default function ResultsReviewPage() {
     </div>
   );
 }
+export default ResultsReviewPage;

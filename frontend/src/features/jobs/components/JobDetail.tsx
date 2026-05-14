@@ -1,6 +1,23 @@
-import React from 'react';
+
 import { Bookmark, Briefcase, DollarSign, MapPin, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { JobLogo } from './JobLogo';
+
+export interface JobDetailData {
+  id: number;
+  logoLetter: string;
+  logoBg: string;
+  title: string;
+  experience: string;
+  salary: string;
+  location: string;
+  company: string;
+  posted: string;
+  field: string;
+  description: string;
+  responsibilities: string[];
+  whoYouAre: string[];
+  [key: string]: unknown;
+}
 
 export const JobDetail = ({ 
   jobs, 
@@ -8,7 +25,7 @@ export const JobDetail = ({
   setSelectedJobId,
   onApply
 }: { 
-  jobs: any[], 
+  jobs: JobDetailData[], 
   selectedJobId: number, 
   setSelectedJobId: (id: number | null) => void,
   onApply: () => void

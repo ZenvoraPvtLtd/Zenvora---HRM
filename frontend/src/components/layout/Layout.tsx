@@ -1,8 +1,7 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const Layout = () => {
-  const location = useLocation();
   const currentRole = 'HR Admin';
 
   return (

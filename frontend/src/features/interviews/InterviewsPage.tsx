@@ -1,4 +1,4 @@
-import { Search, Download, Check, X, ChevronRight } from 'lucide-react';
+import { Search, Download, Check, X } from 'lucide-react';
 import { useState } from 'react';
 
 const mockData = [
