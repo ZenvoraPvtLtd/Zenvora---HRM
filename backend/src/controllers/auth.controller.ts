@@ -15,10 +15,10 @@ export const register = async (
   res: Response
 ) => {
   try {
-    const { fullName, email, password, role, phoneNumber } = req.body;
+    const { name, fullName, email, password, role, phoneNumber } = req.body;
 
     const user = await registerUser(
-      fullName,
+      name || fullName,
       email,
       password,
       role,
