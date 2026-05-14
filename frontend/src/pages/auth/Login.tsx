@@ -14,6 +14,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/oauth/google";
+  };
+
+  const handleMicrosoftLogin = () => {
+    window.location.href = "http://localhost:5000/api/oauth/microsoft";
+  };
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -55,6 +63,7 @@ const Login = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <button
           type="button"
+          onClick={handleGoogleLogin}
           className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
@@ -80,6 +89,7 @@ const Login = () => {
 
         <button
           type="button"
+          onClick={handleMicrosoftLogin}
           className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
