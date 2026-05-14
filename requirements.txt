@@ -1,0 +1,10 @@
+fastapi==0.136.1
+pdfplumber==0.11.9
+Pillow==12.2.0
+pymongo==4.6.0
+pytesseract==0.3.13
+python-dotenv==1.2.2
+python_docx==1.2.0
+scikit_learn==1.8.0
+skillner==1.0.3
+spacy==3.7.2
