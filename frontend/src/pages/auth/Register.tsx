@@ -88,7 +88,7 @@ const Register = () => {
       setApiSuccess(null);
       try {
         const payload = {
-          fullName: values.fullName,
+          name: values.fullName,
           email: values.email,
           phoneNumber: values.phoneNumber,
           role: values.role,

@@ -3,7 +3,6 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 
 import User from "../models/user.model";
-
 import {
   registerUser,
   loginUser,
@@ -27,17 +26,24 @@ export const register = async (
   try {
     const {
       name,
+      fullName,
       email,
       password,
       role,
     } = req.body;
 
+    const userName = name || fullName;
+
+    if (!userName) {
+      throw new Error("Name is required");
+    }
+
     const user = await registerUser(
-      name,
+      userName,
       email,
       password,
       role
-        );
+    );
 
     res.status(201).json({
       success: true,
