@@ -5,7 +5,7 @@ import app from "./app";
 import { connectDB } from "./config/db";
 import "./config/passport";
 const PORT = process.env.PORT || 5000;
-
+console.log(process.env.MONGO_URI);
 connectDB();
 
 app.listen(PORT, () => {

@@ -6,7 +6,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 import AppRoutes from './routes/AppRoutes';
 
-const App = () => {
+function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
@@ -14,6 +14,6 @@ const App = () => {
       </ThemeProvider>
     </BrowserRouter>
   );
-};
+}
 
 export default App;

@@ -18,6 +18,8 @@ export interface IUser extends Document {
   email: string;
   phoneNumber?: string;
   password?: string;
+resetPasswordToken?: string;
+resetPasswordExpire?: Date;
 
   role: UserRole;
 
@@ -84,6 +86,16 @@ const userSchema = new Schema<IUser>(
       enum: Object.values(AuthProvider),
       default: AuthProvider.LOCAL,
     },
+    
+    
+    
+resetPasswordToken: {
+  type: String,
+},
+
+resetPasswordExpire: {
+  type: Date,
+},
   },
   {
     timestamps: true,

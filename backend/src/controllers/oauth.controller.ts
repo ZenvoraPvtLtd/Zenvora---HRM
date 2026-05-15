@@ -9,10 +9,7 @@ export const oauthSuccess = async (
     const user = req.user as any;
 
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication failed",
-      });
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=authentication_failed`);
     }
 
     // Generate JWT
@@ -37,17 +34,14 @@ export const oauthSuccess = async (
       }
     );
 
-    return res.status(200).json({
-      success: true,
-      message: "OAuth login successful",
-      user,
-      accessToken,
-      refreshToken,
-    });
+    // Redirect to frontend with tokens
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const callbackUrl = `${frontendUrl}/oauth/callback?accessToken=${encodeURIComponent(accessToken)}&refreshToken=${encodeURIComponent(refreshToken)}`;
+
+    return res.redirect(callbackUrl);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "OAuth login failed",
-    });
+    console.error('OAuth error:', error);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(`${frontendUrl}/login?error=oauth_failed`);
   }
 };
