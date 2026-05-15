@@ -12,8 +12,8 @@ const jobs = [
        logo: "/logo.png", 
        type: "Full Time",  
        level: "Mid Level", 
-       desc: "Build cutting-edge web applications from start to finish, utilizing your expertise in both front-end and back-end technologies." },
-
+       desc: "Build cutting-edge web applications from start to finish, utilizing your expertise in both front-end and back-end technologies." 
+      },
   { id: 2,  title: "AI/ML Engineer",           company: "Zenvora Tech", salary: "₹18LPA",     location: "Hyderabad, India", logo: "/logo.png", type: "Full Time",  level: "Senior",    desc: "Design and implement machine learning models and AI pipelines to solve complex real-world problems at scale." },
   { id: 3,  title: "UI/UX Designer",           company: "Zenvora Tech", salary: "₹10LPA",     location: "Pune, India",      logo: "/logo.png", type: "Full Time",  level: "Mid Level", desc: "Craft intuitive and visually stunning user interfaces that delight users and drive engagement across platforms." },
   { id: 4,  title: "Frontend React Developer", company: "Zenvora Tech", salary: "₹11LPA",     location: "Chennai, India",   logo: "/logo.png", type: "Full Time",  level: "Mid Level", desc: "Build performant, accessible React applications with a keen eye for design and seamless user experiences." },
@@ -26,6 +26,7 @@ const jobs = [
   { id: 11, title: "Product Manager",           company: "Zenvora Tech", salary: "₹20LPA",     location: "Bangalore, India", logo: "/logo.png", type: "Full Time",  level: "Senior",    desc: "Own the product roadmap, collaborate with cross-functional teams, and ship features users love." },
   { id: 12, title: "Graphic Designer",          company: "Zenvora Tech", salary: "₹7LPA",      location: "Ahmedabad, India", logo: "/logo.png", type: "Full Time",  level: "Junior",    desc: "Create compelling visual assets for digital and print media that communicate brand identity effectively." },
 ];
+
 
 // const BookmarkIcon = ({ filled }: { filled: boolean }) => (
 //   <svg
