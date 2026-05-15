@@ -67,15 +67,17 @@ export const JobCard = ({ job, isAdmin = false, onClick, onApply, onEdit, onDele
         >
           Detail Information
         </span>
-        <button
-          onClick={(e) => { e.stopPropagation(); onApply(); }}
-          style={{
-            background: 'var(--accent)', color: 'white', border: 'none',
-            padding: '0.5rem 1.25rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem'
-          }}
-        >
-          Apply Now
-        </button>
+        {!isAdmin && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onApply(); }}
+            style={{
+              background: 'var(--accent)', color: 'white', border: 'none',
+              padding: '0.5rem 1.25rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem'
+            }}
+          >
+            Apply Now
+          </button>
+        )}
       </div>
     </div>
   );

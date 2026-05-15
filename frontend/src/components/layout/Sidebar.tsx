@@ -175,45 +175,47 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn 
       </div>
 
       {/* Mobile Only: Profile and Notifications */}
-      <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-          <div
-            style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              backgroundColor: 'rgba(59, 130, 246, 0.1)', 
-              border: '1px solid rgba(59, 130, 246, 0.2)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              color: '#3b82f6', 
-              fontWeight: 'bold' 
-            }}
-          >
-            {avatarLetter}
+      {isLoggedIn && (
+        <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            <div
+              style={{ 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                border: '1px solid rgba(59, 130, 246, 0.2)', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                color: '#3b82f6', 
+                fontWeight: 'bold' 
+              }}
+            >
+              {avatarLetter}
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail}</div>
+            </div>
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName || 'Guest'}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail || 'Welcome'}</div>
-          </div>
+          <button style={{ 
+            width: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.75rem', 
+            padding: '0.625rem 0.75rem', 
+            background: 'var(--bg-hover)', 
+            border: 'none', 
+            borderRadius: '0.5rem', 
+            color: 'var(--text-primary)', 
+            fontSize: '0.875rem',
+            cursor: 'pointer'
+          }}>
+            <Bell size={18} /> Notifications
+          </button>
         </div>
-        <button style={{ 
-          width: '100%', 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.75rem', 
-          padding: '0.625rem 0.75rem', 
-          background: 'var(--bg-hover)', 
-          border: 'none', 
-          borderRadius: '0.5rem', 
-          color: 'var(--text-primary)', 
-          fontSize: '0.875rem',
-          cursor: 'pointer'
-        }}>
-          <Bell size={18} /> Notifications
-        </button>
-      </div>
+      )}
 
       {/* Nav sections */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: isCollapsed ? '1rem 0.5rem' : '1rem 0.75rem' }}>

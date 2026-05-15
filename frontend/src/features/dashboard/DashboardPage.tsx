@@ -73,7 +73,7 @@ export default function Dashboard() {
                 { label: 'Shortlisted', value: 124, percent: '24.5%', color: '#10b981' },
                 { label: 'On-hold', value: 45, percent: '8.9%', color: '#f59e0b' },
                 { label: 'Rejected', value: 80, percent: '15.7%', color: '#3b82f6' }
-              ].map((item, idx) => (
+              ].map((item) => (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.color }}></div>
@@ -102,7 +102,7 @@ export default function Dashboard() {
               { name: 'Priya Singh', role: 'HR Executive', date: '15 May, 2026', time: '02:00 PM' },
               { name: 'Rahul Verma', role: 'Backend Developer', date: '17 May, 2026', time: '11:00 AM' },
               { name: 'Sneha Kapoor', role: 'UI/UX Designer', date: '17 May, 2026', time: '03:30 PM' }
-            ].map((interview, i) => (
+            ].map((interview) => (
               <div key={interview.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--chart-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.875rem', flexShrink: 0 }}>
@@ -178,7 +178,7 @@ export default function Dashboard() {
                   { name: 'Dan Sibley', dept: 'DevOps', type: 'Tech interview', status: 'Pending', color: '#f59e0b' },
                   { name: 'Joe Root', dept: 'UX/UI Designer', type: 'Resume review', status: 'In Progress', color: 'var(--accent)' },
                   { name: 'Zak Crawley', dept: '.Net developer', type: 'Final interview', status: 'Completed', color: '#10b981' }
-                ].map((row, i) => (
+                ].map((row) => (
                   <tr key={row.name} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '1rem 0' }}>
                       <span style={{ fontSize: '0.875rem', color: 'var(--text-primary)', fontWeight: 500 }}>{row.name}</span>

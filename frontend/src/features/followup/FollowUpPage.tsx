@@ -53,8 +53,8 @@ export default function FollowUpPage() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
+        <div className="followup-tabs" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', minWidth: 'max-content' }}>
             <span style={{ color: 'var(--text-secondary)', fontWeight: 500, paddingBottom: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>Summary</span>
             <span style={{ color: 'var(--text-secondary)', fontWeight: 500, paddingBottom: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>Backlog</span>
             <span style={{ color: 'var(--text-purple)', borderBottom: '2px solid var(--text-purple)', fontWeight: 600, paddingBottom: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>Board</span>
@@ -63,13 +63,14 @@ export default function FollowUpPage() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1rem' }}>
+        <div className="followup-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1rem', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative', flex: 1 }} className="search-input">
               <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
               <input 
                 type="text" 
                 placeholder="Search board" 
+                className="search-input"
                 style={{ 
                   background: 'var(--bg-secondary)', border: '1px solid var(--border)', 
                   padding: '0.4rem 0.75rem 0.4rem 2rem', borderRadius: '0.25rem', 
@@ -78,20 +79,20 @@ export default function FollowUpPage() {
               />
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '-0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 600, zIndex: 2, border: '2px solid var(--bg-primary)' }}>SJ</div>
               <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--bg-secondary)', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, border: '2px solid var(--border)', marginLeft: '-0.5rem' }}>
                 <Users size={14} />
               </div>
             </div>
 
-            <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.4rem 0.75rem', borderRadius: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+            <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.4rem 0.75rem', borderRadius: '0.25rem', cursor: 'pointer', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
               <Filter size={16} /> Filter
             </button>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <button style={{ background: 'var(--accent)', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem' }}>
+            <button style={{ background: 'var(--accent)', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
               Complete sprint
             </button>
             <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.4rem 0.75rem', borderRadius: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>

@@ -23,21 +23,23 @@ export const JobDetail = ({
   jobs, 
   selectedJobId, 
   setSelectedJobId,
-  onApply
+  onApply,
+  isAdmin = false
 }: { 
-  jobs: JobDetailData[], 
+  jobs: any[], 
   selectedJobId: number, 
   setSelectedJobId: (id: number | null) => void,
-  onApply: () => void
+  onApply: () => void,
+  isAdmin?: boolean
 }) => {
   const selectedJob = jobs.find(j => j.id === selectedJobId);
 
   if (!selectedJob) return null;
 
   return (
-    <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+    <div className="profile-grid" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
       {/* Left Side List */}
-      <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="desktop-only" style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div 
           role="button"
           onClick={() => setSelectedJobId(null)}
@@ -64,13 +66,13 @@ export const JobDetail = ({
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-              <JobLogo letter={job.logoLetter} bg={job.logoBg} size={32} />
+              <JobLogo letter={job.logoLetter || job.title.charAt(0)} bg={job.logoBg || '#a855f7'} size={32} />
               <Bookmark size={16} style={{ color: selectedJobId === job.id ? 'var(--accent)' : 'var(--text-secondary)' }}/>
             </div>
             <h4 style={{ margin: '0 0 0.375rem 0', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)' }}>{job.title}</h4>
             <div style={{ display: 'flex', gap: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
-              <span>{job.experience}</span>
-              <span>{job.salary}</span>
+              <span>{job.experienceLevel || job.experience}</span>
+              <span>{job.salaryMin ? `$${job.salaryMin} - $${job.salaryMax}` : job.salary}</span>
             </div>
             <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
               <MapPin size={12}/> {job.location}
@@ -81,18 +83,31 @@ export const JobDetail = ({
 
       {/* Right Side Details */}
       <div className="card animate-fade-in" style={{ flex: 1, padding: '2.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+        {/* Mobile Back Button */}
+        <div 
+          className="mobile-only"
+          onClick={() => setSelectedJobId(null)}
+          style={{ display: 'none', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', cursor: 'pointer', marginBottom: '1.5rem', fontWeight: 500 }}
+        >
+          <ChevronLeft size={18} /> Back
+        </div>
+
+        <div className="profile-header-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <JobLogo letter={selectedJob.logoLetter} bg={selectedJob.logoBg} size={64} />
+            <JobLogo letter={selectedJob.logoLetter || selectedJob.title.charAt(0)} bg={selectedJob.logoBg || '#a855f7'} size={64} />
             <div>
               <h1 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', color: 'var(--text-primary)' }}>{selectedJob.title}</h1>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{selectedJob.company} • {selectedJob.posted}</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{selectedJob.department || selectedJob.company} • {selectedJob.posted || 'Posted recently'}</div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div className="display-flex-badges" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <Bookmark size={20} style={{ color: 'var(--text-secondary)', cursor: 'pointer' }}/>
-            <button style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Book Slot</button>
-            <button onClick={onApply} style={{ background: 'var(--accent)', border: 'none', color: 'white', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Apply Now</button>
+            {!isAdmin && (
+              <>
+                <button style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Book Slot</button>
+                <button onClick={onApply} style={{ background: 'var(--accent)', border: 'none', color: 'white', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Apply Now</button>
+              </>
+            )}
           </div>
         </div>
 

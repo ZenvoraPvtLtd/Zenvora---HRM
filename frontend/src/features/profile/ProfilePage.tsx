@@ -110,11 +110,10 @@ export default function Profile() {
 
   return (
     <div className="animate-fade-in" style={{ padding: '0 0.5rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1 className="page-title" style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>My Profile</h1>
-      <p className="page-subtitle" style={{ marginBottom: '2rem' }}>Manage your personal information and account settings.</p>
+      
 
       {/* Profile Header Card */}
-      <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem', marginBottom: '2rem', borderTop: '4px solid var(--accent)' }}>
+      <div className="card profile-header-card" style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem', marginBottom: '2rem', borderTop: '4px solid var(--accent)' }}>
         <div style={{ position: 'relative' }}>
           <div style={{ 
             width: '100px', height: '100px', borderRadius: '50%', 
@@ -135,18 +134,18 @@ export default function Profile() {
         
         <div style={{ flex: 1 }}>
           <h2 style={{ fontSize: '1.5rem', margin: '0 0 0.25rem 0', color: 'var(--text-primary)' }}>{userInfo.firstName} {userInfo.lastName}</h2>
-          <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-purple)', fontSize: '0.875rem', fontWeight: '500' }}>
+          <div className="display-flex-badges" style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-purple)', fontSize: '0.875rem', fontWeight: '500', justifyContent: 'inherit' }}>
               <Briefcase size={16} /> {userInfo.role}
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-secondary)', fontSize: '0.875rem', justifyContent: 'inherit' }}>
               <MapPin size={16} /> {userInfo.location}
             </span>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="profile-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
         
         {/* Personal Info Card */}
         <div className="card" style={{ padding: '2rem' }}>
@@ -174,7 +173,7 @@ export default function Profile() {
             )}
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          <div className="profile-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
             <InputField label="First Name" name="firstName" value={editMode.personal ? tempInfo.firstName : userInfo.firstName} isEditing={editMode.personal} onChange={handleChange} />
             <InputField label="Last Name" name="lastName" value={editMode.personal ? tempInfo.lastName : userInfo.lastName} isEditing={editMode.personal} onChange={handleChange} />
           </div>
@@ -251,7 +250,7 @@ export default function Profile() {
               <Briefcase size={18} style={{ color: 'var(--text-purple)' }}/> Employment Details
             </h3>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div className="profile-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               <div>
                 <label style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500' }}>Department</label>
                 <div style={{ color: 'var(--text-primary)', fontSize: '0.9375rem', padding: '0.5rem 0', fontWeight: '500' }}>{userInfo.department}</div>
