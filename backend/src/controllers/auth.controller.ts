@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-
 import User from "../models/user.model";
 
 import {
@@ -25,7 +24,6 @@ export const register = async (
   res: Response
 ) => {
   try {
-    const { fullName, email, password, role, phoneNumber } = req.body;
     const {
       name,
       fullName,

@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { darkTheme, lightTheme } from "../../styles/theme";
 import { useTheme } from "../../context/ThemeContext";
-import AuthLayout from "../../pages/auth/AuthLayout";
+import  { AuthLayout } from "../../pages/auth/AuthLayout";
 
 // ─── API Return Type ────────────────────────────────────────────────────────
 

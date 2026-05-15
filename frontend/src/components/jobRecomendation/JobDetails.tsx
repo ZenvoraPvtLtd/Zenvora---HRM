@@ -6,14 +6,11 @@ import {
   Award,
   ArrowLeft,
   CheckCircle2,
-  Clock,
-  Users,
   Target,
 } from "lucide-react";
 import { darkTheme, lightTheme } from "../../styles/theme";
 import { useTheme } from "../../context/ThemeContext";
 import AuthLayout from "../../pages/auth/AuthLayout";
-import Button from "../button/Button";
 import { ASSETS } from "../../constants/assets";
 
 const jobsData = [
