@@ -21,7 +21,7 @@ interface CandidateSidebarProps {
   isLoggedIn?: boolean;
 }
 
-const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: CandidateSidebarProps) => {
+const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: CandidateSidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 

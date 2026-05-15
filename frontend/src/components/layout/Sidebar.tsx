@@ -42,8 +42,7 @@ interface SidebarProps {
   isLoggedIn?: boolean;
 }
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: SidebarProps) => {
-  const { isDark, toggle } = useTheme();
+const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: SidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 
