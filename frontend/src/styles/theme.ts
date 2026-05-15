@@ -37,7 +37,7 @@ export const darkTheme: AppTheme = {
   card: "bg-white/5 border-white/10",
   logo: "text-white",
   tagline: "text-gray-400",
-  toggleBtn: "bg-white/5 border-white/10 text-white hover:text-white",
+  toggleBtn: "bg-white/5 border-white/10 text-gray-400 hover:text-white",
   heading: "text-white",
   subtext: "text-gray-400",
   label: "text-gray-300",
@@ -72,7 +72,7 @@ export const lightTheme: AppTheme = {
   tagline: "text-slate-500",
   toggleBtn:
     "bg-slate-100 border-slate-300 text-black hover:text-black",
-  heading: "text-slate-800",
+   heading: "text-slate-800",
   subtext: "text-slate-500",
   label: "text-slate-600",
   input:

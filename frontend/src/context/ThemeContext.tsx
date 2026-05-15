@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { darkTheme, lightTheme, type AppTheme } from "../styles/theme";
 
 interface ThemeContextType {
@@ -15,6 +15,15 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.remove('light-theme');
+    } else {
+      document.documentElement.classList.add('light-theme');
+    }
+  }, [isDark]);
+
   const toggle = () => setIsDark((prev) => !prev);
   return (
     <ThemeContext.Provider

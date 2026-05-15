@@ -26,7 +26,6 @@ const AuthLayout = ({ children, fullWidth = false }: Props) => {
       />
 
       <div className={`w-full ${fullWidth ? '' : 'max-w-xl'} relative z-10`}>
-
         {/* Card */}
         <div
           className={`backdrop-blur-xl ${theme.card} border rounded-3xl shadow-2xl p-8 transition-colors duration-300`}
