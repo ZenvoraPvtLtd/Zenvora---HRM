@@ -1,15 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
 
 :root {
-  --bg-primary: #0b0a1a;
-  --bg-secondary: #14132b;
-  --text-primary: #f8fafc;
-  --text-secondary: #8c8fa7;
+  --bg-primary: #070B34;
+  --bg-secondary: #0B102F;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
   --text-purple: #a855f7;
   --text-purple-hover: #c084fc;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --border: rgba(255, 255, 255, 0.08);
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --border: rgba(255, 255, 255, 0.1);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color-scheme: dark;
 }
@@ -27,11 +28,7 @@
   color-scheme: light;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+
 
 body {
   background-color: var(--bg-primary);
@@ -41,42 +38,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Purple text utility applied to all section headers */
-.page-title, 
-.page-subtitle, 
-h2, 
-.card h2,
+/* Purple text utility — only use on elements that need it */
 .text-purple {
-  color: var(--text-purple) !important;
+  color: var(--text-purple);
   transition: color 0.2s ease;
 }
 
-.page-title:hover, 
-.page-subtitle:hover, 
-h2:hover,
-.card h2:hover,
 .text-purple:hover {
-  color: var(--text-purple-hover) !important;
+  color: var(--text-purple-hover);
 }
 
-/* Global button style */
-button {
-  background: linear-gradient(to right, #9333ea, #2563eb) !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease !important;
-}
 
-button:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4);
-  color: white !important;
-}
 
 /* Layout container */
 .app-container {
@@ -86,13 +58,11 @@ button:hover {
 
 /* Sidebar */
 .sidebar {
-  width: 80px;
+  width: 200px;
   background-color: var(--bg-secondary);
-  border-right: none;
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 0;
-  align-items: center;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -147,7 +117,7 @@ button:hover {
 /* Main Content */
 .main-wrapper {
   flex: 1;
-  margin-left: 80px; /* Same as sidebar width */
+  margin-left: 200px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -159,8 +129,7 @@ button:hover {
   display: flex;
   align-items: center;
   padding: 0 2rem;
-  background-color: rgba(11, 10, 26, 0.8);
-  backdrop-filter: blur(16px);
+  background-color: var(--bg-secondary);
   position: sticky;
   top: 0;
   z-index: 30;
@@ -176,12 +145,14 @@ button:hover {
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
   color: var(--text-secondary);
   margin-bottom: 2rem;
   font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Components */

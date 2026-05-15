@@ -50,23 +50,29 @@ export const JobDetail = ({
           <div 
             key={job.id} 
             onClick={() => setSelectedJobId(job.id)}
-            className="card hover-effect" 
             style={{ 
-              padding: '1.25rem', cursor: 'pointer',
-              border: selectedJobId === job.id ? '2px solid var(--accent)' : '1px solid var(--border)',
-              background: selectedJobId === job.id ? 'rgba(99, 102, 241, 0.05)' : 'var(--bg-primary)'
+              padding: '1rem 1.25rem', 
+              cursor: 'pointer',
+              borderRadius: '0.75rem',
+              border: selectedJobId === job.id 
+                ? '2px solid var(--accent)' 
+                : '1px solid var(--border)',
+              background: selectedJobId === job.id 
+                ? 'rgba(124, 58, 237, 0.1)' 
+                : 'var(--bg-secondary)',
+              transition: 'all 0.15s ease',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <JobLogo letter={job.logoLetter} bg={job.logoBg} size={32} />
               <Bookmark size={16} style={{ color: selectedJobId === job.id ? 'var(--accent)' : 'var(--text-secondary)' }}/>
             </div>
-            <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1rem', color: 'var(--text-primary)' }}>{job.title}</h4>
-            <div style={{ display: 'flex', gap: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
+            <h4 style={{ margin: '0 0 0.375rem 0', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)' }}>{job.title}</h4>
+            <div style={{ display: 'flex', gap: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
               <span>{job.experience}</span>
               <span>{job.salary}</span>
             </div>
-            <div style={{ display: 'flex', gap: '0.25rem', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
+            <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
               <MapPin size={12}/> {job.location}
             </div>
           </div>
@@ -110,16 +116,16 @@ export const JobDetail = ({
         </div>
 
         <div style={{ marginBottom: '2rem' }}>
-          <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Job Description</h3>
-          <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '0.9375rem' }}>{selectedJob.description}</p>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Job Description</h3>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '1rem' }}>{selectedJob.description}</p>
         </div>
 
         <div style={{ marginBottom: '2rem' }}>
-          <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Responsibilities</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Responsibilities</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {selectedJob.responsibilities.map((req: string, idx: number) => (
-              <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>
-                <CheckCircle2 size={18} color="var(--accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.6' }}>
+                <CheckCircle2 size={18} color="var(--accent)" style={{ flexShrink: 0, marginTop: '3px' }} />
                 {req}
               </li>
             ))}
@@ -127,11 +133,11 @@ export const JobDetail = ({
         </div>
 
         <div>
-          <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Who You Are</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Who You Are</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {selectedJob.whoYouAre.map((req: string, idx: number) => (
-              <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>
-                <CheckCircle2 size={18} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.6' }}>
+                <CheckCircle2 size={18} color="#10b981" style={{ flexShrink: 0, marginTop: '3px' }} />
                 {req}
               </li>
             ))}

@@ -16,8 +16,8 @@ export default function Dashboard() {
     <div className="animate-fade-in" style={{ padding: '0 1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 className="page-title text-purple" style={{ margin: 0 }}>Dashboard</h1>
-          <p className="page-subtitle text-secondary" style={{ margin: 0, marginTop: '0.25rem' }}>Overview of your recruitment metrics.</p>
+          <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 700, color: 'var(--text-purple)', letterSpacing: '-0.02em' }}>Dashboard</h1>
+          <p style={{ margin: 0, marginTop: '0.25rem', fontSize: '0.95rem', color: 'var(--text-secondary)' }}>Overview of your recruitment metrics.</p>
         </div>
       </div>
 

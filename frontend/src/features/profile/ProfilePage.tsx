@@ -25,16 +25,54 @@ const InputField = ({ label, name, type = "text", value, isEditing, onChange }: 
 );
 
 export default function Profile() {
+  const storedName = localStorage.getItem('userName') || 'HR Admin';
+  const storedEmail = localStorage.getItem('userEmail') || 'admin@zenvora.com';
+  
+  const nameParts = storedName.trim().split(' ');
+  const initialFirstName = nameParts[0] || 'HR';
+  const initialLastName = nameParts.slice(1).join(' ') || 'Admin';
+  
+  const rawRole = (localStorage.getItem('userRole') || '').toLowerCase();
+  let displayRole = '';
+  let displayDept = '';
+  let displayBio = '';
+  switch (rawRole) {
+    case 'candidate':
+      displayRole = 'Candidate';
+      displayDept = 'Recruitment Pool';
+      displayBio = 'Actively seeking new opportunities and excited to grow my career.';
+      break;
+    case 'hr':
+      displayRole = 'HR';
+      displayDept = 'Human Resources';
+      displayBio = 'Passionate about building great HR tech tools and ensuring smooth system operations.';
+      break;
+    case 'admin':
+      displayRole = 'Admin';
+      displayDept = 'Administration';
+      displayBio = 'Managing system-wide settings and overseeing operations.';
+      break;
+    case 'employee':
+      displayRole = 'Employee';
+      displayDept = 'Operations';
+      displayBio = 'Contributing to the company’s success through daily tasks.';
+      break;
+    default:
+      displayRole = 'User';
+      displayDept = '';
+      displayBio = '';
+  }
+
   const [userInfo, setUserInfo] = useState({
-    firstName: 'Shreyas',
-    lastName: 'Kumar',
-    email: 'admin@zenvora.com',
+    firstName: initialFirstName,
+    lastName: initialLastName,
+    email: storedEmail,
     phone: '+91 98765 43210',
     location: 'Mumbai, India',
-    role: 'System Administrator',
-    department: 'IT Operations',
+    role: displayRole,
+    department: displayDept,
     joinDate: '12 Jan 2024',
-    bio: 'Passionate about building great HR tech tools and ensuring smooth system operations.'
+    bio: displayBio
   });
 
   const [editMode, setEditMode] = useState({
@@ -52,6 +90,14 @@ export default function Profile() {
   const handleSave = (section: 'personal' | 'contact') => {
     setUserInfo({ ...tempInfo });
     setEditMode({ ...editMode, [section]: false });
+    
+    if (section === 'personal' || section === 'contact') {
+      const newName = `${tempInfo.firstName} ${tempInfo.lastName}`.trim();
+      localStorage.setItem('userName', newName);
+      localStorage.setItem('userEmail', tempInfo.email);
+      // Dispatching a custom event could tell Layout to re-render, but a page reload is usually fine
+      window.dispatchEvent(new Event('storage')); 
+    }
   };
 
   const handleCancel = (section: 'personal' | 'contact') => {
