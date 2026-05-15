@@ -1,12 +1,43 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-/**
- * ProtectedRoute — requires a valid accessToken.
- * If not logged in, redirects to /login.
- */
-const ProtectedRoute = () => {
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+  fallbackPath?: string;
+}
+
+const KNOWN_ROLES = ['admin', 'hr', 'employee', 'candidate'];
+
+const clearAuthSession = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('userName');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userRole');
+};
+
+const ProtectedRoute = ({ allowedRoles, fallbackPath = "/" }: ProtectedRouteProps) => {
+  const location = useLocation();
   const token = localStorage.getItem('accessToken');
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  const role = localStorage.getItem('userRole');
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!role || !KNOWN_ROLES.includes(role)) {
+    clearAuthSession();
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
+  if (allowedRoles?.length && !allowedRoles.includes(role)) {
+    if (fallbackPath === location.pathname) {
+      clearAuthSession();
+      return <Navigate to="/login" replace />;
+    }
+
+    return <Navigate to={fallbackPath} replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -12,6 +12,15 @@ const OAuthCallback = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const decodeJwtPayload = (token: string) => {
+    try {
+      const payload = token.split(".")[1];
+      return JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     const handleOAuthCallback = async () => {
       try {
@@ -23,14 +32,20 @@ const OAuthCallback = () => {
           // Store tokens and redirect
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-          navigate("/dashboard");
+          const payload = decodeJwtPayload(accessToken);
+          if (payload?.role) localStorage.setItem("userRole", payload.role);
+          navigate(payload?.role === "candidate" ? "/candidate" : "/");
           return;
         }
 
         // If no tokens in URL, check if user is authenticated via API
         const response = await axios.get("/api/auth/me");
         if (response.data.success) {
-          navigate("/dashboard");
+          const user = response.data.user;
+          if (user?.name) localStorage.setItem("userName", user.name);
+          if (user?.email) localStorage.setItem("userEmail", user.email);
+          if (user?.role) localStorage.setItem("userRole", user.role);
+          navigate(user?.role === "candidate" ? "/candidate" : "/");
         } else {
           throw new Error("Authentication failed");
         }

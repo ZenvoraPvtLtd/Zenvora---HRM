@@ -12,13 +12,32 @@ const toArray = (value: unknown): string[] => {
   }
 
   if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed.map(String).filter(Boolean);
+      }
+    } catch {
+      // Fall back to comma-separated values below.
+    }
+
     return value
       .split(",")
+      .map((item) => item.replace(/^\[?["']?|["']?\]?$/g, ""))
       .map((item) => item.trim())
       .filter(Boolean);
   }
 
   return [];
+};
+
+const flattenCandidateSkills = (candidateData: any): string[] => {
+  const skills = candidateData?.skills || {};
+  return [
+    ...toArray(skills?.technical_skills),
+    ...toArray(skills?.soft_skills),
+    ...toArray(skills?.tools_and_technologies),
+  ];
 };
 
 const getCandidateName = (candidateData: any, fallback = "Candidate") =>
@@ -82,6 +101,23 @@ const buildFrontendAnalysis = (
   };
 };
 
+const buildCandidateAiFields = (fastApiResult: any) => {
+  const candidateData = fastApiResult?.candidate_data || fastApiResult?.data || {};
+
+  return {
+    parsedResume: candidateData,
+    detectedSkills: flattenCandidateSkills(candidateData),
+    detectedExperience: candidateData?.experience?.experience || candidateData?.experience || {},
+    riskAnalysis: fastApiResult?.risk_analysis || {},
+    rankingResult: fastApiResult?.ranking_result || {},
+    recommendedJobs: fastApiResult?.recommended_jobs || [],
+    fastApiParsedResumeId:
+      fastApiResult?.parsed_resume_id ||
+      fastApiResult?.data?._id ||
+      fastApiResult?._id,
+  };
+};
+
 const analyzeWithFastApi = async (
   resume: Express.Multer.File,
   appliedJob?: Record<string, unknown>
@@ -128,6 +164,7 @@ export const uploadCandidateResume = async (
     const resumeUrl = `/uploads/resumes/${req.file.filename}`;
     const fastApiResult = await analyzeWithFastApi(req.file);
     const frontendAnalysis = buildFrontendAnalysis(fastApiResult, req.file, req.user);
+    const aiFields = buildCandidateAiFields(fastApiResult);
 
     const existing = await Candidate.findOne({ userId });
 
@@ -142,6 +179,13 @@ export const uploadCandidateResume = async (
       existing.resumeOriginalName = req.file.originalname;
       existing.resumeMimeType = req.file.mimetype;
       existing.aiAnalysis = frontendAnalysis;
+      existing.parsedResume = aiFields.parsedResume;
+      existing.detectedSkills = aiFields.detectedSkills;
+      existing.detectedExperience = aiFields.detectedExperience;
+      existing.riskAnalysis = aiFields.riskAnalysis;
+      existing.rankingResult = aiFields.rankingResult;
+      existing.recommendedJobs = aiFields.recommendedJobs;
+      existing.fastApiParsedResumeId = aiFields.fastApiParsedResumeId;
       existing.uploadedAt = new Date();
       await existing.save();
 
@@ -155,6 +199,7 @@ export const uploadCandidateResume = async (
           uploadedAt: existing.uploadedAt,
         },
         analysis: frontendAnalysis,
+        extracted: aiFields,
       });
     }
 
@@ -164,6 +209,7 @@ export const uploadCandidateResume = async (
       resumeOriginalName: req.file.originalname,
       resumeMimeType: req.file.mimetype,
       aiAnalysis: frontendAnalysis,
+      ...aiFields,
     });
 
     return res.status(201).json({
@@ -176,6 +222,7 @@ export const uploadCandidateResume = async (
         uploadedAt: candidate.uploadedAt,
       },
       analysis: frontendAnalysis,
+      extracted: aiFields,
     });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
@@ -210,6 +257,7 @@ export const submitCandidateApplication = async (
     const resumeUrl = `/uploads/resumes/${req.file.filename}`;
     const fastApiResult = await analyzeWithFastApi(req.file, appliedJob);
     const frontendAnalysis = buildFrontendAnalysis(fastApiResult, req.file, req.user, appliedJob);
+    const aiFields = buildCandidateAiFields(fastApiResult);
 
     const candidate = await Candidate.findOneAndUpdate(
       { userId },
@@ -220,6 +268,7 @@ export const submitCandidateApplication = async (
         resumeMimeType: req.file.mimetype,
         appliedJob,
         aiAnalysis: frontendAnalysis,
+        ...aiFields,
         uploadedAt: new Date(),
       },
       { new: true, upsert: true, setDefaultsOnInsert: true }
@@ -237,6 +286,7 @@ export const submitCandidateApplication = async (
         uploadedAt: candidate.uploadedAt,
       },
       analysis: frontendAnalysis,
+      extracted: aiFields,
     });
   } catch (error: any) {
     return res.status(500).json({
@@ -259,13 +309,17 @@ export const getCandidateApplications = async (
         const analysis: any = candidate.aiAnalysis || {};
         return {
           id: candidate._id?.toString() || index + 1,
-          name: analysis?.candidate?.name || "Candidate",
-          email: analysis?.candidate?.email || "",
+          name: analysis?.candidate?.name || getCandidateName(candidate.parsedResume, "Candidate"),
+          email: analysis?.candidate?.email || getCandidateEmail(candidate.parsedResume, ""),
           avatar: `https://i.pravatar.cc/150?u=${candidate._id}`,
           role: analysis?.application?.role || "Applied Role",
           appliedDate: analysis?.application?.appliedDate || candidate.uploadedAt.toISOString().slice(0, 10),
           matchScore: analysis?.application?.matchScore || 0,
           status: analysis?.application?.status || "Pending",
+          detectedSkills: candidate.detectedSkills || [],
+          detectedExperience: candidate.detectedExperience || {},
+          riskAnalysis: candidate.riskAnalysis || {},
+          rankingResult: candidate.rankingResult || {},
           analysis,
         };
       }),
@@ -294,6 +348,15 @@ export const getCandidateResume = async (
         originalName: candidate.resumeOriginalName,
         mimeType: candidate.resumeMimeType,
         uploadedAt: candidate.uploadedAt,
+      },
+      extracted: {
+        parsedResume: candidate.parsedResume || {},
+        detectedSkills: candidate.detectedSkills || [],
+        detectedExperience: candidate.detectedExperience || {},
+        riskAnalysis: candidate.riskAnalysis || {},
+        rankingResult: candidate.rankingResult || {},
+        recommendedJobs: candidate.recommendedJobs || [],
+        fastApiParsedResumeId: candidate.fastApiParsedResumeId,
       },
     });
   } catch (error: any) {

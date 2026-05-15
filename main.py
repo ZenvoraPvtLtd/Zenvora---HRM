@@ -4,6 +4,7 @@ import shutil
 import json
 
 from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from ResumeParser import universal_parser
@@ -19,12 +20,30 @@ from database import jobs_collection
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 UPLOAD_DIR = "uploads"
 
 os.makedirs(
     UPLOAD_DIR,
     exist_ok=True
 )
+
+
+@app.get("/health")
+def health():
+    return {"success": True, "service": "fastapi-ai", "status": "ok"}
 
 
 def save_upload_file(upload_file: UploadFile, prefix: str = ""):
@@ -73,6 +92,26 @@ def build_job_description_text(
             f"Job Description: {job_description or ''}",
         ]
     )
+
+
+def flatten_resume_skills(resume_data: dict):
+    skills = resume_data.get("skills", {}) or {}
+    detected = []
+
+    for key in ("technical_skills", "soft_skills", "tools_and_technologies"):
+        value = skills.get(key, [])
+        if isinstance(value, list):
+            detected.extend([str(skill) for skill in value if skill])
+
+    return detected
+
+
+def store_parsed_resume(payload: dict):
+    if collection is None:
+        return None
+
+    result = collection.insert_one(payload)
+    return str(result.inserted_id)
 
 
 
@@ -345,13 +384,22 @@ async def parse_resume(file: UploadFile = File(...)):
 
         # Insert into database if available
         if collection is not None:
-            result = collection.insert_one(parsed_data)
-            parsed_data["_id"] = str(result.inserted_id)  # Convert ObjectId to string
+            stored_data = {
+                **parsed_data,
+                "detected_skills": flatten_resume_skills(parsed_data),
+                "detected_experience": parsed_data.get("experience", {}).get("experience", {}),
+            }
+            parsed_resume_id = store_parsed_resume(stored_data)
+            if parsed_resume_id:
+                parsed_data["_id"] = parsed_resume_id  # Convert ObjectId to string
         else:
             print("Warning: MongoDB not available. Data not stored in database.")
 
         return {
             "message": "Resume Parsed Successfully",
+            "parsed_resume_id": parsed_data.get("_id"),
+            "detected_skills": flatten_resume_skills(parsed_data),
+            "detected_experience": parsed_data.get("experience", {}).get("experience", {}),
             "data": parsed_data
         }
     
@@ -405,9 +453,13 @@ async def analyze_application(
             jd_text,
         )
 
+        parsed_resume_id = None
+
         if collection is not None:
             stored_data = {
                 **resume_data,
+                "detected_skills": flatten_resume_skills(resume_data),
+                "detected_experience": resume_data.get("experience", {}).get("experience", {}),
                 "application_job": {
                     "job_title": job_title,
                     "required_skills": required_skills_list,
@@ -420,13 +472,17 @@ async def analyze_application(
                 "risk_analysis": risk_result,
                 "ranking_result": ranking_result,
             }
-            result = collection.insert_one(stored_data)
-            resume_data["_id"] = str(result.inserted_id)
+            parsed_resume_id = store_parsed_resume(stored_data)
+            if parsed_resume_id:
+                resume_data["_id"] = parsed_resume_id
 
         return {
             "success": True,
             "message": "Application analyzed successfully",
+            "parsed_resume_id": parsed_resume_id,
             "candidate_data": resume_data,
+            "detected_skills": flatten_resume_skills(resume_data),
+            "detected_experience": resume_data.get("experience", {}).get("experience", {}),
             "jd_data": jd_data,
             "recommended_jobs": matched_jobs,
             "risk_analysis": risk_result,

@@ -37,7 +37,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Protected routes — redirect to /login if not logged in */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute allowedRoles={['admin', 'hr', 'employee']} fallbackPath="/candidate" />}>
         {/* HR Dashboard Portal */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
@@ -49,7 +49,9 @@ const AppRoutes = () => {
           <Route path="follow-up" element={<FollowUpPage />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+      </Route>
 
+      <Route element={<ProtectedRoute allowedRoles={['candidate']} fallbackPath="/" />}>
         {/* Candidate Portal */}
         <Route path="/candidate" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />
