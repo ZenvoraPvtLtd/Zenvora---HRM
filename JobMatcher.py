@@ -410,13 +410,19 @@ def match_jobs(
         # Experience Score
         # -----------------------------------
 
-        required_experience = float(
+        try:
 
-            job.get(
-                "experience_required",
-                0
+            required_experience = float(
+
+                job.get(
+                    "experience_required",
+                    0
+                )
             )
-        )
+
+        except:
+
+            required_experience = 0
 
         experience_score = (
 
