@@ -1,7 +1,7 @@
 import { ChevronLeft, UploadCloud, X } from 'lucide-react';
 
 export interface JobApplicationData {
-  id: number;
+  id: string | number;
   title: string;
   company: string;
   location: string;
@@ -13,7 +13,7 @@ export const JobApplicationForm = ({
   jobs, 
   onCancel 
 }: { 
-  jobId: number, 
+  jobId: string | number,
   jobs: JobApplicationData[], 
   onCancel: () => void 
 }) => {

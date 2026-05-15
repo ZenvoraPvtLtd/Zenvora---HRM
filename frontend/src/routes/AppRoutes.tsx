@@ -12,6 +12,7 @@ import CandidateLayout from '../components/layout/CandidateLayout';
 import Dashboard from '../features/dashboard/DashboardPage';
 import CandidateDashboard from '../features/candidate/CandidateDashboardPage';
 import Jobs from '../features/jobs/JobsPage';
+import CreateJobPage from '../features/jobs/CreateJobPage';
 import Candidates from '../features/candidates/CandidatesPage';
 import Interviews from '../features/interviews/InterviewsPage';
 import Attendance from '../features/attendance/AttendancePage';
@@ -25,7 +26,6 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-      <Route path="/jobs" element={<JobRecommendations />} />
       {/* Public routes — redirect to / if already logged in */}
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
@@ -38,6 +38,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="jobs" element={<Jobs />} />
+          <Route path="jobs/create" element={<CreateJobPage />} />
           <Route path="candidates" element={<Candidates />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="attendance" element={<Attendance />} />
@@ -51,7 +52,7 @@ const AppRoutes = () => {
         {/* Candidate Portal */}
         <Route path="/candidate" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />
-          <Route path="jobs" element={<Jobs isCandidateView={true} />} />
+          <Route path="jobs" element={<JobRecommendations />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>

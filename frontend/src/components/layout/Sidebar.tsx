@@ -10,7 +10,8 @@ import {
   CalendarCheck,
   MessageSquare,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Bell
 } from 'lucide-react';
 
 const navSections = [
@@ -24,7 +25,7 @@ const navSections = [
   {
     label: 'EMPLOYEE',
     items: [
-      { to: '/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
+      { to: '/jobs/create', icon: <Briefcase size={18} />, label: 'Create Job' },
       { to: '/candidates', icon: <Users size={18} />, label: 'Candidates' },
       { to: '/interviews', icon: <Video size={18} />, label: 'Interviews' },
       { to: '/attendance', icon: <CalendarCheck size={18} />, label: 'Attendance' },
@@ -36,25 +37,23 @@ const navSections = [
 interface SidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (val: boolean) => void;
+  userName?: string;
+  userEmail?: string;
+  isLoggedIn?: boolean;
 }
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: SidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
+  const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 
   return (
     <aside
       style={{
-        width: isCollapsed ? '72px' : '240px',
-        minWidth: isCollapsed ? '72px' : '240px',
+        width: '100%',
+        height: '100%',
         background: 'var(--bg-secondary)',
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        zIndex: 40,
         borderRight: '1px solid var(--border)',
         transition: 'width 0.3s ease',
       }}
@@ -169,6 +168,49 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
           </>
         )}
       </div>
+
+      {/* Mobile Only: Profile and Notifications */}
+      {isLoggedIn && (
+        <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            <div
+              style={{ 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                border: '1px solid rgba(59, 130, 246, 0.2)', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                color: '#3b82f6', 
+                fontWeight: 'bold' 
+              }}
+            >
+              {avatarLetter}
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail}</div>
+            </div>
+          </div>
+          <button style={{ 
+            width: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.75rem', 
+            padding: '0.625rem 0.75rem', 
+            background: 'var(--bg-hover)', 
+            border: 'none', 
+            borderRadius: '0.5rem', 
+            color: 'var(--text-primary)', 
+            fontSize: '0.875rem',
+            cursor: 'pointer'
+          }}>
+            <Bell size={18} /> Notifications
+          </button>
+        </div>
+      )}
 
       {/* Nav sections */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: isCollapsed ? '1rem 0.5rem' : '1rem 0.75rem' }}>
