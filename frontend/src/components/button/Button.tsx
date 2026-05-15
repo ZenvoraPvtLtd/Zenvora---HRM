@@ -18,7 +18,7 @@ const Button = ({
     <button
       {...props}
       disabled={disabled || loading}
-      className={`w-full bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
+      className={`w-full font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed bg-linear-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white hover:scale-[1.01] shadow-lg shadow-purple-500/20 ${className}`}
     >
       {loading ? (
         loadingText

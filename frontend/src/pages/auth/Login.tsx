@@ -6,7 +6,7 @@ import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
-import AuthLayout from "./AuthLayout";
+import { AuthLayout } from "../auth/AuthLayout";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,8 +39,12 @@ const Login = () => {
           email: values.email,
           password: values.password,
         });
-        localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/dashboard");
+        const { accessToken, user } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        if (user?.name) localStorage.setItem("userName", user.name);
+        if (user?.email) localStorage.setItem("userEmail", user.email);
+        if (user?.role) localStorage.setItem("userRole", user.role);
+        navigate(user?.role === "candidate" ? "/candidate" : "/");
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {
@@ -141,7 +145,8 @@ const Login = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className={`text-sm ${theme.label}`}>Password</label>
-        </div>
+         
+          </div>
           <div className="relative">
             <Lock
               size={18}

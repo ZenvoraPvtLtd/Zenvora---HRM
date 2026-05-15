@@ -1,12 +1,16 @@
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
+
+import './App.css'
+
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
+
 import AppRoutes from './routes/AppRoutes';
 
 function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <AppRoutes />
+      <AppRoutes />
       </ThemeProvider>
     </BrowserRouter>
   );

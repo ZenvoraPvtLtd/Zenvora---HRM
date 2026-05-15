@@ -6,7 +6,9 @@ import { Navigate, Outlet } from 'react-router-dom';
  */
 const PublicRoute = () => {
   const token = localStorage.getItem('accessToken');
-  return token ? <Navigate to="/" replace /> : <Outlet />;
+  const role = localStorage.getItem('userRole');
+  if (!token) return <Outlet />;
+  return <Navigate to={role === 'candidate' ? '/candidate' : '/'} replace />;
 };
 
 export default PublicRoute;

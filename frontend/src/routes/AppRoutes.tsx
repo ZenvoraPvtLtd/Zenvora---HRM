@@ -5,6 +5,8 @@ import ForgotPassword from '../pages/auth/ForgotPassword';
 import ResetPassword from '../pages/auth/ResetPassword';
 import OAuthCallback from '../pages/auth/OAuthCallback';
 import { JobRecommendations } from '../components/jobRecomendation/JobRecommendations';
+import { JobDetails } from '../components/jobRecomendation/JobDetails';
+import RiskAnalysis from "../components/RiskAnalysis/RiskAnalysis";
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import Layout from '../components/layout/Layout';
@@ -22,13 +24,12 @@ import FollowUpPage from '../features/followup/FollowUpPage';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/jobs" element={<JobRecommendations />} />
+      <Route path="/jobs/:id" element={<JobDetails />} />
+      <Route path="/risk" element={<RiskAnalysis  />} />
       {/* Public routes — redirect to / if already logged in */}
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
