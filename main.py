@@ -51,42 +51,24 @@ class JobOpening(BaseModel):
 # ============================================
 
 @app.post("/create_job_opening")
-async def create_job_opening(
-    job: JobOpening
-):
+def create_job_opening(job: JobOpening):
 
-    try:
+    job_data = job.dict()
 
-        job_data = job.dict()
+    result = jobs_collection.insert_one(
+        job_data
+    )
 
-        result = jobs_collection.insert_one(
-            job_data
-        )
+    return {
 
-        return {
+        "success": True,
 
-            "message":
-                "Job Opening Created Successfully",
+        "message":
+        "Job created successfully",
 
-            "job_id":
-                str(result.inserted_id),
-
-            "job_data":
-                job_data
-        }
-
-    except Exception as e:
-
-        return JSONResponse(
-
-            status_code=500,
-
-            content={
-                "error": str(e)
-            }
-        )
-
-
+        "job_id":
+        str(result.inserted_id)
+    }
 # ============================================
 # SMART JOB MATCH ENDPOINT
 # ============================================
