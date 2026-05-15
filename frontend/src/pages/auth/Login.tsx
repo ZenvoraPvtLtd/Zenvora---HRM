@@ -6,7 +6,8 @@ import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
-import { AuthLayout } from "../auth/AuthLayout";
+import AuthLayout from "./AuthLayout";
+import { getDashboardPath, storeAuthUser } from "../../utils/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,12 +40,9 @@ const Login = () => {
           email: values.email,
           password: values.password,
         });
-        const { accessToken, user } = response.data;
-        localStorage.setItem("accessToken", accessToken);
-        if (user?.name) localStorage.setItem("userName", user.name);
-        if (user?.email) localStorage.setItem("userEmail", user.email);
-        if (user?.role) localStorage.setItem("userRole", user.role);
-        navigate(user?.role === "candidate" ? "/candidate" : "/");
+        localStorage.setItem("accessToken", response.data.accessToken);
+        storeAuthUser(response.data.user);
+        navigate(getDashboardPath(response.data.user?.role), { replace: true });
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {

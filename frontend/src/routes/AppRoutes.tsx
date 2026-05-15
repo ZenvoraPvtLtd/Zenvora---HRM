@@ -6,7 +6,7 @@ import ResetPassword from '../pages/auth/ResetPassword';
 import OAuthCallback from '../pages/auth/OAuthCallback';
 import { JobRecommendations } from '../components/jobRecomendation/JobRecommendations';
 import { JobDetails } from '../components/jobRecomendation/JobDetails';
-import RiskAnalysis from "../components/RiskAnalysis/RiskAnalysis";
+import RiskAnalysis from '../components/RiskAnalysis/RiskAnalysis';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import Layout from '../components/layout/Layout';
@@ -29,16 +29,14 @@ const AppRoutes = () => {
       <Route path="/oauth/callback" element={<OAuthCallback />} />
       <Route path="/jobs" element={<JobRecommendations />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
-      <Route path="/risk" element={<RiskAnalysis  />} />
-      {/* Public routes — redirect to / if already logged in */}
+      <Route path="/risk" element={<RiskAnalysis />} />
+
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
-      {/* Protected routes — redirect to /login if not logged in */}
-      <Route element={<ProtectedRoute allowedRoles={['admin', 'hr', 'employee']} fallbackPath="/candidate" />}>
-        {/* HR Dashboard Portal */}
+      <Route element={<ProtectedRoute allowedRoles="hr" />}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="jobs" element={<Jobs />} />
@@ -51,8 +49,7 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={['candidate']} fallbackPath="/" />}>
-        {/* Candidate Portal */}
+      <Route element={<ProtectedRoute allowedRoles="candidate" />}>
         <Route path="/candidate" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />
           <Route path="jobs" element={<Jobs isCandidateView={true} />} />
@@ -60,7 +57,6 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

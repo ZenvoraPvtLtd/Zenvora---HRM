@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { LogOut, LogIn, Sun, Moon, UserCircle, Search, Bell, Menu, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import Sidebar from './Sidebar';
+import { clearAuthStorage } from '../../utils/auth';
 
 const Layout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -182,9 +183,7 @@ const Layout = () => {
                         </Link>
                         <div
                           onClick={() => {
-                            localStorage.removeItem('accessToken');
-                            localStorage.removeItem('userEmail');
-                            localStorage.removeItem('userName');
+                            clearAuthStorage();
                             setIsLoggedIn(false);
                             setIsDropdownOpen(false);
                             navigate('/login');
@@ -198,7 +197,11 @@ const Layout = () => {
                       </>
                     ) : (
                       <div
-                        onClick={() => { setIsLoggedIn(true); setIsDropdownOpen(false); }}
+                        onClick={() => {
+                          setIsLoggedIn(false);
+                          setIsDropdownOpen(false);
+                          navigate('/login');
+                        }}
                         style={{ padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--text-primary)', fontSize: '0.875rem', borderRadius: '0.25rem', transition: 'background 0.2s' }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}

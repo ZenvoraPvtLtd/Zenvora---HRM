@@ -1,26 +1,18 @@
 import { Navigate, Outlet } from 'react-router-dom';
-
-const KNOWN_ROLES = ['admin', 'hr', 'employee', 'candidate'];
-
-const clearAuthSession = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('userName');
-  localStorage.removeItem('userEmail');
-  localStorage.removeItem('userRole');
-};
+import { clearAuthStorage, getDashboardPath, getStoredUserRole } from '../utils/auth';
 
 const PublicRoute = () => {
   const token = localStorage.getItem('accessToken');
-  const role = localStorage.getItem('userRole');
+  const role = getStoredUserRole();
 
   if (!token) return <Outlet />;
 
-  if (!role || !KNOWN_ROLES.includes(role)) {
-    clearAuthSession();
+  if (!role) {
+    clearAuthStorage();
     return <Outlet />;
   }
 
-  return <Navigate to={role === 'candidate' ? '/candidate' : '/'} replace />;
+  return <Navigate to={getDashboardPath(role)} replace />;
 };
 
 export default PublicRoute;

@@ -4,6 +4,7 @@ import axios from "axios";
 import { ShieldCheck, Loader2 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import AuthLayout from "./AuthLayout";
+import { getDashboardPath, getRoleFromToken, storeAuthUser } from "../../utils/auth";
 
 const OAuthCallback = () => {
   const navigate = useNavigate();
@@ -11,15 +12,6 @@ const OAuthCallback = () => {
   const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const decodeJwtPayload = (token: string) => {
-    try {
-      const payload = token.split(".")[1];
-      return JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
-    } catch {
-      return null;
-    }
-  };
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
@@ -32,20 +24,21 @@ const OAuthCallback = () => {
           // Store tokens and redirect
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-          const payload = decodeJwtPayload(accessToken);
-          if (payload?.role) localStorage.setItem("userRole", payload.role);
-          navigate(payload?.role === "candidate" ? "/candidate" : "/");
+          const role = getRoleFromToken(accessToken);
+
+          if (role) {
+            localStorage.setItem("userRole", role);
+          }
+
+          navigate(getDashboardPath(role), { replace: true });
           return;
         }
 
         // If no tokens in URL, check if user is authenticated via API
         const response = await axios.get("/api/auth/me");
         if (response.data.success) {
-          const user = response.data.user;
-          if (user?.name) localStorage.setItem("userName", user.name);
-          if (user?.email) localStorage.setItem("userEmail", user.email);
-          if (user?.role) localStorage.setItem("userRole", user.role);
-          navigate(user?.role === "candidate" ? "/candidate" : "/");
+          storeAuthUser(response.data.user);
+          navigate(getDashboardPath(response.data.user?.role), { replace: true });
         } else {
           throw new Error("Authentication failed");
         }

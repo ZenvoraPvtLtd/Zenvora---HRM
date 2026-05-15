@@ -1,40 +1,36 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import {
+  clearAuthStorage,
+  getDashboardPath,
+  getStoredUserRole,
+  isCandidateRole,
+  isHrRole,
+} from '../utils/auth';
 
-interface ProtectedRouteProps {
-  allowedRoles?: string[];
-  fallbackPath?: string;
-}
-
-const KNOWN_ROLES = ['admin', 'hr', 'employee', 'candidate'];
-
-const clearAuthSession = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('userName');
-  localStorage.removeItem('userEmail');
-  localStorage.removeItem('userRole');
+type ProtectedRouteProps = {
+  allowedRoles?: 'hr' | 'candidate';
 };
 
-const ProtectedRoute = ({ allowedRoles, fallbackPath = "/" }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const location = useLocation();
   const token = localStorage.getItem('accessToken');
-  const role = localStorage.getItem('userRole');
+  const role = getStoredUserRole();
 
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!role || !KNOWN_ROLES.includes(role)) {
-    clearAuthSession();
+  if (!role) {
+    clearAuthStorage();
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
-  if (allowedRoles?.length && !allowedRoles.includes(role)) {
-    if (fallbackPath === location.pathname) {
-      clearAuthSession();
-      return <Navigate to="/login" replace />;
-    }
+  if (allowedRoles === 'hr' && !isHrRole(role)) {
+    return <Navigate to={getDashboardPath(role)} replace />;
+  }
 
-    return <Navigate to={fallbackPath} replace />;
+  if (allowedRoles === 'candidate' && !isCandidateRole(role)) {
+    return <Navigate to={getDashboardPath(role)} replace />;
   }
 
   return <Outlet />;

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { Briefcase, LayoutDashboard, UserCircle, LogOut, LogIn, Sun, Moon, PanelLeftClose, PanelLeftOpen, Search, Bell, Menu, X } from 'lucide-react';
+import { clearAuthStorage } from '../../utils/auth';
 
 const candidateNavSections = [
   {
@@ -465,10 +466,7 @@ const CandidateLayout = () => {
                       </Link>
                       <div 
                         onClick={() => { 
-                          localStorage.removeItem('accessToken');
-                          localStorage.removeItem('userEmail');
-                          localStorage.removeItem('userName');
-                          localStorage.removeItem('userRole');
+                          clearAuthStorage();
                           setIsLoggedIn(false); 
                           setIsDropdownOpen(false); 
                           navigate('/login');
