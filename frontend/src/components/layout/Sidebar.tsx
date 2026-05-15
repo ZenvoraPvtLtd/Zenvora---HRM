@@ -13,8 +13,6 @@ import {
   PanelLeftOpen,
   Bell
 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-
 const navSections = [
   {
     label: 'MAIN',
@@ -40,11 +38,9 @@ interface SidebarProps {
   setIsCollapsed: (val: boolean) => void;
   userName?: string;
   userEmail?: string;
-  isLoggedIn?: boolean;
 }
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: SidebarProps) => {
-  const { isDark, toggle } = useTheme();
+const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: SidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 

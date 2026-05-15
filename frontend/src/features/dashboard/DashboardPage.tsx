@@ -4,24 +4,58 @@ import {
   Clock,
   UserPlus,
   BarChart3,
-  MoreHorizontal
+  MoreHorizontal,
+  Search,
+  Bell,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { AuthLayout } from '../../pages/auth/AuthLayout';
 
 export default function Dashboard() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, toggle } = useTheme();
 
   return (
-    <div className={`animate-fade-in relative min-h-screen w-full ${theme.page} transition-colors duration-300`}>
+    <AuthLayout fullWidth noShadow>
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-      {/* Background blurs — same as AuthLayout */}
-      <div className={`fixed top-0 left-0 w-72 h-72 ${theme.blur1} blur-[120px] opacity-50 pointer-events-none z-0`} />
-      <div className={`fixed bottom-0 right-0 w-72 h-72 ${theme.blur2} blur-[120px] opacity-40 pointer-events-none z-0`} />
 
-      <div className="relative z-10">
+        {/* Custom Page Header (Moved from Layout) */}
+        <div className="backdrop-blur-md bg-white/5 rounded-2xl p-4 border border-white/10 mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Search Bar */}
+            <div className="relative w-full sm:w-[350px]">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input 
+                type="text" 
+                placeholder="Search candidates, jobs..." 
+                className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-purple-500/50"
+              />
+            </div>
+
+            {/* Profile & Notifications */}
+            <div className="flex items-center gap-4">
+              <button className="text-gray-400 hover:text-white">
+                <Bell size={20} />
+              </button>
+              
+              <div className="flex items-center gap-3">
+                <div className="text-right text-sm text-white hidden sm:block">
+                  <span className="text-gray-400">Welcome back, </span>
+                  <span className="font-semibold">{localStorage.getItem('userName') || 'HR'}</span>
+                </div>
+                
+                <div className="w-9 h-9 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-sm">
+                  {(localStorage.getItem('userName') || 'HR').charAt(0).toUpperCase()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       {/* Hero Banner */}
-      <div className={`relative overflow-hidden rounded-2xl border mb-8 px-10 py-8 ${
+      <div className={`relative overflow-hidden rounded-2xl border mb-8 p-6 sm:p-10 ${
         isDark
           ? 'bg-[#0f0a1e] border-purple-900/30'
           : `${theme.card} border`
@@ -30,8 +64,8 @@ export default function Dashboard() {
         <div className={`absolute bottom-0 right-0 w-56 h-56 ${theme.blur2} blur-[100px] opacity-30 pointer-events-none`} />
         <div className="relative z-10">
           <h1 className={`text-3xl font-bold tracking-tight ${theme.heading}`}>
-            Welcome back!{' '}
-            <span className="text-purple-500">HR Dashboard</span>
+            Welcome back,{' '}
+            <span className="text-purple-500">{localStorage.getItem('userName') || 'HR'}</span>
           </h1>
           <p className={`mt-1 text-sm ${theme.subtext}`}>
             Here's an overview of your recruitment metrics.
@@ -58,13 +92,13 @@ export default function Dashboard() {
       </div>
 
       {/* Main Row */}
-      <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
         {/* Total Applications Donut */}
         <div className={`backdrop-blur-xl border rounded-2xl p-6 flex flex-col transition-colors duration-300 ${theme.card}`}>
           <div className={`text-base font-semibold mb-6 ${theme.heading}`}>Total Applications</div>
 
-          <div className="chart-container-responsive" style={{ display: 'flex', alignItems: 'center', gap: '2rem', flex: 1 }}>
+          <div className="flex flex-col sm:flex-row items-center gap-6 flex-1">
             <div className="chart-donut" style={{ position: 'relative', width: '180px', height: '180px', flexShrink: 0 }}>
               <div style={{
                 width: '100%', height: '100%', borderRadius: '50%',
@@ -115,7 +149,7 @@ export default function Dashboard() {
               { name: 'Rahul Verma', role: 'Backend Developer', date: '17 May, 2026', time: '11:00 AM' },
               { name: 'Sneha Kapoor', role: 'UI/UX Designer', date: '17 May, 2026', time: '03:30 PM' }
             ].map((interview) => (
-              <div key={interview.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+              <div key={interview.name} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${isDark ? 'bg-white/5 text-white' : 'bg-slate-100 text-slate-700'}`}>
                     {interview.name.charAt(0)}
@@ -125,11 +159,11 @@ export default function Dashboard() {
                     <div className={`text-xs truncate ${theme.subtext}`}>{interview.role}</div>
                   </div>
                 </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div className={`text-xs flex items-center gap-1 justify-end ${theme.label}`}>
+                <div className="text-left sm:text-right flex-shrink-0">
+                  <div className={`text-xs flex items-center gap-1 justify-start sm:justify-end ${theme.label}`}>
                     <Calendar size={12} /> {interview.date.split(',')[0]}
                   </div>
-                  <div className={`text-xs flex items-center gap-1 justify-end mt-0.5 ${theme.subtext}`}>
+                  <div className={`text-xs flex items-center gap-1 justify-start sm:justify-end mt-0.5 ${theme.subtext}`}>
                     <Clock size={12} /> {interview.time}
                   </div>
                 </div>
@@ -140,7 +174,7 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom Row */}
-      <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '1.5rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Recent Activity */}
         <div className={`backdrop-blur-xl border rounded-2xl p-6 transition-colors duration-300 ${theme.card}`}>
@@ -156,7 +190,7 @@ export default function Dashboard() {
               { icon: <BarChart3 size={16} />, text: 'Rahul moved to Technical', time: '20m', color: '#f59e0b' },
               { icon: <FileX size={16} />, text: 'Mohit Patel was rejected', time: '30m', color: '#ef4444' }
             ].map((activity, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+              <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
                   <div style={{
                     width: '36px', height: '36px', borderRadius: '0.5rem',
@@ -167,7 +201,7 @@ export default function Dashboard() {
                   </div>
                   <span className={`text-sm truncate ${theme.heading}`}>{activity.text}</span>
                 </div>
-                <span className={`text-xs shrink-0 ${theme.subtext}`}>{activity.time}</span>
+                <span className={`text-xs shrink-0 ${theme.subtext} self-start sm:self-auto`}>{activity.time}</span>
               </div>
             ))}
           </div>
@@ -180,7 +214,7 @@ export default function Dashboard() {
             <MoreHorizontal size={18} className={`cursor-pointer ${theme.subtext}`} />
           </div>
 
-          <div className="table-container">
+          <div className="table-container overflow-x-auto">
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr className={`text-xs border-b ${theme.subtext} ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
@@ -236,6 +270,6 @@ export default function Dashboard() {
       </div>
 
       </div> {/* relative z-10 */}
-    </div>
+    </AuthLayout>
   );
 }

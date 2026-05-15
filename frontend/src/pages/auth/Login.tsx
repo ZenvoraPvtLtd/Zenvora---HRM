@@ -43,6 +43,7 @@ const Login = () => {
         localStorage.setItem("accessToken", accessToken);
         if (user?.name) localStorage.setItem("userName", user.name);
         if (user?.email) localStorage.setItem("userEmail", user.email);
+        if (user?.phoneNumber) localStorage.setItem("userPhone", user.phoneNumber);
         if (user?.role) localStorage.setItem("userRole", user.role);
         navigate(user?.role === "candidate" ? "/candidate" : "/");
       } catch (error: any) {

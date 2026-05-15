@@ -2,10 +2,27 @@ import { Request, Response } from "express";
 import Job from "../models/job.model";
 import { AuthRequest } from "../middlewares/auth.middleware";
 
-export const createJob = async (
-  req: AuthRequest,
-  res: Response
-) => {
+export const getJobs = async (req: Request, res: Response) => {
+  try {
+    const jobs = await Job.find({ status: "Open" })
+      .select("-__v")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error: any) {
+    console.error("Get jobs error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch jobs",
+      error: error.message,
+    });
+  }
+};
+
+export const createJob = async (req: AuthRequest, res: Response) => {
   try {
     const {
       title,
@@ -50,14 +67,23 @@ export const createJob = async (
       });
     }
 
-    if (!Array.isArray(skills) || !Array.isArray(responsibilities) || !Array.isArray(qualifications)) {
+    if (
+      !Array.isArray(skills) ||
+      !Array.isArray(responsibilities) ||
+      !Array.isArray(qualifications)
+    ) {
       return res.status(400).json({
         success: false,
         message: "Skills, responsibilities, and qualifications must be arrays",
       });
     }
 
-    const allowedJobTypes = ["Full-time", "Part-time", "Internship", "Contract"];
+    const allowedJobTypes = [
+      "Full-time",
+      "Part-time",
+      "Internship",
+      "Contract",
+    ];
     if (!allowedJobTypes.includes(jobType)) {
       return res.status(400).json({
         success: false,
@@ -87,7 +113,9 @@ export const createJob = async (
       qualifications,
       openings: openings || 1,
       status: status || "Open",
-      applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : undefined,
+      applicationDeadline: applicationDeadline
+        ? new Date(applicationDeadline)
+        : undefined,
       createdBy: req.user.id,
     });
 
