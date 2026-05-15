@@ -15,6 +15,7 @@ import {
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
+import { getDashboardPath, storeAuthUser } from "../../utils/auth";
 
 function getPasswordStrength(password: string): {
   label: string;
@@ -94,10 +95,12 @@ const Register = () => {
           role: values.role,
           password: values.password,
         };
-        await axios.post("/api/auth/register", payload);
-        setApiSuccess("Account created successfully! Redirecting to login...");
+        const response = await axios.post("/api/auth/register", payload);
+        localStorage.setItem("accessToken", response.data.accessToken);
+        storeAuthUser(response.data.user);
+        setApiSuccess("Account created successfully! Redirecting...");
         resetForm();
-        setTimeout(() => navigate("/login"), 1500);
+        navigate(getDashboardPath(response.data.user?.role), { replace: true });
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Registration failed. Please try again.");
       } finally {

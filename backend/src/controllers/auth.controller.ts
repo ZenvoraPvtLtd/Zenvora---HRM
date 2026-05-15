@@ -48,8 +48,24 @@ export const register = async (
       phoneNumber
     );
 
+    const accessToken = generateAccessToken(
+      user._id.toString(),
+      user.role
+    );
+
+    const refreshToken = generateRefreshToken(
+      user._id.toString()
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+
     res.status(201).json({
       success: true,
+      accessToken,
       user,
     });
   } catch (error: any) {
