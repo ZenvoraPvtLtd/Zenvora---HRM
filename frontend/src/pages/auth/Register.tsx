@@ -95,7 +95,7 @@ const Register = () => {
           password: values.password,
         };
         await axios.post("/api/auth/register", payload);
-        setApiSuccess("Account created successfully! Redirecting to login...");
+        setApiSuccess("Account created successfully! Redirecting...");
         resetForm();
         setTimeout(() => navigate("/login"), 1500);
       } catch (error: any) {

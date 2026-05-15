@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes";
 import oauthRoutes from "./routes/oauth.routes";
 import jobRoutes from "./routes/job.routes";
 import candidateRoutes from "./routes/candidate.routes";
+import applicationRoutes from "./routes/application.routes";
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use("/api/auth", oauthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/candidate", candidateRoutes);
+app.use("/api/applications", applicationRoutes);
 
 export default app;

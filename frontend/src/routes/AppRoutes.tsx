@@ -24,12 +24,9 @@ import FollowUpPage from '../features/followup/FollowUpPage';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/jobs" element={<JobRecommendations />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
       <Route path="/risk" element={<RiskAnalysis  />} />
