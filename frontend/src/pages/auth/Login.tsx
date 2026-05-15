@@ -42,9 +42,7 @@ const Login = () => {
         localStorage.setItem("accessToken", response.data.accessToken);
         navigate("/dashboard");
       } catch (error: any) {
-        setApiError(
-          error?.response?.data?.message || "Login failed. Please try again.",
-        );
+        setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {
         setSubmitting(false);
       }
@@ -65,9 +63,9 @@ const Login = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <button
           type="button"
-          onClick={handleGoogleLogin}
-          className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
-        >
+        onClick={handleGoogleLogin}
+        className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+      >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path
               fill="#4285F4"
@@ -143,7 +141,7 @@ const Login = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className={`text-sm ${theme.label}`}>Password</label>
-          </div>
+        </div>
           <div className="relative">
             <Lock
               size={18}

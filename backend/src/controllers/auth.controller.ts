@@ -3,6 +3,7 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 
 import User from "../models/user.model";
+
 import {
   registerUser,
   loginUser,
@@ -30,9 +31,10 @@ export const register = async (
       email,
       password,
       role,
+      phoneNumber,
     } = req.body;
 
-    const userName = name || fullName;
+    const userName = (name || fullName || "").trim();
 
     if (!userName) {
       throw new Error("Name is required");
@@ -42,7 +44,8 @@ export const register = async (
       userName,
       email,
       password,
-      role
+      role,
+      phoneNumber
     );
 
     res.status(201).json({
@@ -68,34 +71,24 @@ export const login = async (
   res: Response
 ) => {
   try {
-    const { email, password } =
-      req.body;
+    const { email, password } = req.body;
 
-    const user = await loginUser(
-      email,
-      password
+    const user = await loginUser(email, password);
+
+    const accessToken = generateAccessToken(
+      user._id.toString(),
+      user.role
     );
 
-    const accessToken =
-      generateAccessToken(
-        user._id.toString(),
-        user.role
-      );
-
-    const refreshToken =
-      generateRefreshToken(
-        user._id.toString()
-      );
-
-    res.cookie(
-      "refreshToken",
-      refreshToken,
-      {
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict",
-      }
+    const refreshToken = generateRefreshToken(
+      user._id.toString()
     );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
 
     res.status(200).json({
       success: true,

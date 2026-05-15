@@ -20,6 +20,7 @@ export interface IUser extends Document {
   password?: string;
 resetPasswordToken?: string;
 resetPasswordExpire?: Date;
+
   role: UserRole;
 
   googleId?: string;

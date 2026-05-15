@@ -9,7 +9,6 @@ interface HoverableCardProps {
 
 const HoverableCard = ({ title, icon, description }: HoverableCardProps) => {
   const { theme } = useTheme();
-
   return (
     <div
       className={`${theme.featureCard} border rounded-2xl p-4 hover:-translate-y-0.5 transition-all duration-300`}

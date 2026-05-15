@@ -4,8 +4,7 @@ import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import OAuthCallback from "../pages/auth/OAuthCallback";
- 
- 
+import { JobRecommendations } from "../components/jobRecomendation/JobRecommendations";
 
 const AppRoutes = () => {
   return (
@@ -15,9 +14,8 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-       
-      
       <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/jobs" element={<JobRecommendations />} />
     </Routes>
   );
 };
