@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { LogOut, LogIn, Sun, Moon, UserCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import Sidebar from './Sidebar';
+import { clearAuthStorage } from '../../utils/auth';
 
 const Layout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -117,9 +118,7 @@ const Layout = () => {
                       </Link>
                       <div 
                       onClick={() => { 
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('userEmail');
-                        localStorage.removeItem('userName');
+                        clearAuthStorage();
                         setIsLoggedIn(false); 
                         setIsDropdownOpen(false); 
                         navigate('/login');

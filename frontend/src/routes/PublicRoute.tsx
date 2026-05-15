@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { getDashboardPath, getStoredUserRole } from '../utils/auth';
 
 /**
  * PublicRoute — only for guests (login/register).
@@ -6,7 +7,8 @@ import { Navigate, Outlet } from 'react-router-dom';
  */
 const PublicRoute = () => {
   const token = localStorage.getItem('accessToken');
-  return token ? <Navigate to="/" replace /> : <Outlet />;
+  const role = getStoredUserRole();
+  return token ? <Navigate to={getDashboardPath(role)} replace /> : <Outlet />;
 };
 
 export default PublicRoute;

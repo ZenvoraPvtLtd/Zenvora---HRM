@@ -22,12 +22,9 @@ import FollowUpPage from '../features/followup/FollowUpPage';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/jobs" element={<JobRecommendations />} />
       {/* Public routes — redirect to / if already logged in */}
       <Route element={<PublicRoute />}>
@@ -36,8 +33,8 @@ const AppRoutes = () => {
       </Route>
 
       {/* Protected routes — redirect to /login if not logged in */}
-      <Route element={<ProtectedRoute />}>
-        {/* HR Dashboard Portal */}
+      <Route element={<ProtectedRoute allowedRoles="hr" />}>
+        {/* HR/Admin Dashboard Portal */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="jobs" element={<Jobs />} />
@@ -48,7 +45,9 @@ const AppRoutes = () => {
           <Route path="follow-up" element={<FollowUpPage />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+      </Route>
 
+      <Route element={<ProtectedRoute allowedRoles="candidate" />}>
         {/* Candidate Portal */}
         <Route path="/candidate" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />

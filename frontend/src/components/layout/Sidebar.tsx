@@ -12,7 +12,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen
 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
 
 const navSections = [
   {

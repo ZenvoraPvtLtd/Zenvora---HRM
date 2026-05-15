@@ -7,6 +7,7 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
+import { getDashboardPath, storeAuthUser } from "../../utils/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ const Login = () => {
           password: values.password,
         });
         localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/dashboard");
+        storeAuthUser(response.data.user);
+        navigate(getDashboardPath(response.data.user?.role), { replace: true });
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {
