@@ -25,7 +25,7 @@ const navSections = [
   {
     label: 'EMPLOYEE',
     items: [
-      { to: '/jobs/create', icon: <Briefcase size={18} />, label: 'Create Job' },
+      { to: '/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
       { to: '/candidates', icon: <Users size={18} />, label: 'Candidates' },
       { to: '/interviews', icon: <Video size={18} />, label: 'Interviews' },
       { to: '/attendance', icon: <CalendarCheck size={18} />, label: 'Attendance' },

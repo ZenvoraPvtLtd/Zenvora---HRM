@@ -112,7 +112,14 @@ export const toJobFormData = (job: any): JobFormData => ({
 });
 
 const parseJobResponse = async (response: Response) => {
-  const data = await response.json();
+  const text = await response.text();
+  let data: any = {};
+
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error('Jobs API did not return valid JSON. Please check that the backend server is running on port 5000.');
+  }
 
   if (!response.ok) {
     throw new Error(data?.message || 'Job request failed');
