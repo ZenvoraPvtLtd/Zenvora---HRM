@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
-import { Briefcase, LayoutDashboard, UserCircle, LogOut, LogIn, Sun, Moon, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Briefcase, LayoutDashboard, UserCircle, LogOut, LogIn, Sun, Moon, PanelLeftClose, PanelLeftOpen, Search, Bell, Menu, X } from 'lucide-react';
 
 const candidateNavSections = [
   {
@@ -16,25 +16,23 @@ const candidateNavSections = [
 interface CandidateSidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (val: boolean) => void;
+  userName?: string;
+  userEmail?: string;
+  isLoggedIn?: boolean;
 }
 
-const CandidateSidebar = ({ isCollapsed, setIsCollapsed }: CandidateSidebarProps) => {
+const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: CandidateSidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
+  const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 
   return (
     <aside
       style={{
-        width: isCollapsed ? '72px' : '240px',
-        minWidth: isCollapsed ? '72px' : '240px',
+        width: '100%',
+        height: '100%',
         background: 'var(--bg-secondary)',
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        zIndex: 40,
         borderRight: '1px solid var(--border)',
         transition: 'width 0.3s ease',
       }}
@@ -149,6 +147,47 @@ const CandidateSidebar = ({ isCollapsed, setIsCollapsed }: CandidateSidebarProps
           </>
         )}
       </div>
+      
+      {/* Mobile Only: Profile and Notifications */}
+      <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+          <div
+            style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '50%', 
+              backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+              border: '1px solid rgba(59, 130, 246, 0.2)', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              color: '#3b82f6', 
+              fontWeight: 'bold' 
+            }}
+          >
+            {avatarLetter}
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName || 'Guest'}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail || 'Welcome'}</div>
+          </div>
+        </div>
+        <button style={{ 
+          width: '100%', 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '0.75rem', 
+          padding: '0.625rem 0.75rem', 
+          background: 'var(--bg-hover)', 
+          border: 'none', 
+          borderRadius: '0.5rem', 
+          color: 'var(--text-primary)', 
+          fontSize: '0.875rem',
+          cursor: 'pointer'
+        }}>
+          <Bell size={18} /> Notifications
+        </button>
+      </div>
 
       {/* Nav sections */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: isCollapsed ? '1rem 0.5rem' : '1rem 0.75rem' }}>
@@ -261,6 +300,7 @@ const CandidateLayout = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { isDark, toggle } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -286,53 +326,113 @@ const CandidateLayout = () => {
 
   return (
     <div className="app-container">
-      <CandidateSidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
-      <div className="main-wrapper" style={{ marginLeft: isSidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s ease' }}>
-        <header className="header">
+      <div className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)} />
+      <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        <CandidateSidebar 
+          isCollapsed={isSidebarCollapsed} 
+          setIsCollapsed={setIsSidebarCollapsed}
+          userName={userName}
+          userEmail={userEmail}
+          isLoggedIn={isLoggedIn}
+        />
+      </div>
+      <div className="main-wrapper" style={{ marginLeft: isSidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s ease', width: '100%' }}>
+        <header className="header" style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          padding: '1rem 2rem', 
+          background: 'var(--bg-primary)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: 'none',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
+        }}>
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            style={{ 
+              display: 'none', 
+              background: 'transparent', 
+              border: 'none', 
+              color: 'var(--text-primary)', 
+              cursor: 'pointer',
+              marginRight: '1rem'
+            }}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          
+          <div className="header-search" style={{ position: 'relative', width: '450px' }}>
+            <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+            <input 
+              type="text" 
+              placeholder="Search candidates, jobs..." 
+              style={{ 
+                width: '100%', 
+                padding: '0.75rem 1rem 0.75rem 3rem', 
+                borderRadius: '2rem', 
+                border: 'none', 
+                background: 'var(--chart-bg)', 
+                color: 'var(--text-primary)', 
+                fontSize: '0.9rem',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+              }} 
+            />
+          </div>
 
-
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative' }} ref={dropdownRef}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative' }} ref={dropdownRef}>
+            <button className="desktop-only" style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center' }} title="Notifications">
+              <Bell size={22} />
+            </button>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              {isLoggedIn ? (
-                <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                  Welcome back, <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{userName}</span>
-                </span>
-              ) : (
-                <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                  Welcome, Guest
-                </span>
-              )}
-              <div 
+            <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div className="header-welcome-text" style={{ textAlign: 'right', display: isLoggedIn ? 'block' : 'none' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Welcome back,</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>{userName}</div>
+              </div>
+              
+              <div
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontWeight: 'bold' }}
+                style={{ 
+                  width: '40px', 
+                  height: '40px', 
+                  borderRadius: '50%', 
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                  border: '1px solid rgba(59, 130, 246, 0.2)', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: '#3b82f6', 
+                  fontWeight: 'bold',
+                  fontSize: '1rem'
+                }}
               >
                 {avatarLetter}
               </div>
             </div>
 
-            {/* Theme Toggle in Header (to match Admin) */}
-            <button
-              onClick={() => toggle()}
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              style={{
-                width: '36px',
-                height: '36px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '50%',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            {/* Theme Toggle - Always Visible */}
+              <button
+                onClick={() => toggle()}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  background: 'var(--chart-bg)',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer'
+                }}
+              >
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+
 
             {isDropdownOpen && (
               <div className="animate-fade-in" style={{

@@ -11,6 +11,9 @@
   --accent: #7c3aed;
   --accent-hover: #6d28d9;
   --border: rgba(255, 255, 255, 0.1);
+  --card-bg: #0B102F;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --chart-bg: rgba(255, 255, 255, 0.05);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color-scheme: dark;
 }
@@ -25,6 +28,9 @@
   --accent: #4f46e5;
   --accent-hover: #4338ca;
   --border: rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --chart-bg: rgba(0, 0, 0, 0.05);
   color-scheme: light;
 }
 
@@ -58,7 +64,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 200px;
+  width: auto;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border);
   display: flex;
@@ -68,6 +74,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: 40;
+  transition: width 0.3s ease, transform 0.3s ease;
 }
 
 .sidebar-logo {
@@ -117,22 +124,21 @@ body {
 /* Main Content */
 .main-wrapper {
   flex: 1;
-  margin-left: 200px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
 .header {
-  height: 72px;
-  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  padding: 0 2rem;
-  background-color: var(--bg-secondary);
+  padding: 1rem 2rem;
+  background-color: var(--bg-primary);
+  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 100;
 }
 
 .main-content {
@@ -180,8 +186,148 @@ body {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Fix dropdown options visibility */
-select option {
-  background-color: var(--bg-secondary);
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 260px !important;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+  }
+
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    flex: 1;
+  }
+
+  .header {
+    padding: 0.75rem 1rem !important;
+    height: auto !important;
+  }
+
+  .main-content {
+    padding: 1rem 0.5rem !important;
+  }
+
+  .page-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .page-subtitle {
+    font-size: 0.875rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Stack grid layouts */
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Card optimizations */
+  .card {
+    padding: 1.25rem !important;
+  }
+
+  /* Hide non-essential header elements on mobile */
+  .header-welcome-text {
+    display: none !important;
+  }
+
+  /* Table responsiveness */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .header-search {
+    display: none;
+  }
+  
+  .metric-card-value {
+    font-size: 1.5rem !important;
+  }
+
+  .chart-container-responsive {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1.5rem !important;
+  }
+
+  .chart-donut {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .chart-donut-inner {
+    width: 110px !important;
+    height: 110px !important;
+  }
+}
+
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 35;
+  backdrop-filter: blur(8px);
+}
+
+.mobile-overlay.active {
+  display: block;
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  background: var(--bg-hover);
+  border: none;
   color: var(--text-primary);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex !important;
+  }
 }
