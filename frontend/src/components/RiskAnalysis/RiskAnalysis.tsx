@@ -237,7 +237,7 @@ export default function RiskAnalysis({ results = mockResults }: RiskAnalysisProp
 
   return (
     <AuthLayout fullWidth>
-      <div className={`px-6 py-10 max-w-7xl mx-auto ${theme.page} ${theme.heading}`}>
+      <div className={`px-6 py-10 max-w-7xl mx-auto rounded-xl ${theme.page} ${theme.heading}`}>
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
