@@ -5,6 +5,8 @@ export interface ICandidate extends Document {
   resumeUrl: string;
   resumeOriginalName: string;
   resumeMimeType: string;
+  appliedJob?: Record<string, unknown>;
+  aiAnalysis?: Record<string, unknown>;
   uploadedAt: Date;
 }
 
@@ -27,6 +29,12 @@ const candidateSchema = new Schema<ICandidate>(
     resumeMimeType: {
       type: String,
       required: true,
+    },
+    appliedJob: {
+      type: Schema.Types.Mixed,
+    },
+    aiAnalysis: {
+      type: Schema.Types.Mixed,
     },
     uploadedAt: {
       type: Date,

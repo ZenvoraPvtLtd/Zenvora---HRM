@@ -5,6 +5,19 @@ from sklearn.metrics.pairwise import cosine_similarity
 from SkillsExtractor import extract_skills
 
 
+def flatten_skills(skills):
+    if isinstance(skills, tuple):
+        flattened = []
+        for group in skills:
+            if isinstance(group, list):
+                flattened.extend(group)
+            elif group:
+                flattened.append(group)
+        return flattened
+
+    return skills or []
+
+
 def detect_fake_experience(resume_text, jd_text):
     """Detect signs of fake or exaggerated experience."""
     return {
@@ -47,10 +60,16 @@ def check_grammar(resume_text):
 
 def calculate_skill_overlap(resume_skills, jd_skills):
     """Calculate skill overlap between resume and JD."""
+    resume_skills_set = set([skill.lower() for skill in flatten_skills(resume_skills)])
+    jd_skills_set = set([skill.lower() for skill in flatten_skills(jd_skills)])
+    matched_skills = sorted(resume_skills_set & jd_skills_set)
+    missing_skills = sorted(jd_skills_set - resume_skills_set)
+    overlap_score = round((len(matched_skills) / len(jd_skills_set)) * 100, 2) if jd_skills_set else 100
+
     return {
-        "overlap_score": 75,
-        "matched_skills": [],
-        "missing_skills": []
+        "overlap_score": overlap_score,
+        "matched_skills": matched_skills,
+        "missing_skills": missing_skills
     }
 
 

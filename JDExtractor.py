@@ -7,9 +7,18 @@ from ExperienceExtractor import (
 
 def build_jd_json(text):
 
-    technical, soft, tools = (
-        extract_skills(text)
-    )
+    extracted_skills = extract_skills(text)
+
+    if isinstance(extracted_skills, tuple):
+        all_skills = []
+
+        for skill_group in extracted_skills:
+            if isinstance(skill_group, list):
+                all_skills.extend(skill_group)
+            elif skill_group:
+                all_skills.append(skill_group)
+    else:
+        all_skills = extracted_skills or []
 
     experience = (
         extract_experience(text)
@@ -18,7 +27,7 @@ def build_jd_json(text):
     all_skills = list(
 
         set(
-            technical + soft + tools
+            all_skills
         )
     )
 

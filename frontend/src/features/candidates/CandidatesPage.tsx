@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search, Filter, Calendar, Mail, FileText, CheckCircle, XCircle, Clock, Video } from 'lucide-react';
+import API_BASE_URL from '../../config/apiConfig';
 
 const initialCandidates = [
   {
@@ -57,6 +58,29 @@ const initialCandidates = [
 export default function CandidatesPage() {
   const [candidates, setCandidates] = useState(initialCandidates.sort((a, b) => b.matchScore - a.matchScore));
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const loadAnalyzedCandidates = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/candidate/applications`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+          },
+        });
+
+        if (!response.ok) return;
+
+        const result = await response.json();
+        if (Array.isArray(result.candidates) && result.candidates.length > 0) {
+          setCandidates(result.candidates.sort((a: any, b: any) => b.matchScore - a.matchScore));
+        }
+      } catch {
+        // Keep demo data visible if the backend is offline or the user is not an HR/admin.
+      }
+    };
+
+    loadAnalyzedCandidates();
+  }, []);
 
   const handleScheduleInterview = (id: number) => {
     setCandidates(candidates.map(c => c.id === id ? { ...c, status: 'Interview Scheduled' } : c));

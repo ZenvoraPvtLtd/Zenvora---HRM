@@ -1,7 +1,9 @@
 import os
 import shutil
 
-from fastapi import FastAPI, UploadFile, File
+import json
+
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 
 from ResumeParser import universal_parser
@@ -23,6 +25,54 @@ os.makedirs(
     UPLOAD_DIR,
     exist_ok=True
 )
+
+
+def save_upload_file(upload_file: UploadFile, prefix: str = ""):
+    safe_name = os.path.basename(upload_file.filename or "uploaded-file")
+    file_path = os.path.join(UPLOAD_DIR, f"{prefix}{safe_name}")
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+
+    return file_path
+
+
+def normalize_required_skills(required_skills: str | None):
+    if not required_skills:
+        return []
+
+    try:
+        parsed = json.loads(required_skills)
+        if isinstance(parsed, list):
+            return [str(skill) for skill in parsed]
+    except Exception:
+        pass
+
+    return [
+        skill.strip()
+        for skill in required_skills.split(",")
+        if skill.strip()
+    ]
+
+
+def build_job_description_text(
+    job_title: str | None,
+    department: str | None,
+    location: str | None,
+    experience_required: str | None,
+    required_skills: list[str],
+    job_description: str | None,
+):
+    return "\n".join(
+        [
+            f"Job Title: {job_title or ''}",
+            f"Department: {department or ''}",
+            f"Location: {location or ''}",
+            f"Experience Required: {experience_required or ''}",
+            f"Required Skills: {', '.join(required_skills)}",
+            f"Job Description: {job_description or ''}",
+        ]
+    )
 
 
 
@@ -309,4 +359,86 @@ async def parse_resume(file: UploadFile = File(...)):
         return JSONResponse(
             status_code=500,
             content={"error": str(e), "message": "Failed to parse resume"}
+        )
+
+
+@app.post("/analyze_application")
+async def analyze_application(
+    resume: UploadFile = File(...),
+    job_title: str | None = Form(None),
+    required_skills: str | None = Form(None),
+    experience_required: str | None = Form(None),
+    department: str | None = Form(None),
+    location: str | None = Form(None),
+    job_description: str | None = Form(None),
+):
+    try:
+        resume_path = save_upload_file(resume, "application-")
+        resume_text = universal_parser(resume_path)
+        resume_data = build_json(resume_text)
+        resume_data["raw_resume_text"] = resume_text
+
+        matched_jobs = match_jobs(resume_data, resume_text)
+
+        required_skills_list = normalize_required_skills(required_skills)
+        jd_text = build_job_description_text(
+            job_title,
+            department,
+            location,
+            experience_required,
+            required_skills_list,
+            job_description,
+        )
+        jd_data = build_jd_json(jd_text)
+
+        risk_result = analyze_candidate_risk(
+            resume_data,
+            jd_data,
+            resume_text,
+            jd_text,
+        )
+
+        ranking_result = generate_candidate_ranking(
+            resume_data,
+            jd_data,
+            resume_text,
+            jd_text,
+        )
+
+        if collection is not None:
+            stored_data = {
+                **resume_data,
+                "application_job": {
+                    "job_title": job_title,
+                    "required_skills": required_skills_list,
+                    "experience_required": experience_required,
+                    "department": department,
+                    "location": location,
+                    "job_description": job_description,
+                },
+                "recommended_jobs": matched_jobs,
+                "risk_analysis": risk_result,
+                "ranking_result": ranking_result,
+            }
+            result = collection.insert_one(stored_data)
+            resume_data["_id"] = str(result.inserted_id)
+
+        return {
+            "success": True,
+            "message": "Application analyzed successfully",
+            "candidate_data": resume_data,
+            "jd_data": jd_data,
+            "recommended_jobs": matched_jobs,
+            "risk_analysis": risk_result,
+            "ranking_result": ranking_result,
+        }
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "error": str(e),
+                "message": "Application analysis failed",
+            },
         )

@@ -253,6 +253,9 @@ def match_jobs(
 
     resume_text=""
 ):
+    if jobs_collection is None:
+        return []
+
 
     # -----------------------------------
     # Candidate Skills

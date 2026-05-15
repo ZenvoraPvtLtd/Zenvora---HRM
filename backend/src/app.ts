@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes";
 import oauthRoutes from "./routes/oauth.routes";
 import jobRoutes from "./routes/job.routes";
 import candidateRoutes from "./routes/candidate.routes";
+import { requireDatabase } from "./middlewares/db.middleware";
 
 const app = express();
 
@@ -23,8 +24,8 @@ app.use("/api/oauth", oauthRoutes);
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use("/api/auth", oauthRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/jobs", jobRoutes);
-app.use("/api/candidate", candidateRoutes);
+app.use("/api/auth", requireDatabase, authRoutes);
+app.use("/api/jobs", requireDatabase, jobRoutes);
+app.use("/api/candidate", requireDatabase, candidateRoutes);
 
 export default app;

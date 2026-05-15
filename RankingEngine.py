@@ -3,6 +3,19 @@ from sklearn.metrics.pairwise import cosine_similarity
 from SkillsExtractor import extract_skills
 
 
+def flatten_skills(skills):
+    if isinstance(skills, tuple):
+        flattened = []
+        for group in skills:
+            if isinstance(group, list):
+                flattened.extend(group)
+            elif group:
+                flattened.append(group)
+        return flattened
+
+    return skills or []
+
+
 def calculate_experience_score(candidate_exp, required_exp):
     """Calculate experience score based on candidate vs required experience."""
     if required_exp == 0:
@@ -112,8 +125,8 @@ def calculate_skill_score(resume_skills, jd_skills):
 def generate_candidate_ranking(resume_data, jd_data, resume_text, jd_text):
     """Generate comprehensive candidate ranking against job description."""
     # Extract skills from resume and JD
-    resume_skills = extract_skills(resume_text)
-    jd_skills = extract_skills(jd_text)
+    resume_skills = flatten_skills(extract_skills(resume_text))
+    jd_skills = flatten_skills(extract_skills(jd_text))
 
     # Calculate skill score and matching
     skill_result = calculate_skill_score(resume_skills, jd_skills)
