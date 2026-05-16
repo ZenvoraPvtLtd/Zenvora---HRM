@@ -1,24 +1,27 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
-import OAuthCallback from "../pages/auth/OAuthCallback";
-import { JobRecommendations } from "../components/jobRecomendation/JobRecommendations";
-import { JobDetails } from "../components/jobRecomendation/JobDetails";
-import RiskAnalysis from "../components/RiskAnalysis/RiskAnalysis";
-import ProtectedRoute from "./ProtectedRoute";
-import PublicRoute from "./PublicRoute";
-import Layout from "../components/layout/Layout";
-import CandidateLayout from "../components/layout/CandidateLayout";
-import Dashboard from "../features/dashboard/DashboardPage";
-import CandidateDashboard from "../features/candidate/CandidateDashboardPage";
-import Candidates from "../features/candidates/CandidatesPage";
-import Interviews from "../features/interviews/InterviewsPage";
-import Attendance from "../features/attendance/AttendancePage";
-import ResultsReview from "../features/results/ResultsReviewPage";
-import Profile from "../features/profile/ProfilePage";
-import FollowUpPage from "../features/followup/FollowUpPage";
+import { JobDetailPage } from "../features/candidateDashboard/JobDetailPage";
+import RiskAnalysis from "../features/dashboard/RiskAnalysisPage";
+
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from '../pages/auth/Login';
+import Register from '../pages/auth/Register';
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import ResetPassword from '../pages/auth/ResetPassword';
+import OAuthCallback from '../pages/auth/OAuthCallback';
+import { JobsPage } from '../features/candidateDashboard/JobsPage';
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
+import Layout from '../components/layout/Layout';
+import CandidateLayout from '../components/layout/CandidateLayout';
+import Dashboard from '../features/dashboard/DashboardPage';
+import CandidateDashboard from '../features/candidateDashboard/CandidateDashboardPage';
+import Jobs from '../features/dashboard/jobs/JobsPage';
+import CreateJobPage from '../features/dashboard/jobs/CreateJobPage';
+import Candidates from '../features/dashboard/CandidatesPage';
+import Interviews from '../features/dashboard/InterviewsPage';
+import Attendance from '../features/dashboard/AttendancePage';
+import ResultsReview from '../features/dashboard/ResultsReviewPage';
+import Profile from '../features/dashboard/ProfilePage';
+import FollowUpPage from '../features/dashboard/FollowUpPage';
 
 const AppRoutes = () => {
   return (
@@ -35,10 +38,12 @@ const AppRoutes = () => {
       </Route>
 
       {/* Protected routes — redirect to /login if not logged in */}
-      <Route element={<ProtectedRoute />}>
-        {/* HR Dashboard Portal */}
+      <Route element={<ProtectedRoute allowedRoles="hr" />}>
+        {/* HR/Admin Dashboard Portal */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path="createjobs" element={<Jobs />} />
+          <Route path="createjobs/create" element={<CreateJobPage />} />
           <Route path="candidates" element={<Candidates />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="attendance" element={<Attendance />} />
@@ -46,12 +51,14 @@ const AppRoutes = () => {
           <Route path="follow-up" element={<FollowUpPage />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+      </Route>
 
+      <Route element={<ProtectedRoute allowedRoles="candidate" />}>
         {/* Candidate Portal */}
-        <Route path="/candidate" element={<CandidateLayout />}>
+        <Route path="/candidatedashboard" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />
-          <Route path="jobs" element={<JobRecommendations />} />
-          <Route path="jobs/:id" element={<JobDetails />} />
+          <Route path="jobs" element={<JobsPage />} />
+          <Route path="jobs/:id" element={<JobDetailPage />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { ShieldCheck, Loader2 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import AuthLayout from "./AuthLayout";
+import { getDashboardPath, getRoleFromToken } from "../../utils/auth";
 
 const OAuthCallback = () => {
   const navigate = useNavigate();
@@ -23,14 +24,20 @@ const OAuthCallback = () => {
           // Store tokens and redirect
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-          navigate("/dashboard");
+          const role = getRoleFromToken(accessToken);
+
+          if (role) {
+            localStorage.setItem("userRole", role);
+          }
+
+          navigate(getDashboardPath(role), { replace: true });
           return;
         }
 
         // If no tokens in URL, check if user is authenticated via API
         const response = await axios.get("/api/auth/me");
         if (response.data.success) {
-          navigate("/dashboard");
+          navigate(getDashboardPath(response.data.user?.role), { replace: true });
         } else {
           throw new Error("Authentication failed");
         }

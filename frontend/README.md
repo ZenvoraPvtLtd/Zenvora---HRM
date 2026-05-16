@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Zenvora Internship – Enterprise Level AI Product Development
 
 Hello Team,
@@ -297,7 +295,6 @@ This project is designed to provide real-world experience in:
 
 Best Regards
 Zenvora Pvt. Ltd.
->>>>>>> e5169471baf53db4960a60709be88be833f8527c
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

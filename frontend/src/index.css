@@ -153,7 +153,19 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2.5rem;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .main-content {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    padding: 2.5rem;
+  }
 }
 
 .page-title {
@@ -312,13 +324,12 @@ body {
     flex: 1;
   }
 
-  .header {
-    padding: 0.75rem 1rem !important;
-    height: auto !important;
+  .mobile-topbar {
+    display: flex !important;
   }
 
   .main-content {
-    padding: 1rem 0.5rem !important;
+    padding: 0.75rem !important;
   }
 
   .page-title {
@@ -372,6 +383,62 @@ body {
 
   .table {
     min-width: 600px;
+  }
+
+  /* Profile Page Responsiveness */
+  .profile-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile-header-card {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 1.5rem !important;
+  }
+
+  .profile-header-card > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-header-card .display-flex-badges {
+    justify-content: center !important;
+    width: 100%;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* FollowUp Page Responsiveness */
+  .followup-header {
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+
+  .followup-tabs {
+    overflow-x: auto !important;
+    padding-bottom: 5px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .followup-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .followup-actions {
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+
+  .followup-actions > div {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .followup-actions .search-input {
+    width: 100% !important;
   }
 
   .mobile-only {
@@ -448,8 +515,16 @@ body {
   cursor: pointer;
 }
 
+#mobile-topbar {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .mobile-menu-btn {
+    display: flex !important;
+  }
+
+  #mobile-topbar {
     display: flex !important;
   }
 }
