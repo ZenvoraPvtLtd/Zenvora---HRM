@@ -1,5 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import api from '../../utils/axiosInstance';
+import { useState, useEffect, useRef } from "react";
+import api from "../../utils/axiosInstance";
+import { darkTheme, lightTheme } from "../../styles/theme";
+import { useTheme } from "../../context/ThemeContext";
+import { AuthLayout } from "../../pages/auth/AuthLayout";
 import {
   FileText,
   CheckCircle,
@@ -12,8 +15,10 @@ import {
   Briefcase,
   Upload,
   Trash2,
-  Loader2
-} from 'lucide-react';
+  Loader2,
+  Search,
+  Bell,
+} from "lucide-react";
 
 interface ResumeData {
   url: string;
@@ -23,6 +28,8 @@ interface ResumeData {
 }
 
 export default function CandidateDashboard() {
+  const { isDark } = useTheme();
+  const theme = isDark ? darkTheme : lightTheme;
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [resumeLoading, setResumeLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -31,7 +38,7 @@ export default function CandidateDashboard() {
   const [success, setSuccess] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = "http://localhost:5000";
 
   useEffect(() => {
     fetchResume();
@@ -40,11 +47,11 @@ export default function CandidateDashboard() {
   const fetchResume = async () => {
     setResumeLoading(true);
     try {
-      const res = await api.get('/api/candidate/resume');
+      const res = await api.get("/api/candidate/resume");
       setResume(res.data.resume);
     } catch (err: any) {
       if (err.response?.status !== 404) {
-        setError('Failed to load resume.');
+        setError("Failed to load resume.");
       }
       setResume(null);
     } finally {
@@ -56,13 +63,17 @@ export default function CandidateDashboard() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowed = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
     if (!allowed.includes(file.type)) {
-      setError('Only PDF, DOC, or DOCX files are allowed.');
+      setError("Only PDF, DOC, or DOCX files are allowed.");
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be under 5 MB.');
+      setError("File size must be under 5 MB.");
       return;
     }
 
@@ -71,31 +82,37 @@ export default function CandidateDashboard() {
     setUploading(true);
 
     const formData = new FormData();
-    formData.append('resume', file);
+    formData.append("resume", file);
 
     try {
-      const res = await api.post('/api/candidate/resume', formData);
+      const res = await api.post("/api/candidate/resume", formData);
       setResume(res.data.resume);
-      setSuccess(resume ? 'Resume updated successfully!' : 'Resume uploaded successfully!');
+      setSuccess(
+        resume
+          ? "Resume updated successfully!"
+          : "Resume uploaded successfully!",
+      );
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Upload failed. Please try again.');
+      setError(
+        err.response?.data?.message || "Upload failed. Please try again.",
+      );
     } finally {
       setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete your resume?')) return;
+    if (!window.confirm("Are you sure you want to delete your resume?")) return;
     setError(null);
     setSuccess(null);
     setDeleting(true);
     try {
-      await api.delete('/api/candidate/resume');
+      await api.delete("/api/candidate/resume");
       setResume(null);
-      setSuccess('Resume deleted successfully.');
+      setSuccess("Resume deleted successfully.");
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Delete failed.');
+      setError(err.response?.data?.message || "Delete failed.");
     } finally {
       setDeleting(false);
     }
@@ -103,268 +120,292 @@ export default function CandidateDashboard() {
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    return d.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
 
   return (
-    <div className="animate-fade-in candidate-dashboard">
-      <div className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h1 className="page-title">Candidate Dashboard</h1>
-          <p className="page-subtitle" style={{ marginBottom: 0 }}>Welcome back! Here is the status of your applications.</p>
+    <AuthLayout fullWidth noShadow>
+      <div className={`px-6 py-10 max-w-7xl mx-auto rounded-xl ${theme.page} ${theme.heading}`}>
+        {/* Top Header Bar */}
+        <div className="flex items-center justify-between gap-4 mb-10 bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+          {/* Search Bar */}
+          <div className="relative w-full max-w-[450px]">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              type="text" 
+              placeholder="Search candidates, jobs..." 
+              className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500 text-sm"
+            />
+          </div>
+
+          {/* User Profile & Notifications */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <button className="text-gray-400 hover:text-white transition-colors" title="Notifications">
+              <Bell size={22} />
+            </button>
+            
+            <div className="flex items-center gap-3">
+              <div className="text-right text-sm text-white hidden sm:block">
+                <span className="text-gray-400">Welcome back, </span>
+                <span className="font-semibold">{localStorage.getItem('userName') || 'Candidate'}</span>
+              </div>
+              
+              <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 font-bold text-base">
+                {(localStorage.getItem('userName') || 'Candidate').charAt(0).toUpperCase()}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="profile-completeness card" style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1.5rem', width: '300px' }}>
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Profile Completeness</div>
-            <div style={{ fontWeight: 'bold', fontSize: '1.25rem', color: 'var(--text-primary)' }}>85%</div>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-600/20 flex items-center justify-center border border-purple-500/30">
+                <Briefcase className="text-purple-400 w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight ${theme.heading}`}>
+                Candidate Dashboard
+              </h1>
+            </div>
+            <p className={`${theme.subtext} mt-2 text-sm sm:text-base`}>
+              Welcome back! Here is the status of your applications.
+            </p>
           </div>
-          <div style={{ flex: 1, height: '8px', backgroundColor: 'var(--bg-primary)', borderRadius: '4px', overflow: 'hidden' }}>
-            <div style={{ width: '85%', height: '100%', background: 'linear-gradient(to right, #6366f1, #a855f7)', borderRadius: '4px' }}></div>
+          
+          {/* Profile Completeness */}
+          <div className={`${theme.card} rounded-3xl p-4 flex items-center gap-4 w-full sm:w-72 shadow-[0_0_40px_rgba(124,58,237,0.08)]`}>
+            <div className="flex-1">
+              <div className={`text-sm ${theme.subtext} mb-1`}>Profile Completeness</div>
+              <div className={`text-xl font-bold ${theme.heading}`}>85%</div>
+            </div>
+            <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="h-full bg-linear-to-r from-purple-500 to-blue-500" style={{ width: "85%" }}></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-
-          {/* Application Status Tracker */}
-          <div className="card">
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Briefcase size={20} style={{ color: 'var(--accent)' }} /> Frontend Developer Application
-            </h2>
-            <div className="status-tracker" style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '14px', left: '20px', right: '20px', height: '2px', backgroundColor: 'var(--border)', zIndex: 0 }}></div>
-              <div style={{ position: 'absolute', top: '14px', left: '20px', width: '75%', height: '2px', backgroundColor: 'var(--accent)', zIndex: 0 }}></div>
-              {[
-                { label: 'Applied', done: true },
-                { label: 'Screening', done: true },
-                { label: 'Technical Round', done: true },
-                { label: 'Interview', active: true },
-                { label: 'Offer', done: false },
-              ].map((step) => (
-                <div key={step.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
-                  <div style={{
-                    width: '30px', height: '30px', borderRadius: '50%',
-                    backgroundColor: step.done ? 'var(--accent)' : step.active ? 'var(--bg-primary)' : 'var(--bg-primary)',
-                    border: step.active ? '2px solid var(--accent)' : step.done ? 'none' : '2px solid var(--border)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white'
-                  }}>
-                    {step.done ? <CheckCircle size={16} /> : step.active ? (
-                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--accent)' }} />
-                    ) : null}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column */}
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            {/* Application Status Tracker */}
+            <div className={`${theme.card} rounded-3xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)]`}>
+              <div className="flex items-center gap-2 mb-6">
+                <Briefcase size={20} className="text-purple-400" />
+                <h2 className={`text-lg font-semibold ${theme.heading}`}>Frontend Developer Application</h2>
+              </div>
+              
+              {/* Desktop Progress Bar */}
+              <div className="hidden sm:flex relative justify-between items-center mb-8">
+                {/* Progress Bar Background */}
+                <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700 -translate-y-1/2 z-0"></div>
+                {/* Progress Bar Active */}
+                <div className="absolute top-1/2 left-0 w-3/4 h-0.5 bg-purple-500 -translate-y-1/2 z-0"></div>
+                
+                {[
+                  { label: "Applied", done: true },
+                  { label: "Screening", done: true },
+                  { label: "Technical Round", done: true },
+                  { label: "Interview", active: true },
+                  { label: "Offer", done: false },
+                ].map((step, index) => (
+                  <div key={index} className="relative z-10 flex flex-col items-center gap-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm
+                      ${step.done ? "bg-purple-500" : step.active ? "bg-white border-2 border-purple-500 text-purple-500" : "bg-gray-200 dark:bg-gray-700 text-gray-500"}`}>
+                      {step.done ? <CheckCircle size={16} /> : step.active ? <div className="w-2 h-2 rounded-full bg-purple-500"></div> : index + 1}
+                    </div>
+                    <span className={`text-xs ${step.active ? "text-purple-500 font-semibold" : theme.subtext} whitespace-nowrap`}>
+                      {step.label}
+                    </span>
                   </div>
-                  <span style={{ fontSize: '0.875rem', fontWeight: step.active ? 500 : undefined, color: step.active ? 'var(--accent)' : step.done ? undefined : 'var(--text-secondary)' }}>
-                    {step.label}
-                  </span>
+                ))}
+              </div>
+
+              {/* Mobile Progress Bar (Simple Linear) */}
+              <div className="block sm:hidden mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-purple-500">Interview</span>
+                  <span className={`text-xs ${theme.subtext}`}>Step 4 of 5</span>
                 </div>
-              ))}
-            </div>
-            <div style={{ marginTop: '2rem', padding: '1rem', backgroundColor: 'rgba(99, 102, 241, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Clock size={16} style={{ color: 'var(--accent)' }} /> Your application is currently under review for the interview stage.
-              </p>
-            </div>
-          </div>
-
-          {/* Upcoming Interview + Resume */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-
-            {/* Upcoming Interview */}
-            <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Video size={20} style={{ color: 'var(--accent)' }} /> Upcoming Interview
-              </h2>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                  <div style={{ width: '48px', height: '48px', minWidth: '48px', borderRadius: '0.75rem', backgroundColor: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
-                    <Calendar size={24} />
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Technical Round</h3>
-                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Today, 2:00 PM - 3:00 PM</p>
-                  </div>
+                <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-full bg-purple-500" style={{ width: "75%" }}></div>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                  Interviewer: <strong>Sarah Jenkins</strong> (Lead Engineer)
+              </div>
+              
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 flex items-center gap-3">
+                <Clock size={16} className="text-purple-400" />
+                <p className={`text-sm ${theme.heading}`}>
+                  Your application is currently under review for the interview stage.
                 </p>
               </div>
-              <button style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: 'none', background: 'linear-gradient(to right, #3b82f6, #6366f1)', color: 'white', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                <Video size={18} /> Join Video Call
-              </button>
             </div>
 
-            {/* Resume Section */}
-            <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <FileText size={20} style={{ color: 'var(--accent)' }} /> Resume
-              </h2>
-
-              {/* Feedback messages */}
-              {error && (
-                <div style={{ marginBottom: '0.75rem', padding: '0.6rem 0.875rem', borderRadius: '0.5rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', fontSize: '0.8rem' }}>
-                  {error}
-                </div>
-              )}
-              {success && (
-                <div style={{ marginBottom: '0.75rem', padding: '0.6rem 0.875rem', borderRadius: '0.5rem', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', color: '#10b981', fontSize: '0.8rem' }}>
-                  {success}
-                </div>
-              )}
-
-              {/* Hidden file input */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.doc,.docx"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-
-              {resumeLoading ? (
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                  <Loader2 size={24} style={{ color: 'var(--accent)', animation: 'spin 1s linear infinite' }} />
-                </div>
-              ) : resume ? (
-                <>
-                  {/* Resume info */}
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px dashed var(--border)', borderRadius: '0.75rem', marginBottom: '1rem', backgroundColor: 'rgba(255,255,255,0.02)', gap: '0.375rem' }}>
-                    <FileText size={36} style={{ color: 'var(--accent)' }} />
-                    <p style={{ fontWeight: 600, fontSize: '0.875rem', textAlign: 'center', wordBreak: 'break-all' }}>{resume.originalName}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      Uploaded {formatDate(resume.uploadedAt)}
-                    </p>
+            {/* Upcoming Interview & Resume Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Upcoming Interview */}
+              <div className={`${theme.card} rounded-3xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)] flex flex-col justify-between`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Video size={20} className="text-purple-400" />
+                    <h2 className={`text-lg font-semibold ${theme.heading}`}>Upcoming Interview</h2>
                   </div>
+                  
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                      <Calendar size={24} />
+                    </div>
+                    <div>
+                      <h3 className={`font-semibold ${theme.heading}`}>Technical Round</h3>
+                      <p className={`text-sm ${theme.subtext}`}>Today, 2:00 PM - 3:00 PM</p>
+                    </div>
+                  </div>
+                  
+                  <p className={`text-sm ${theme.subtext} mb-4`}>
+                    Interviewer: <strong>Sarah Jenkins</strong> (Lead Engineer)
+                  </p>
+                </div>
+                
+                <button className="w-full py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold hover:opacity-90 transition flex items-center justify-center gap-2">
+                  <Video size={18} /> Join Video Call
+                </button>
+              </div>
 
-                  {/* Action buttons */}
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <a
-                      href={`${BASE_URL}${resume.url}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="View"
-                      style={{ flex: 1, padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
-                    >
+              {/* Resume Section */}
+              <div className={`${theme.card} rounded-3xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)] flex flex-col justify-between`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <FileText size={20} className="text-purple-400" />
+                    <h2 className={`text-lg font-semibold ${theme.heading}`}>Resume</h2>
+                  </div>
+                  
+                  {error && (
+                    <div className="mb-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                      {error}
+                    </div>
+                  )}
+                  {success && (
+                    <div className="mb-3 p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
+                      {success}
+                    </div>
+                  )}
+                  
+                  <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={handleFileChange} />
+                  
+                  {resumeLoading ? (
+                    <div className="flex justify-center items-center py-6">
+                      <Loader2 size={24} className="text-purple-400 animate-spin" />
+                    </div>
+                  ) : resume ? (
+                    <div className="border border-dashed border-purple-500/20 rounded-xl p-4 flex flex-col items-center gap-2 mb-4 bg-purple-500/5">
+                      <FileText size={32} className="text-purple-400" />
+                      <p className={`font-semibold text-sm text-center break-all ${theme.heading}`}>{resume.originalName}</p>
+                      <p className={`text-xs ${theme.subtext}`}>Uploaded {formatDate(resume.uploadedAt)}</p>
+                    </div>
+                  ) : (
+                    <div onClick={() => !uploading && fileInputRef.current?.click()} className="border border-dashed border-purple-500/20 rounded-xl p-6 flex flex-col items-center gap-2 mb-4 bg-purple-500/5 cursor-pointer hover:border-purple-500 transition">
+                      {uploading ? <Loader2 size={32} className="text-purple-400 animate-spin" /> : <Upload size={32} className="text-purple-400" />}
+                      <p className={`font-medium text-sm ${theme.heading}`}>{uploading ? "Uploading..." : "Upload Resume"}</p>
+                      <p className={`text-xs ${theme.subtext}`}>PDF, DOC, DOCX — max 5 MB</p>
+                    </div>
+                  )}
+                </div>
+                
+                {resume && (
+                  <div className="flex gap-2">
+                    <a href={`${BASE_URL}${resume.url}`} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 border border-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 hover:bg-purple-500/5 transition">
                       <Eye size={16} />
                     </a>
-                    <a
-                      href={`${BASE_URL}${resume.url}`}
-                      download={resume.originalName}
-                      title="Download"
-                      style={{ flex: 1, padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid var(--border)', backgroundColor: 'transparent', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
-                    >
+                    <a href={`${BASE_URL}${resume.url}`} download={resume.originalName} className="flex-1 py-2 border border-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 hover:bg-purple-500/5 transition">
                       <Download size={16} />
                     </a>
-                    <button
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploading}
-                      title="Update"
-                      style={{ flex: 2, padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid var(--accent)', backgroundColor: 'rgba(99,102,241,0.1)', color: 'var(--accent)', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.375rem', fontSize: '0.875rem' }}
-                    >
-                      {uploading ? <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> : <Upload size={15} />}
-                      {uploading ? 'Uploading...' : 'Update'}
+                    <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex-2 py-2 bg-purple-500/10 text-purple-400 rounded-lg flex items-center justify-center gap-1 text-sm font-medium hover:bg-purple-500/20 transition">
+                      {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                      Update
                     </button>
-                    <button
-                      onClick={handleDelete}
-                      disabled={deleting}
-                      title="Delete"
-                      style={{ flex: 1, padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(239,68,68,0.4)', backgroundColor: 'rgba(239,68,68,0.08)', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      {deleting ? <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> : <Trash2 size={15} />}
+                    <button onClick={handleDelete} disabled={deleting} className="flex-1 py-2 bg-red-500/10 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition">
+                      {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                     </button>
                   </div>
-                </>
-              ) : (
-                /* No resume — upload zone */
-                <div
-                  onClick={() => !uploading && fileInputRef.current?.click()}
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem 1rem', border: '2px dashed var(--border)', borderRadius: '0.75rem', cursor: uploading ? 'not-allowed' : 'pointer', backgroundColor: 'rgba(255,255,255,0.02)', gap: '0.5rem', transition: 'border-color 0.2s' }}
-                  onMouseEnter={(e) => { if (!uploading) e.currentTarget.style.borderColor = 'var(--accent)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
-                >
-                  {uploading ? (
-                    <Loader2 size={32} style={{ color: 'var(--accent)', animation: 'spin 1s linear infinite' }} />
-                  ) : (
-                    <Upload size={32} style={{ color: 'var(--text-secondary)' }} />
-                  )}
-                  <p style={{ fontWeight: 500, fontSize: '0.875rem', color: 'var(--text-primary)' }}>
-                    {uploading ? 'Uploading...' : 'Upload Resume'}
-                  </p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
-                    PDF, DOC, DOCX — max 5 MB
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Action Items */}
-          <div className="card">
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <AlertCircle size={20} style={{ color: '#f59e0b' }} /> Action Items
-            </h2>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
-                <div style={{ width: '20px', height: '20px', minWidth: '20px', borderRadius: '4px', border: '2px solid var(--border)', marginTop: '2px' }}></div>
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem' }}>Complete Technical Round</h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Technical interview pending evaluation.</p>
-                </div>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
-                <div style={{ width: '20px', height: '20px', minWidth: '20px', borderRadius: '4px', border: '2px solid var(--border)', marginTop: '2px' }}></div>
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem' }}>Interview Round</h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Schedule your final interview with HR.</p>
-                </div>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                <CheckCircle size={20} style={{ color: '#10b981', marginTop: '2px', minWidth: '20px' }} />
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: 'var(--text-secondary)', textDecoration: 'line-through' }}>Screening Round</h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Completed on Oct 24.</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          {/* Assessment Results */}
-          <div className="card">
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <CheckCircle size={20} style={{ color: 'var(--accent)' }} /> Recent Results
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ padding: '1rem', backgroundColor: 'var(--bg-primary)', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span style={{ fontWeight: 500, fontSize: '0.875rem' }}>Frontend Coding Challenge</span>
-                  <span style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.875rem' }}>92/100</span>
-                </div>
-                <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--bg-secondary)', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ width: '92%', height: '100%', backgroundColor: '#10b981' }}></div>
-                </div>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Excellent performance in React & TypeScript.</p>
+          {/* Right Column */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+            {/* Action Items */}
+            <div className={`${theme.card} rounded-3xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)]`}>
+              <div className="flex items-center gap-2 mb-4">
+                <AlertCircle size={20} className="text-yellow-400" />
+                <h2 className={`text-lg font-semibold ${theme.heading}`}>Action Items</h2>
               </div>
-              <div style={{ padding: '1rem', backgroundColor: 'var(--bg-primary)', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span style={{ fontWeight: 500, fontSize: '0.875rem' }}>Cognitive Aptitude Test</span>
-                  <span style={{ color: '#3b82f6', fontWeight: 'bold', fontSize: '0.875rem' }}>85/100</span>
+              
+              <ul className="flex flex-col gap-4">
+                <li className="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
+                  <div className="w-5 h-5 rounded border-2 border-gray-300 dark:border-gray-600 mt-0.5"></div>
+                  <div>
+                    <h4 className={`text-sm font-medium ${theme.heading}`}>Complete Technical Round</h4>
+                    <p className={`text-xs ${theme.subtext}`}>Technical interview pending evaluation.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
+                  <div className="w-5 h-5 rounded border-2 border-gray-300 dark:border-gray-600 mt-0.5"></div>
+                  <div>
+                    <h4 className={`text-sm font-medium ${theme.heading}`}>Interview Round</h4>
+                    <p className={`text-xs ${theme.subtext}`}>Schedule your final interview with HR.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={20} className="text-green-500 mt-0.5" />
+                  <div>
+                    <h4 className={`text-sm font-medium line-through ${theme.subtext}`}>Screening Round</h4>
+                    <p className={`text-xs ${theme.subtext}`}>Completed on Oct 24.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {/* Assessment Results */}
+            <div className={`${theme.card} rounded-3xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)]`}>
+              <div className="flex items-center gap-2 mb-4">
+                <CheckCircle size={20} className="text-purple-400" />
+                <h2 className={`text-lg font-semibold ${theme.heading}`}>Recent Results</h2>
+              </div>
+              
+              <div className="flex flex-col gap-4">
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-100 dark:border-gray-800">
+                  <div className="flex justify-between mb-2">
+                    <span className={`text-sm font-medium ${theme.heading}`}>Frontend Coding Challenge</span>
+                    <span className="text-sm font-bold text-green-500">92/100</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500" style={{ width: "92%" }}></div>
+                  </div>
+                  <p className={`text-xs ${theme.subtext} mt-2`}>Excellent performance in React & TypeScript.</p>
                 </div>
-                <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--bg-secondary)', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ width: '85%', height: '100%', backgroundColor: '#3b82f6' }}></div>
+                
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-100 dark:border-gray-800">
+                  <div className="flex justify-between mb-2">
+                    <span className={`text-sm font-medium ${theme.heading}`}>Cognitive Aptitude Test</span>
+                    <span className="text-sm font-bold text-blue-500">85/100</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500" style={{ width: "85%" }}></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    </AuthLayout>
   );
 }
+
+
+
+

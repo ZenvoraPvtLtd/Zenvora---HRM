@@ -5,7 +5,7 @@ export interface IJob extends Document {
   description: string;
   department: string;
   location: string;
-  jobType: "Full-time" | "Part-time" | "I`A``                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     nternship" | "Contract";
+  jobType: "Full-time" | "Part-time" | "Internship" | "Contract";
   experienceLevel: string;
   salaryMin?: number;
   salaryMax?: number;

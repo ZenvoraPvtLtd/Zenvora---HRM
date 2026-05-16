@@ -1,15 +1,16 @@
+
 import { useEffect, useMemo, useState } from 'react';
+import * as XLSX from 'xlsx';
+
 import {
   ArrowDownUp,
   Briefcase,
   Download,
-  Filter,
   Mail,
   Phone,
   Search,
   Users,
 } from 'lucide-react';
-import API_BASE_URL from '../../config/apiConfig';
 
 type Candidate = {
   id: string | number;
@@ -17,95 +18,199 @@ type Candidate = {
   email: string;
   phone: string;
   skills: string[];
+  softskills: string[];
   experience: number;
   status: string;
   uploadedAt?: string;
   resumeOriginalName?: string;
 };
 
-type SortKey = 'name' | 'experience' | 'status' | 'uploadedAt';
+type SortKey =
+  | 'name'
+  | 'experience'
+  | 'status'
+  | 'uploadedAt';
+
 type SortDirection = 'asc' | 'desc';
 
-const statusColors: Record<string, { bg: string; color: string }> = {
-  Applied: { bg: 'rgba(245, 158, 11, 0.12)', color: '#f59e0b' },
-  Pending: { bg: 'rgba(245, 158, 11, 0.12)', color: '#f59e0b' },
-  Shortlisted: { bg: 'rgba(16, 185, 129, 0.12)', color: '#10b981' },
-  'Interview Scheduled': { bg: 'rgba(59, 130, 246, 0.12)', color: '#3b82f6' },
-  Rejected: { bg: 'rgba(239, 68, 68, 0.12)', color: '#ef4444' },
-  Offering: { bg: 'rgba(168, 85, 247, 0.12)', color: 'var(--text-purple)' },
+const statusColors: Record<
+  string,
+  { bg: string; color: string }
+> = {
+  Applied: {
+    bg: 'rgba(245, 158, 11, 0.12)',
+    color: '#f59e0b',
+  },
+  Shortlisted: {
+    bg: 'rgba(16, 185, 129, 0.12)',
+    color: '#10b981',
+  },
+  'Interview Scheduled': {
+    bg: 'rgba(59, 130, 246, 0.12)',
+    color: '#3b82f6',
+  },
+  Rejected: {
+    bg: 'rgba(239, 68, 68, 0.12)',
+    color: '#ef4444',
+  },
+  Offering: {
+    bg: 'rgba(168, 85, 247, 0.12)',
+    color: '#a855f7',
+  },
 };
 
-const getExperienceYears = (value: any) => {
-  return Number(
-    value?.total_experience_years ??
-      value?.experience?.total_experience_years ??
-      value?.experience ??
-      0,
+const getCandidatesEndpoint = () => {
+  return 'http://localhost:5000/api/candidates';
+};
+
+const normalizeCandidates = (
+  data: any,
+): Candidate[] => {
+  const rows = Array.isArray(data)
+    ? data
+    : data?.candidates || [];
+
+  return rows.map(
+    (candidate: any, index: number) => {
+      const allSkills = Array.isArray(
+        candidate.detected_skills,
+      )
+        ? candidate.detected_skills
+        : Array.isArray(candidate.skills)
+        ? candidate.skills
+        : [];
+
+      const softSkillKeywords = [
+        'communication',
+        'teamwork',
+        'problem solving',
+        'time management',
+        'leadership',
+        'adaptability',
+        'critical thinking',
+        'collaboration',
+        'creativity',
+        'interpersonal skills',
+        'work ethic',
+        'emotional intelligence',
+      ];
+
+      const technicalSkills =
+        allSkills.filter(
+          (skill: string) =>
+            !softSkillKeywords.includes(
+              skill.toLowerCase(),
+            ),
+        );
+
+      const softSkills = allSkills.filter(
+        (skill: string) =>
+          softSkillKeywords.includes(
+            skill.toLowerCase(),
+          ),
+      );
+
+      return {
+        id:
+          candidate.id ||
+          candidate._id ||
+          index + 1,
+
+        name:
+          candidate.name ||
+          candidate.personal_information
+            ?.full_name ||
+          'Unknown Candidate',
+
+        email:
+          candidate.email ||
+          candidate.personal_information
+            ?.email ||
+          '',
+
+        phone:
+          candidate.phone ||
+          candidate.personal_information
+            ?.phone ||
+          '',
+
+        skills: technicalSkills,
+
+        softskills: softSkills,
+
+        experience: Number(
+          candidate.experience ||
+            candidate.detected_experience
+              ?.total_experience_years ||
+            0,
+        ),
+
+        status:
+          candidate.status || 'Applied',
+
+        uploadedAt:
+          candidate.uploadedAt ||
+          candidate.created_at,
+
+        resumeOriginalName:
+          candidate.resumeOriginalName ||
+          candidate.resume_name,
+      };
+    },
   );
 };
 
-const normalizeCandidates = (data: any): Candidate[] => {
-  const rows = Array.isArray(data) ? data : data?.candidates || [];
-
-  return rows.map((candidate: any, index: number) => {
-    const analysis = candidate.analysis || {};
-    const parsedResume = analysis?.ai?.parsedResume || {};
-    const personal = parsedResume?.personal_information || {};
-    const detectedExperience =
-      candidate.detectedExperience ||
-      analysis?.ai?.parsedResume?.experience?.experience ||
-      {};
-
-    return {
-      id: candidate.id || candidate._id || index + 1,
-      name: candidate.name || personal.full_name || 'Unknown Candidate',
-      email: candidate.email || personal.email || '',
-      phone: candidate.phone || personal.phone || '',
-      skills:
-        candidate.detectedSkills ||
-        analysis?.candidate?.skills?.technical_skills ||
-        analysis?.candidate?.skills ||
-        [],
-      experience: getExperienceYears(detectedExperience),
-      status: candidate.status || analysis?.application?.status || 'Applied',
-      uploadedAt: candidate.uploadedAt || candidate.appliedDate,
-      resumeOriginalName:
-        candidate.resumeOriginalName ||
-        analysis?.resume?.originalName ||
-        'Parsed resume',
-    };
-  });
-};
-
 export default function CandidatesPage() {
-  const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [sortKey, setSortKey] = useState<SortKey>('uploadedAt');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [candidates, setCandidates] =
+    useState<Candidate[]>([]);
+
+  const [searchQuery, setSearchQuery] =
+    useState('');
+
+  const [statusFilter, setStatusFilter] =
+    useState('All');
+
+  const [sortKey, setSortKey] =
+    useState<SortKey>('uploadedAt');
+
+  const [sortDirection, setSortDirection] =
+    useState<SortDirection>('desc');
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     const fetchCandidates = async () => {
-      setLoading(true);
-      setError(null);
-
       try {
-        const response = await fetch(`${API_BASE_URL}/api/candidate/applications`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-          },
-        });
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(
+          getCandidatesEndpoint(),
+        );
 
         if (!response.ok) {
-          throw new Error('Unable to load candidate data');
+          throw new Error(
+            'Unable to fetch candidates',
+          );
         }
 
         const data = await response.json();
-        setCandidates(normalizeCandidates(data));
+
+        setCandidates(
+          normalizeCandidates(data),
+        );
       } catch (err: any) {
-        setError(err.message || 'Unable to load candidate data');
+        console.error(err);
+
+        setError(
+          err.message ||
+            'Failed to load candidates',
+        );
       } finally {
         setLoading(false);
       }
@@ -115,88 +220,212 @@ export default function CandidatesPage() {
   }, []);
 
   const statuses = useMemo(() => {
-    return ['All', ...Array.from(new Set(candidates.map((candidate) => candidate.status)))];
+    return [
+      'All',
+      ...Array.from(
+        new Set(
+          candidates.map(
+            (candidate) =>
+              candidate.status,
+          ),
+        ),
+      ),
+    ];
   }, [candidates]);
 
   const visibleCandidates = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+    const query = searchQuery
+      .trim()
+      .toLowerCase();
 
     return candidates
       .filter((candidate) => {
         const matchesSearch =
-          candidate.name.toLowerCase().includes(query) ||
-          candidate.email.toLowerCase().includes(query) ||
-          candidate.phone.toLowerCase().includes(query) ||
-          candidate.skills.some((skill) => skill.toLowerCase().includes(query));
+          candidate.name
+            .toLowerCase()
+            .includes(query) ||
+          candidate.email
+            .toLowerCase()
+            .includes(query) ||
+          candidate.phone
+            .toLowerCase()
+            .includes(query) ||
+          candidate.skills.some((skill) =>
+            skill
+              .toLowerCase()
+              .includes(query),
+          ) ||
+          candidate.softskills.some(
+            (skill) =>
+              skill
+                .toLowerCase()
+                .includes(query),
+          );
 
-        const matchesStatus = statusFilter === 'All' || candidate.status === statusFilter;
+        const matchesStatus =
+          statusFilter === 'All' ||
+          candidate.status ===
+            statusFilter;
 
-        return matchesSearch && matchesStatus;
+        return (
+          matchesSearch &&
+          matchesStatus
+        );
       })
       .sort((a, b) => {
+        const direction =
+          sortDirection === 'asc'
+            ? 1
+            : -1;
+
         const aValue = a[sortKey] || '';
         const bValue = b[sortKey] || '';
-        const direction = sortDirection === 'asc' ? 1 : -1;
 
-        if (typeof aValue === 'number' && typeof bValue === 'number') {
-          return (aValue - bValue) * direction;
+        if (
+          typeof aValue === 'number' &&
+          typeof bValue === 'number'
+        ) {
+          return (
+            (aValue - bValue) *
+            direction
+          );
         }
 
-        return String(aValue).localeCompare(String(bValue)) * direction;
+        return (
+          String(aValue).localeCompare(
+            String(bValue),
+          ) * direction
+        );
       });
-  }, [candidates, searchQuery, sortDirection, sortKey, statusFilter]);
+  }, [
+    candidates,
+    searchQuery,
+    statusFilter,
+    sortKey,
+    sortDirection,
+  ]);
 
   const stats = useMemo(() => {
     return {
       total: candidates.length,
-      shortlisted: candidates.filter((candidate) => candidate.status === 'Shortlisted').length,
-      interviews: candidates.filter((candidate) => candidate.status === 'Interview Scheduled').length,
+
+      shortlisted:
+        candidates.filter(
+          (candidate) =>
+            candidate.status ===
+            'Shortlisted',
+        ).length,
+
+      interviews:
+        candidates.filter(
+          (candidate) =>
+            candidate.status ===
+            'Interview Scheduled',
+        ).length,
+
       averageExperience:
         candidates.length === 0
           ? 0
           : Math.round(
-              candidates.reduce((total, candidate) => total + candidate.experience, 0) /
-                candidates.length,
+              candidates.reduce(
+                (
+                  total,
+                  candidate,
+                ) =>
+                  total +
+                  candidate.experience,
+                0,
+              ) / candidates.length,
             ),
     };
   }, [candidates]);
 
-  const handleSort = (key: SortKey) => {
+  const handleSort = (
+    key: SortKey,
+  ) => {
     if (sortKey === key) {
-      setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
+      setSortDirection((prev) =>
+        prev === 'asc'
+          ? 'desc'
+          : 'asc',
+      );
+
       return;
     }
 
     setSortKey(key);
+
     setSortDirection('asc');
   };
 
-  const exportCsv = () => {
-    const header = ['Name', 'Email', 'Phone', 'Skills', 'Experience', 'Status'];
-    const rows = visibleCandidates.map((candidate) => [
-      candidate.name,
-      candidate.email,
-      candidate.phone,
-      candidate.skills.join(', '),
-      String(candidate.experience),
-      candidate.status,
-    ]);
+  const exportExcel = () => {
+    const data =
+      visibleCandidates.map(
+        (candidate) => ({
+          Name: candidate.name,
 
-    const csv = [header, ...rows]
-      .map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(','))
-      .join('\n');
+          Email: candidate.email,
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'Parsed_Candidates_List.csv';
-    link.click();
-    URL.revokeObjectURL(url);
+          Phone: candidate.phone,
+
+          'Technical Skills':
+            candidate.skills.join(
+              ', ',
+            ),
+
+          'Soft Skills':
+            candidate.softskills.join(
+              ', ',
+            ),
+
+          Experience: `${candidate.experience} yrs`,
+
+          Status: candidate.status,
+
+          'Upload Date':
+            candidate.uploadedAt
+              ? new Date(
+                  candidate.uploadedAt,
+                ).toLocaleDateString()
+              : '-',
+        }),
+      );
+
+    const worksheet =
+      XLSX.utils.json_to_sheet(data);
+
+    worksheet['!cols'] = [
+      { wch: 25 },
+      { wch: 30 },
+      { wch: 18 },
+      { wch: 40 },
+      { wch: 35 },
+      { wch: 15 },
+      { wch: 20 },
+      { wch: 18 },
+    ];
+
+    const workbook =
+      XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      'Candidates',
+    );
+
+    XLSX.writeFile(
+      workbook,
+      'Candidates.xlsx',
+    );
   };
 
-  const renderStatusBadge = (status: string) => {
-    const colors = statusColors[status] || statusColors.Applied;
+  const renderStatusBadge = (
+    status: string,
+  ) => {
+    const colors =
+      statusColors[status] ||
+      statusColors.Applied;
 
     return (
       <span
@@ -204,7 +433,8 @@ export default function CandidatesPage() {
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '0.35rem 0.75rem',
+          padding:
+            '0.35rem 0.75rem',
           borderRadius: '999px',
           fontSize: '0.75rem',
           fontWeight: 700,
@@ -219,24 +449,44 @@ export default function CandidatesPage() {
   };
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <div
+      className="animate-fade-in"
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden',
+      }}
+    >
+      {/* HEADER */}
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
+          justifyContent:
+            'space-between',
+          alignItems: 'center',
           marginBottom: '1.5rem',
           gap: '1rem',
           flexWrap: 'wrap',
         }}
       >
         <div>
-          <h1 className="page-title">All Status</h1>
-          <p className="page-subtitle">Parsed resume profiles from the candidate pipeline.</p>
+          <h1 className="page-title">
+            All Candidates
+          </h1>
+
+          <p className="page-subtitle">
+            Parsed resume profiles
+            from candidate
+            pipeline.
+          </p>
         </div>
+
         <button
-          onClick={exportCsv}
-          disabled={visibleCandidates.length === 0}
+          onClick={exportExcel}
+          disabled={
+            visibleCandidates.length ===
+            0
+          }
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -245,199 +495,586 @@ export default function CandidatesPage() {
             borderRadius: '0.5rem',
             background: '#16a34a',
             color: 'white',
-            padding: '0.75rem 1rem',
+            padding:
+              '0.75rem 1rem',
             fontWeight: 700,
-            cursor: visibleCandidates.length === 0 ? 'not-allowed' : 'pointer',
-            opacity: visibleCandidates.length === 0 ? 0.6 : 1,
+            cursor:
+              visibleCandidates.length ===
+              0
+                ? 'not-allowed'
+                : 'pointer',
+            opacity:
+              visibleCandidates.length ===
+              0
+                ? 0.6
+                : 1,
           }}
         >
-          <Download size={18} /> Export CSV
+          <Download size={18} />
+          Export Excel
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '1rem', marginBottom: '1.25rem' }}>
+      {/* STATS */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns:
+            'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: '1rem',
+          marginBottom: '1.5rem',
+        }}
+      >
         {[
-          { label: 'Total leads', value: stats.total, icon: Users },
-          { label: 'Shortlisted', value: stats.shortlisted, icon: Briefcase },
-          { label: 'Interviews', value: stats.interviews, icon: Users },
-          { label: 'Avg experience', value: `${stats.averageExperience} yrs`, icon: Briefcase },
+          {
+            label:
+              'Total Candidates',
+            value: stats.total,
+            icon: Users,
+          },
+          {
+            label: 'Shortlisted',
+            value:
+              stats.shortlisted,
+            icon: Briefcase,
+          },
+          {
+            label: 'Interviews',
+            value:
+              stats.interviews,
+            icon: Users,
+          },
+          {
+            label:
+              'Avg Experience',
+            value: `${stats.averageExperience} yrs`,
+            icon: Briefcase,
+          },
         ].map((item) => (
-          <div key={item.label} className="card" style={{ padding: '1rem', display: 'flex', gap: '0.875rem', alignItems: 'center' }}>
+          <div
+            key={item.label}
+            className="card"
+            style={{
+              padding: '1rem',
+              display: 'flex',
+              alignItems:
+                'center',
+              gap: '1rem',
+            }}
+          >
             <div
               style={{
                 width: '42px',
                 height: '42px',
-                borderRadius: '0.75rem',
-                border: '1px solid var(--border)',
+                borderRadius:
+                  '0.75rem',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-purple)',
-                background: 'rgba(168, 85, 247, 0.1)',
+                alignItems:
+                  'center',
+                justifyContent:
+                  'center',
+                background:
+                  'rgba(168,85,247,0.12)',
+                color: '#a855f7',
               }}
             >
               <item.icon size={20} />
             </div>
+
             <div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem', marginBottom: '0.25rem' }}>{item.label}</div>
-              <div style={{ color: 'var(--text-primary)', fontSize: '1.35rem', fontWeight: 800 }}>{item.value}</div>
+              <div
+                style={{
+                  fontSize:
+                    '0.8rem',
+                  color:
+                    'var(--text-secondary)',
+                }}
+              >
+                {item.label}
+              </div>
+
+              <div
+                style={{
+                  fontSize:
+                    '1.5rem',
+                  fontWeight: 700,
+                }}
+              >
+                {item.value}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="card" style={{ padding: '1rem', marginBottom: '1.25rem', display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 280px', position: 'relative' }}>
-          <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+      {/* SEARCH */}
+      <div
+        className="card"
+        style={{
+          padding: '1rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          gap: '1rem',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            minWidth: '250px',
+            position: 'relative',
+          }}
+        >
+          <Search
+            size={18}
+            style={{
+              position: 'absolute',
+              left: '1rem',
+              top: '50%',
+              transform:
+                'translateY(-50%)',
+              color:
+                'var(--text-secondary)',
+            }}
+          />
+
           <input
+            type="text"
             value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search by name, email, phone, or skill"
+            onChange={(e) =>
+              setSearchQuery(
+                e.target.value,
+              )
+            }
+            placeholder="Search candidates..."
             style={{
               width: '100%',
-              padding: '0.75rem 1rem 0.75rem 2.5rem',
-              borderRadius: '0.5rem',
-              border: '1px solid var(--border)',
-              background: 'rgba(255,255,255,0.02)',
-              color: 'var(--text-primary)',
+              padding:
+                '0.75rem 1rem 0.75rem 2.5rem',
+              borderRadius:
+                '0.75rem',
+              border:
+                '1px solid var(--border)',
+              background:
+                'rgba(255,255,255,0.03)',
+              color:
+                'var(--text-primary)',
               outline: 'none',
             }}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Filter size={18} style={{ color: 'var(--text-secondary)' }} />
-          <select
-            value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value)}
-            style={{
-              padding: '0.72rem 1rem',
-              borderRadius: '0.5rem',
-              border: '1px solid var(--border)',
-              background: 'var(--bg-secondary)',
-              color: 'var(--text-primary)',
-              outline: 'none',
-            }}
-          >
-            {statuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
+
+        <select
+          value={statusFilter}
+          onChange={(e) =>
+            setStatusFilter(
+              e.target.value,
+            )
+          }
+          style={{
+            padding:
+              '0.75rem 1rem',
+            borderRadius:
+              '0.75rem',
+            border:
+              '1px solid var(--border)',
+            background:
+              'rgba(255,255,255,0.03)',
+            color:
+              'var(--text-primary)',
+            minWidth: '180px',
+          }}
+        >
+          {statuses.map((status) => (
+            <option
+              key={status}
+              value={status}
+            >
+              {status}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="card" style={{ overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '980px' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.04)' }}>
-                {[
-                  { key: 'name', label: 'Candidate' },
-                  { key: 'experience', label: 'Experience' },
-                  { key: 'status', label: 'Status' },
-                  { key: 'uploadedAt', label: 'Upload Date' },
-                ].map((column) => (
-                  <th key={column.key} style={{ padding: '1rem', color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.8125rem' }}>
-                    <button
-                      onClick={() => handleSort(column.key as SortKey)}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'inherit',
-                        cursor: 'pointer',
-                        fontWeight: 'inherit',
-                      }}
-                    >
-                      {column.label}
-                      <ArrowDownUp size={13} />
-                    </button>
-                  </th>
-                ))}
-                <th style={{ padding: '1rem', color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.8125rem' }}>Contact</th>
-                <th style={{ padding: '1rem', color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.8125rem' }}>Extracted Skills</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading && (
-                <tr>
-                  <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                    Loading candidate profiles...
-                  </td>
-                </tr>
-              )}
+      {/* TABLE */}
+      <div
+        className="card"
+        style={{
+          width: '100%',
+          overflowX: 'auto',
+          borderRadius: '1rem',
+        }}
+      >
+        <table
+          style={{
+            width: '100%',
+            borderCollapse:
+              'collapse',
+            minWidth: '900px',
+          }}
+        >
+          <thead>
+            <tr
+              style={{
+                borderBottom:
+                  '1px solid var(--border)',
+              }}
+            >
+              {[
+                {
+                  key: 'name',
+                  label: 'Name',
+                },
+                {
+                  key: 'experience',
+                  label:
+                    'Experience',
+                },
+                {
+                  key: 'status',
+                  label: 'Status',
+                },
+                {
+                  key: 'uploadedAt',
+                  label:
+                    'Upload Date',
+                },
+              ].map((column) => (
+                <th
+                  key={column.key}
+                  style={{
+                    padding:
+                      '1rem',
+                    textAlign:
+                      'left',
+                    whiteSpace:
+                      'nowrap',
+                  }}
+                >
+                  <button
+                    onClick={() =>
+                      handleSort(
+                        column.key as SortKey,
+                      )
+                    }
+                    style={{
+                      background:
+                        'transparent',
+                      border:
+                        'none',
+                      color:
+                        'inherit',
+                      display:
+                        'flex',
+                      alignItems:
+                        'center',
+                      gap: '0.35rem',
+                      cursor:
+                        'pointer',
+                    }}
+                  >
+                    {column.label}
+                    <ArrowDownUp
+                      size={14}
+                    />
+                  </button>
+                </th>
+              ))}
 
-              {!loading && error && (
+              <th
+                style={{
+                  padding:
+                    '1rem',
+                  textAlign:
+                    'left',
+                }}
+              >
+                Contact
+              </th>
+
+              <th
+                style={{
+                  padding:
+                    '1rem',
+                  textAlign:
+                    'left',
+                }}
+              >
+                Technical Skills
+              </th>
+
+              <th
+                style={{
+                  padding:
+                    '1rem',
+                  textAlign:
+                    'left',
+                }}
+              >
+                Soft Skills
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {loading && (
+              <tr>
+                <td
+                  colSpan={7}
+                  style={{
+                    padding:
+                      '2rem',
+                    textAlign:
+                      'center',
+                  }}
+                >
+                  Loading
+                  candidates...
+                </td>
+              </tr>
+            )}
+
+            {!loading &&
+              error && (
                 <tr>
-                  <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                  <td
+                    colSpan={7}
+                    style={{
+                      padding:
+                        '2rem',
+                      textAlign:
+                        'center',
+                      color: 'red',
+                    }}
+                  >
                     {error}
                   </td>
                 </tr>
               )}
 
-              {!loading && !error && visibleCandidates.length === 0 && (
+            {!loading &&
+              !error &&
+              visibleCandidates.length ===
+                0 && (
                 <tr>
-                  <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                    No candidates found.
+                  <td
+                    colSpan={7}
+                    style={{
+                      padding:
+                        '2rem',
+                      textAlign:
+                        'center',
+                    }}
+                  >
+                    No candidates
+                    found.
                   </td>
                 </tr>
               )}
 
-              {!loading &&
-                !error &&
-                visibleCandidates.map((candidate) => (
-                  <tr key={candidate.id} className="hover-effect" style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '1rem' }}>
-                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{candidate.name}</div>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{candidate.resumeOriginalName || 'Parsed resume'}</div>
-                    </td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)', fontWeight: 700 }}>
-                      {candidate.experience} yrs
-                    </td>
-                    <td style={{ padding: '1rem' }}>{renderStatusBadge(candidate.status)}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                      {candidate.uploadedAt ? new Date(candidate.uploadedAt).toLocaleDateString() : '-'}
-                    </td>
-                    <td style={{ padding: '1rem', color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-                        <Mail size={13} /> {candidate.email || '-'}
+            {!loading &&
+              !error &&
+              visibleCandidates.map(
+                (
+                  candidate,
+                ) => (
+                  <tr
+                    key={
+                      candidate.id
+                    }
+                    style={{
+                      borderBottom:
+                        '1px solid var(--border)',
+                    }}
+                  >
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontWeight: 700,
+                        }}
+                      >
+                        {
+                          candidate.name
+                        }
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <Phone size={13} /> {candidate.phone || '-'}
+
+                      <div
+                        style={{
+                          fontSize:
+                            '0.75rem',
+                          color:
+                            'var(--text-secondary)',
+                        }}
+                      >
+                        {candidate.resumeOriginalName ||
+                          'Resume'}
                       </div>
                     </td>
-                    <td style={{ padding: '1rem' }}>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                        {candidate.skills.length > 0 ? (
-                          candidate.skills.map((skill) => (
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      {
+                        candidate.experience
+                      }{' '}
+                      yrs
+                    </td>
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      {renderStatusBadge(
+                        candidate.status,
+                      )}
+                    </td>
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      {candidate.uploadedAt
+                        ? new Date(
+                            candidate.uploadedAt,
+                          ).toLocaleDateString()
+                        : '-'}
+                    </td>
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      <div>
+                        <Mail
+                          size={14}
+                        />{' '}
+                        {
+                          candidate.email
+                        }
+                      </div>
+
+                      <div>
+                        <Phone
+                          size={14}
+                        />{' '}
+                        {
+                          candidate.phone
+                        }
+                      </div>
+                    </td>
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display:
+                            'flex',
+                          flexWrap:
+                            'wrap',
+                          gap: '0.35rem',
+                          maxWidth:
+                            '250px',
+                        }}
+                      >
+                        {candidate.skills.map(
+                          (
+                            skill,
+                          ) => (
                             <span
-                              key={`${candidate.id}-${skill}`}
+                              key={
+                                skill
+                              }
                               style={{
-                                padding: '0.25rem 0.5rem',
-                                borderRadius: '0.4rem',
-                                background: 'rgba(59, 130, 246, 0.1)',
-                                color: '#60a5fa',
-                                border: '1px solid rgba(96, 165, 250, 0.18)',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
+                                padding:
+                                  '0.25rem 0.5rem',
+                                borderRadius:
+                                  '0.4rem',
+                                background:
+                                  'rgba(59,130,246,0.1)',
+                                color:
+                                  '#60a5fa',
+                                fontSize:
+                                  '0.75rem',
                               }}
                             >
-                              {skill}
+                              {
+                                skill
+                              }
                             </span>
-                          ))
-                        ) : (
-                          <span style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>No skills parsed</span>
+                          ),
+                        )}
+                      </div>
+                    </td>
+
+                    <td
+                      style={{
+                        padding:
+                          '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display:
+                            'flex',
+                          flexWrap:
+                            'wrap',
+                          gap: '0.35rem',
+                          maxWidth:
+                            '250px',
+                        }}
+                      >
+                        {candidate.softskills.map(
+                          (
+                            skill,
+                          ) => (
+                            <span
+                              key={
+                                skill
+                              }
+                              style={{
+                                padding:
+                                  '0.25rem 0.5rem',
+                                borderRadius:
+                                  '0.4rem',
+                                background:
+                                  'rgba(16,185,129,0.1)',
+                                color:
+                                  '#34d399',
+                                fontSize:
+                                  '0.75rem',
+                              }}
+                            >
+                              {
+                                skill
+                              }
+                            </span>
+                          ),
                         )}
                       </div>
                     </td>
                   </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                ),
+              )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

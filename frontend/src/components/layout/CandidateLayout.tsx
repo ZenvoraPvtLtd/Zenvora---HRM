@@ -2,14 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { Briefcase, LayoutDashboard, UserCircle, LogOut, LogIn, Sun, Moon, PanelLeftClose, PanelLeftOpen, Search, Bell, Menu, X } from 'lucide-react';
-import { clearAuthStorage } from '../../utils/auth';
 
 const candidateNavSections = [
   {
     label: 'MAIN',
     items: [
       { to: '/candidate', icon: <LayoutDashboard size={18} />, label: 'Dashboard', exact: true },
-      { to: '/candidate/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
+      { to: '/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
     ],
   }
 ];
@@ -22,7 +21,7 @@ interface CandidateSidebarProps {
   isLoggedIn?: boolean;
 }
 
-const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: CandidateSidebarProps) => {
+const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn }: CandidateSidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 
@@ -150,45 +149,47 @@ const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: 
       </div>
       
       {/* Mobile Only: Profile and Notifications */}
-      <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-          <div
-            style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              backgroundColor: 'rgba(59, 130, 246, 0.1)', 
-              border: '1px solid rgba(59, 130, 246, 0.2)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              color: '#3b82f6', 
-              fontWeight: 'bold' 
-            }}
-          >
-            {avatarLetter}
+      {isLoggedIn && (
+        <div className="mobile-only" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            <div
+              style={{ 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                border: '1px solid rgba(59, 130, 246, 0.2)', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                color: '#3b82f6', 
+                fontWeight: 'bold' 
+              }}
+            >
+              {avatarLetter}
+            </div>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail}</div>
+            </div>
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userName || 'Guest'}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{userEmail || 'Welcome'}</div>
-          </div>
+          <button style={{ 
+            width: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.75rem', 
+            padding: '0.625rem 0.75rem', 
+            background: 'var(--bg-hover)', 
+            border: 'none', 
+            borderRadius: '0.5rem', 
+            color: 'var(--text-primary)', 
+            fontSize: '0.875rem',
+            cursor: 'pointer'
+          }}>
+            <Bell size={18} /> Notifications
+          </button>
         </div>
-        <button style={{ 
-          width: '100%', 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.75rem', 
-          padding: '0.625rem 0.75rem', 
-          background: 'var(--bg-hover)', 
-          border: 'none', 
-          borderRadius: '0.5rem', 
-          color: 'var(--text-primary)', 
-          fontSize: '0.875rem',
-          cursor: 'pointer'
-        }}>
-          <Bell size={18} /> Notifications
-        </button>
-      </div>
+      )}
 
       {/* Nav sections */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: isCollapsed ? '1rem 0.5rem' : '1rem 0.75rem' }}>
@@ -338,18 +339,7 @@ const CandidateLayout = () => {
         />
       </div>
       <div className="main-wrapper" style={{ marginLeft: isSidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s ease', width: '100%' }}>
-        <header className="header" style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between', 
-          padding: '1rem 2rem', 
-          background: 'var(--bg-primary)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: 'none',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100
-        }}>
+        <header className="header flex md:hidden items-center justify-between p-4 bg-[var(--bg-primary)] backdrop-blur-md sticky top-0 z-[100]">
           <button 
             className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -466,7 +456,10 @@ const CandidateLayout = () => {
                       </Link>
                       <div 
                         onClick={() => { 
-                          clearAuthStorage();
+                          localStorage.removeItem('accessToken');
+                          localStorage.removeItem('userEmail');
+                          localStorage.removeItem('userName');
+                          localStorage.removeItem('userRole');
                           setIsLoggedIn(false); 
                           setIsDropdownOpen(false); 
                           navigate('/login');

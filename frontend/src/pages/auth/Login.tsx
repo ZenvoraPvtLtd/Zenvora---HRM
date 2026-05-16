@@ -6,8 +6,8 @@ import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
-import AuthLayout from "./AuthLayout";
 import { getDashboardPath, storeAuthUser } from "../../utils/auth";
+import { AuthLayout } from "../auth/AuthLayout";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const Login = () => {
       {/* Heading */}
       <div className="mb-8">
         <h2 className={`text-4xl font-bold mb-2 ${theme.heading}`}>
-          Welcome Back! 👋
+          Welcome Back!
         </h2>
         <p className={theme.subtext}>Login to continue to your account</p>
       </div>

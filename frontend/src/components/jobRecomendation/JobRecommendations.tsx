@@ -1,10 +1,13 @@
-import { Briefcase } from "lucide-react";
+import { Briefcase, ChevronLeft } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { darkTheme, lightTheme } from "../../styles/theme";
 import { useTheme } from "../../context/ThemeContext";
 import { AuthLayout } from "../../pages/auth/AuthLayout";
 import Button from "../button/Button";
 import { ASSETS } from "../../constants/assets";
+import { JobSearch } from "./JobSearch";
+import { JobApplicationForm } from "./JobApplicationForm";
 
 const jobs = [
   {
@@ -142,104 +145,136 @@ const jobs = [
   },
 ];
 
-
 export const JobRecommendations = () => {
   const { isDark } = useTheme();
   const theme = isDark ? darkTheme : lightTheme;
   const navigate = useNavigate();
+  const [applyingForJobId, setApplyingForJobId] = useState<number | null>(null);
+
+  const applicationJobs = jobs.map((job) => ({
+    id: job.id,
+    title: job.title,
+    company: job.company,
+    location: job.location,
+  }));
 
   return (
     <AuthLayout fullWidth>
       <div
         className={`px-6 py-10 max-w-7xl mx-auto rounded-xl ${theme.page} ${theme.heading}`}
       >
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-600/20 flex items-center justify-center border border-purple-500/30">
-              <Briefcase className="text-purple-400 w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
-            <h1
-              className={`text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight ${theme.heading}`}
+        {applyingForJobId !== null ? (
+          <JobApplicationForm
+            jobId={applyingForJobId}
+            jobs={applicationJobs}
+            onCancel={() => setApplyingForJobId(null)}
+          />
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => navigate("/candidate")}
+              className={`mb-6 flex items-center gap-2 text-sm font-semibold transition-colors ${theme.subtext} hover:text-purple-400`}
             >
-              Job Recommendations
-            </h1>
-          </div>
-        </div>
+              <ChevronLeft size={18} />
+              Back
+            </button>
 
-        {/* ── Grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {jobs.map((job) => {
-            return (
-              <div
-                key={job.id}
-                className={`${theme.card} rounded-3xl p-4 sm:p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_40px_rgba(124,58,237,0.08)] border border-purple-500/20`}
-              >
-                {/* Logo */}
-                <div className="flex items-start justify-between">
-                  <div className="w-12 h-12 bg-linear-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    Z
-                  </div>
+            <JobSearch />
+
+            {/* ── Header ── */}
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-600/20 flex items-center justify-center border border-purple-500/30">
+                  <Briefcase className="text-purple-400 w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-
-                {/* Title */}
-                <h2
-                  className={`text-lg font-bold leading-snug ${theme.heading}`}
+                <h1
+                  className={`text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight ${theme.heading}`}
                 >
-                  {job.title}
-                </h2>
-
-                {/* Company */}
-                <p className={`text-sm ${theme.subtext}`}>{job.company}</p>
-
-                {/* Description */}
-                <p
-                  className={`text-sm leading-relaxed line-clamp-3 ${theme.label}`}
-                >
-                  {job.desc}
-                </p>
-
-                {/* Salary + Location */}
-                <div className="flex items-center justify-between pt-2">
-                  <span className={`text-sm font-semibold ${theme.heading}`}>
-                    {job.salary}
-                  </span>
-                  <span className={`text-xs ${theme.subtext}`}>
-                    📍 {job.location}
-                  </span>
-                </div>
-
-                {/* Tags */}
-                <div className="flex gap-2 flex-wrap">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 border-purple-500/20 text-purple-300`}
-                  >
-                    {job.type}
-                  </span>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 border-purple-500/20 text-purple-300`}
-                  >
-                    {job.level}
-                  </span>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col md:flex-row gap-3 mt-auto">
-                  {/* Details */}
-                  <Button
-                    onClick={() => navigate(`/jobs/${job.id}`)}
-                    className={`shadow-none! hover:scale-100! border from-transparent! to-transparent! ${!isDark ? "text-black!" : ""} border-purple-500/20 bg-purple-500/10`}
-                  >
-                    Details
-                  </Button>
-
-                  {/* Apply Now */}
-                  <Button>Apply Now</Button>
-                </div>
+                  Job Recommendations
+                </h1>
               </div>
-            );
-          })}
-        </div>
+            </div>
+
+            {/* ── Grid ── */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {jobs.map((job) => {
+                return (
+                  <div
+                    key={job.id}
+                    className={`${theme.card} rounded-3xl p-4 sm:p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_40px_rgba(124,58,237,0.08)] border border-purple-500/20`}
+                  >
+                    {/* Logo */}
+                    <div className="flex items-start justify-between">
+                      <div className="w-12 h-12 bg-linear-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                        Z
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h2
+                      className={`text-lg font-bold leading-snug ${theme.heading}`}
+                    >
+                      {job.title}
+                    </h2>
+
+                    {/* Company */}
+                    <p className={`text-sm ${theme.subtext}`}>{job.company}</p>
+
+                    {/* Description */}
+                    <p
+                      className={`text-sm leading-relaxed line-clamp-3 ${theme.label}`}
+                    >
+                      {job.desc}
+                    </p>
+
+                    {/* Salary + Location */}
+                    <div className="flex items-center justify-between pt-2">
+                      <span
+                        className={`text-sm font-semibold ${theme.heading}`}
+                      >
+                        {job.salary}
+                      </span>
+                      <span className={`text-xs ${theme.subtext}`}>
+                        📍 {job.location}
+                      </span>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex gap-2 flex-wrap">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 border-purple-500/20 text-purple-300`}
+                      >
+                        {job.type}
+                      </span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 border-purple-500/20 text-purple-300`}
+                      >
+                        {job.level}
+                      </span>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex flex-col md:flex-row gap-3 mt-auto">
+                      {/* Details */}
+                      <Button
+                        onClick={() => navigate(`/jobs/${job.id}`)}
+                        className={`shadow-none! hover:scale-100! border from-transparent! to-transparent! ${!isDark ? "text-black!" : ""} border-purple-500/20 bg-purple-500/10`}
+                      >
+                        Details
+                      </Button>
+
+                      {/* Apply Now */}
+                      <Button onClick={() => setApplyingForJobId(job.id)}>
+                        Apply Now
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
     </AuthLayout>
   );
