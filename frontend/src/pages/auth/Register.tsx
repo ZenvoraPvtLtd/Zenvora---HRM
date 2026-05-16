@@ -98,6 +98,7 @@ const Register = () => {
         const response = await axios.post("/api/auth/register", payload);
         localStorage.setItem("accessToken", response.data.accessToken);
         storeAuthUser(response.data.user);
+        await axios.post("/api/auth/register", payload);
         setApiSuccess("Account created successfully! Redirecting...");
         resetForm();
         navigate(getDashboardPath(response.data.user?.role), { replace: true });

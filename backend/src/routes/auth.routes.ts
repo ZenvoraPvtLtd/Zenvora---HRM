@@ -9,9 +9,9 @@ import { protect } from "../middlewares/auth.middleware";
 
 import { authorizeRoles } from "../middlewares/role.middleware";
 import {
-  
   forgotPassword,
   resetPassword,
+  refreshToken,
 } from "../controllers/auth.controller";
 const router = express.Router();
 
@@ -52,6 +52,8 @@ router.get(
   }
 );
 
+
+router.post("/refresh-token", refreshToken);
 
 router.post(
   "/forgot-password",

@@ -8,9 +8,10 @@ import { featureCards } from "./constants";
 interface Props {
   children: React.ReactNode;
   fullWidth?: boolean;
+  noShadow?: boolean;
 }
 
-const AuthLayout = ({ children, fullWidth = false }: Props) => {
+export const AuthLayout = ({ children, fullWidth = false, noShadow = false }: Props) => {
   const { theme, isDark, toggle } = useTheme();
 
   return (
@@ -24,11 +25,10 @@ const AuthLayout = ({ children, fullWidth = false }: Props) => {
       <div
         className={`absolute bottom-0 right-0 w-72 h-72 ${theme.blur2} blur-[120px] transition-colors duration-300`}
       />
-
       <div className={`w-full ${fullWidth ? '' : 'max-w-xl'} relative z-10`}>
         {/* Card */}
         <div
-          className={`backdrop-blur-xl ${theme.card} border rounded-3xl shadow-2xl p-8 transition-colors duration-300`}
+          className={`backdrop-blur-xl ${theme.card} border rounded-3xl ${noShadow ? '' : 'shadow-2xl'} p-8 transition-colors duration-300`}
         >
           {/* Logo + Theme Toggle */}
           <div className="flex items-start justify-between mb-8">

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-
 import User from "../models/user.model";
 
 import {
@@ -118,6 +118,31 @@ export const login = async (
       success: false,
       message: error.message,
     });
+  }
+};
+
+/* ======================================================
+   REFRESH TOKEN
+====================================================== */
+
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      return res.status(401).json({ message: "No refresh token" });
+    }
+
+    const decoded: any = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const newAccessToken = generateAccessToken(user._id.toString(), user.role);
+
+    return res.status(200).json({ accessToken: newAccessToken });
+  } catch {
+    return res.status(401).json({ message: "Invalid or expired refresh token" });
   }
 };
 

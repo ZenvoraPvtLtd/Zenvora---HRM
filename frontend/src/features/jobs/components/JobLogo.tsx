@@ -1,11 +1,28 @@
+type JobLogoProps = {
+  letter?: string;
+  bg?: string;
+  size?: number;
+};
 
-
-export const JobLogo = ({ letter, bg, size = 40 }: { letter: string, bg: string, size?: number }) => (
-  <div style={{ 
-    width: `${size}px`, height: `${size}px`, borderRadius: '50%', 
-    background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', 
-    color: bg === '#ffe01b' ? '#000' : '#fff', fontWeight: 'bold', fontSize: `${size * 0.5}px` 
-  }}>
-    {letter}
-  </div>
-);
+export const JobLogo = ({ letter = 'Z', bg = '#a855f7', size = 44 }: JobLogoProps) => {
+  return (
+    <div
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        minWidth: `${size}px`,
+        borderRadius: '0.75rem',
+        background: bg,
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 800,
+        fontSize: `${Math.max(14, Math.floor(size * 0.4))}px`,
+        boxShadow: '0 10px 20px rgba(0,0,0,0.18)',
+      }}
+    >
+      {letter.charAt(0).toUpperCase()}
+    </div>
+  );
+};

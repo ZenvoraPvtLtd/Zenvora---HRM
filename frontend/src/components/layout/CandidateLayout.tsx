@@ -9,7 +9,7 @@ const candidateNavSections = [
     label: 'MAIN',
     items: [
       { to: '/candidate', icon: <LayoutDashboard size={18} />, label: 'Dashboard', exact: true },
-      { to: '/candidate/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
+      { to: '/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
     ],
   }
 ];
@@ -340,18 +340,7 @@ const CandidateLayout = () => {
         />
       </div>
       <div className="main-wrapper" style={{ marginLeft: isSidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s ease', width: '100%' }}>
-        <header className="header" style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between', 
-          padding: '1rem 2rem', 
-          background: 'var(--bg-primary)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: 'none',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100
-        }}>
+        <header className="header flex md:hidden items-center justify-between p-4 bg-[var(--bg-primary)] backdrop-blur-md sticky top-0 z-[100]">
           <button 
             className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -468,7 +457,10 @@ const CandidateLayout = () => {
                       </Link>
                       <div 
                         onClick={() => { 
-                          clearAuthStorage();
+                          localStorage.removeItem('accessToken');
+                          localStorage.removeItem('userEmail');
+                          localStorage.removeItem('userName');
+                          localStorage.removeItem('userRole');
                           setIsLoggedIn(false); 
                           setIsDropdownOpen(false); 
                           navigate('/login');
