@@ -8,7 +8,7 @@ const candidateNavSections = [
     label: 'MAIN',
     items: [
       { to: '/candidate', icon: <LayoutDashboard size={18} />, label: 'Dashboard', exact: true },
-      { to: '/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
+      { to: '/candidate/jobs', icon: <Briefcase size={18} />, label: 'Jobs' },
     ],
   }
 ];
@@ -18,9 +18,10 @@ interface CandidateSidebarProps {
   setIsCollapsed: (val: boolean) => void;
   userName?: string;
   userEmail?: string;
+  onLogout: () => void;
 }
 
-const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: CandidateSidebarProps) => {
+const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, onLogout }: CandidateSidebarProps) => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const avatarLetter = userName ? userName.charAt(0).toUpperCase() : 'G';
 
@@ -283,6 +284,35 @@ const CandidateSidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail }: 
             </>
           )}
         </NavLink>
+
+        <button
+          onClick={onLogout}
+          title={isCollapsed ? 'Logout' : undefined}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isCollapsed ? 'center' : 'flex-start',
+            gap: isCollapsed ? '0' : '0.625rem',
+            padding: isCollapsed ? '0.75rem 0' : '0.625rem 0.75rem',
+            borderRadius: '0.5rem',
+            width: '100%',
+            background: 'transparent',
+            border: 'none',
+            fontSize: '0.95rem',
+            fontWeight: 400,
+            color: '#ef4444',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            marginTop: '0.25rem',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239,68,68,0.1)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+        >
+          <span style={{ flexShrink: 0, display: 'flex' }}>
+            <LogOut size={18} />
+          </span>
+          {!isCollapsed && <span>Logout</span>}
+        </button>
       </div>
     </aside>
   );
@@ -300,6 +330,15 @@ const CandidateLayout = () => {
   const navigate = useNavigate();
   const { isDark, toggle } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+    navigate('/login');
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -327,11 +366,12 @@ const CandidateLayout = () => {
     <div className="app-container">
       <div className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)} />
       <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
-        <CandidateSidebar 
-          isCollapsed={isSidebarCollapsed} 
+        <CandidateSidebar
+          isCollapsed={isSidebarCollapsed}
           setIsCollapsed={setIsSidebarCollapsed}
           userName={userName}
           userEmail={userEmail}
+          onLogout={handleLogout}
         />
       </div>
       <div className="main-wrapper" style={{ marginLeft: isSidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s ease', width: '100%' }}>

@@ -26,8 +26,7 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
-      <Route path="/jobs" element={<JobRecommendations />} />
-      <Route path="/jobs/:id" element={<JobDetails />} />
+
       <Route path="/risk" element={<RiskAnalysis />} />
       {/* Public routes — redirect to / if already logged in */}
       <Route element={<PublicRoute />}>
@@ -51,7 +50,8 @@ const AppRoutes = () => {
         {/* Candidate Portal */}
         <Route path="/candidate" element={<CandidateLayout />}>
           <Route index element={<CandidateDashboard />} />
-          <Route path="jobs" element={<Navigate to="/jobs" replace />} />
+          <Route path="jobs" element={<JobRecommendations />} />
+          <Route path="jobs/:id" element={<JobDetails />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>
