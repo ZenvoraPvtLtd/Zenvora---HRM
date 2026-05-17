@@ -227,7 +227,7 @@ export default function CandidatesPage() {
             gap: '0.5rem',
             border: 'none',
             borderRadius: '0.5rem',
-            background: '#16a34a',
+            background: 'var(--accent)',
             color: 'white',
             padding: '0.75rem 1rem',
             fontWeight: 700,
@@ -257,7 +257,7 @@ export default function CandidatesPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'var(--text-purple)',
-                background: 'rgba(168, 85, 247, 0.1)',
+                background: 'var(--icon-accent-bg)',
               }}
             >
               <item.icon size={20} />

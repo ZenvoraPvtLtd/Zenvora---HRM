@@ -150,7 +150,7 @@ export default function Attendance() {
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Permission Request <span style={{ background: activeTab === 'permission' ? 'rgba(168, 85, 247, 0.1)' : 'rgba(255,255,255,0.05)', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>11</span>
+            Permission Request <span style={{ background: activeTab === 'permission' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>11</span>
           </div>
           <div
             onClick={() => setActiveTab('schedule')}
@@ -170,7 +170,7 @@ export default function Attendance() {
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Activity log <span style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>2</span>
+            Activity log <span style={{ background: 'var(--bg-hover)', color: 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>2</span>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ export default function Attendance() {
           <div style={{
             border: '1px solid var(--border)', color: 'var(--text-primary)',
             display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+          }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
             Export CSV <Download size={16} />
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function Attendance() {
                 <tr key={record.id} style={{
                   borderBottom: index !== records.length - 1 ? '1px solid var(--border)' : 'none',
                   transition: 'background-color 0.2s',
-                  backgroundColor: record.isBreakActive ? 'rgba(168, 85, 247, 0.05)' : 'transparent'
+                  backgroundColor: record.isBreakActive ? 'var(--icon-accent-bg)' : 'transparent'
                 }}>
                   <td style={{ padding: '1rem 0' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

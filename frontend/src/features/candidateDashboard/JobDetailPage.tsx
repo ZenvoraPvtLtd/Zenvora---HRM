@@ -511,8 +511,8 @@ export const JobDetailPage = () => {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="shrink-0">
             <div
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center text-white font-bold text-4xl sm:text-5xl"
-              style={{ background: "linear-gradient(135deg, #a855f7, #3b82f6)" }}
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center font-bold text-4xl sm:text-5xl"
+              style={{ background: "var(--logo-bg)", color: "var(--logo-text)" }}
             >
               Z
             </div>

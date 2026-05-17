@@ -1,5 +1,6 @@
 export const JobLogo = ({ letter, bg, size = 48 }: { letter: string; bg: string; size?: number }) => (
   <div
+    className="job-logo"
     style={{
       width: size,
       height: size,

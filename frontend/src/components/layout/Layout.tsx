@@ -71,7 +71,7 @@ const Layout = () => {
             <div
               style={{
                 width: '1.75rem', height: '1.75rem',
-                background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+                background: 'var(--logo-bg)',
                 borderRadius: '0.375rem', display: 'flex', alignItems: 'center',
                 justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '0.75rem',
               }}

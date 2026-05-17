@@ -62,7 +62,7 @@ export default function Interviews() {
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Upcoming Interviews <span style={{ background: activeTab === 'upcoming' ? 'rgba(168, 85, 247, 0.1)' : 'rgba(255,255,255,0.05)', color: activeTab === 'upcoming' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>15</span>
+            Upcoming Interviews <span style={{ background: activeTab === 'upcoming' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'upcoming' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>15</span>
           </div>
           <div 
             onClick={() => setActiveTab('completed')}
@@ -82,7 +82,7 @@ export default function Interviews() {
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Activity log <span style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>2</span>
+            Activity log <span style={{ background: 'var(--bg-hover)', color: 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>2</span>
           </div>
         </div>
 
@@ -105,7 +105,7 @@ export default function Interviews() {
           <div style={{ 
             border: '1px solid var(--border)', color: 'var(--text-primary)',
             display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+          }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
             Export CSV <Download size={16} />
           </div>
         </div>
@@ -148,10 +148,10 @@ export default function Interviews() {
                           border: '1px solid var(--border)', color: 'var(--text-primary)',
                           display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', fontSize: '0.75rem', fontWeight: '500', cursor: 'pointer',
                           transition: 'background 0.2s',
-                        }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                        }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
                           Start <Check size={14} />
                         </div>
-                        <div style={{ border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.375rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                        <div style={{ border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.375rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
                           <X size={14} />
                         </div>
                       </div>

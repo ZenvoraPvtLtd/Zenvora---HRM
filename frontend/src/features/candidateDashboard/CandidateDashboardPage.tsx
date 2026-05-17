@@ -92,7 +92,7 @@ export default function CandidateDashboard() {
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(168,85,247,0.3)" }}
+            style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
           >
             <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
           </div>
@@ -123,7 +123,7 @@ export default function CandidateDashboard() {
             </span>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-              style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.3)", color: "var(--text-purple)" }}
+              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-purple)" }}
             >
               {avatarLetter}
             </div>
@@ -158,7 +158,7 @@ export default function CandidateDashboard() {
             <div className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>85%</div>
           </div>
           <div className="w-20 sm:w-24 h-2 rounded-full overflow-hidden shrink-0" style={{ background: "var(--bg-hover)" }}>
-            <div className="h-full rounded-full" style={{ width: "85%", background: "linear-gradient(to right, #a855f7, #3b82f6)" }} />
+            <div className="h-full rounded-full" style={{ width: "85%", background: "var(--btn-primary-bg)" }} />
           </div>
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function CandidateDashboard() {
 
             <div
               className="rounded-xl p-3 sm:p-4 flex items-start sm:items-center gap-3"
-              style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}
+              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
             >
               <Clock size={16} style={{ color: "var(--text-purple)", flexShrink: 0 }} />
               <p className="text-sm" style={{ color: "var(--text-primary)" }}>
@@ -254,7 +254,7 @@ export default function CandidateDashboard() {
               </div>
               <button
                 className="w-full py-2.5 sm:py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-sm sm:text-base transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(to right, #3b82f6, #a855f7)", color: "#fff", border: "none", cursor: "pointer" }}
+                style={{ background: "var(--btn-primary-bg)", color: "#fff", border: "none", cursor: "pointer" }}
               >
                 <Video size={16} /> Join Video Call
               </button>
@@ -284,7 +284,7 @@ export default function CandidateDashboard() {
                 ) : resume ? (
                   <div
                     className="rounded-xl p-4 flex flex-col items-center gap-2 mb-4"
-                    style={{ border: "1px dashed rgba(168,85,247,0.3)", background: "rgba(168,85,247,0.05)" }}
+                    style={{ border: "1px dashed var(--border)", background: "var(--icon-accent-bg)" }}
                   >
                     <FileText size={28} style={{ color: "var(--text-purple)" }} />
                     <p className="font-semibold text-sm text-center break-all" style={{ color: "var(--text-primary)" }}>{resume.originalName}</p>
@@ -294,7 +294,7 @@ export default function CandidateDashboard() {
                   <div
                     onClick={() => !uploading && fileInputRef.current?.click()}
                     className="rounded-xl p-5 sm:p-6 flex flex-col items-center gap-2 mb-4 cursor-pointer transition-colors"
-                    style={{ border: "1px dashed rgba(168,85,247,0.3)", background: "rgba(168,85,247,0.05)" }}
+                    style={{ border: "1px dashed var(--border)", background: "var(--icon-accent-bg)" }}
                   >
                     {uploading ? <Loader2 size={28} className="animate-spin" style={{ color: "var(--text-purple)" }} /> : <Upload size={28} style={{ color: "var(--text-purple)" }} />}
                     <p className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>{uploading ? "Uploading..." : "Upload Resume"}</p>
@@ -322,7 +322,7 @@ export default function CandidateDashboard() {
                   <button
                     onClick={() => fileInputRef.current?.click()} disabled={uploading}
                     className="flex-1 py-2 rounded-lg flex items-center justify-center gap-1 text-xs sm:text-sm font-medium transition-colors"
-                    style={{ background: "rgba(168,85,247,0.1)", color: "var(--text-purple)", border: "none", cursor: "pointer" }}
+                    style={{ background: "var(--icon-accent-bg)", color: "var(--text-purple)", border: "none", cursor: "pointer" }}
                   >
                     {uploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />} Update
                   </button>

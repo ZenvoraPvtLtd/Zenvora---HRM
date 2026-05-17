@@ -13,7 +13,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import Button from "./components/Button";
+import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
 import { getDashboardPath, storeAuthUser} from "../../utils/auth";
 
@@ -95,6 +95,7 @@ const Register = () => {
           role: values.role,
           password: values.password,
         };
+        await axios.post("/api/auth/register", payload);
         const response = await axios.post("/api/auth/register", payload);
         localStorage.setItem("accessToken", response.data.accessToken);
         storeAuthUser(response.data.user);
@@ -115,7 +116,7 @@ const Register = () => {
     <AuthLayout>
       {/* Heading */}
       <div className="mb-8">
-        <h2 className={`text-4xl font-bold mb-2 ${theme.heading}`}>
+        <h2 className={`text-4xl font-bold mb-2 tracking-tight ${theme.heading}`}>
           Create Account
         </h2>
         <p className={theme.subtext}>Join Zenvora and start your journey</p>
@@ -127,7 +128,7 @@ const Register = () => {
         <button
           type="button"
           onClick={() => window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`}
-          className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+          className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -141,7 +142,7 @@ const Register = () => {
         <button
           type="button"
           onClick={() => window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/microsoft`}
-          className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+          className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path fill="#F25022" d="M1 1h10v10H1z" />
@@ -164,7 +165,7 @@ const Register = () => {
       <form onSubmit={formik.handleSubmit} className="space-y-5">
         {/* Full Name */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Full Name
           </label>
           <div className="relative">
@@ -180,7 +181,7 @@ const Register = () => {
               value={formik.values.fullName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
           </div>
           {formik.touched.fullName && formik.errors.fullName && (
@@ -192,7 +193,7 @@ const Register = () => {
 
         {/* Email */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Email Address
           </label>
           <div className="relative">
@@ -208,7 +209,7 @@ const Register = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
           </div>
           {formik.touched.email && formik.errors.email && (
@@ -218,7 +219,7 @@ const Register = () => {
 
         {/* Phone */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Phone Number
           </label>
           <div className="relative">
@@ -234,7 +235,7 @@ const Register = () => {
               value={formik.values.phoneNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
           </div>
           {formik.touched.phoneNumber && formik.errors.phoneNumber && (
@@ -246,7 +247,7 @@ const Register = () => {
 
         {/* Role */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>Role</label>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>Role</label>
           <div className="relative">
             <select
               id="role"
@@ -285,7 +286,7 @@ const Register = () => {
 
         {/* Password */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Password
           </label>
           <div className="relative">
@@ -301,7 +302,7 @@ const Register = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
             <button
               type="button"
@@ -344,7 +345,7 @@ const Register = () => {
 
         {/* Confirm Password */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Confirm Password
           </label>
           <div className="relative">
@@ -360,7 +361,7 @@ const Register = () => {
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
             <button
               type="button"
@@ -387,15 +388,16 @@ const Register = () => {
               checked={formik.values.agreeTerms}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="mt-0.5 w-4 h-4 rounded accent-purple-500 shrink-0"
+              className="mt-0.5 w-4 h-4 rounded shrink-0"
+              style={{ accentColor: 'var(--accent)' }}
             />
             <span className={`text-sm ${theme.termsText}`}>
               I agree to the{" "}
-              <span className="text-purple-500 hover:text-purple-400 cursor-pointer">
+              <span className={`cursor-pointer underline ${theme.link}`}>
                 Terms of Service
               </span>{" "}
               and{" "}
-              <span className="text-purple-500 hover:text-purple-400 cursor-pointer">
+              <span className={`cursor-pointer underline ${theme.link}`}>
                 Privacy Policy
               </span>
             </span>
@@ -434,7 +436,7 @@ const Register = () => {
         Already have an account?{" "}
         <Link
           to="/login"
-          className="text-purple-500 hover:text-purple-400 font-semibold"
+          className={`font-semibold ${theme.signupLink}`}
         >
           Sign in here
         </Link>

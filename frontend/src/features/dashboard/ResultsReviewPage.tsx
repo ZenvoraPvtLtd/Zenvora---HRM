@@ -112,7 +112,7 @@ function ResultsReviewPage() {
               key={type}
               onClick={() => setFilterType(type)}
               style={{
-                background: filterType === type ? 'rgba(168, 85, 247, 0.1)' : 'transparent',
+                background: filterType === type ? 'var(--icon-accent-bg)' : 'transparent',
                 color: filterType === type ? 'var(--text-purple)' : 'var(--text-secondary)',
                 border: `1px solid ${filterType === type ? 'var(--accent)' : 'var(--border)'}`,
                 padding: '0.5rem 1rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem'

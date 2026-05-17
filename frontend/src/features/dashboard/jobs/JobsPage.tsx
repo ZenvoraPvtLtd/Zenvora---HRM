@@ -178,7 +178,7 @@ export default function JobsPage({
               <span
                 className="px-2 py-0.5 rounded-full text-xs"
                 style={{
-                  background: activeTab === tab.key ? "rgba(168,85,247,0.1)" : "var(--bg-hover)",
+                  background: activeTab === tab.key ? "var(--icon-accent-bg)" : "var(--bg-hover)",
                   color: activeTab === tab.key ? "var(--text-purple)" : "var(--text-secondary)",
                 }}
               >
@@ -270,7 +270,7 @@ export default function JobsPage({
                       <div className="flex items-center gap-3">
                         <div
                           className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-semibold text-sm"
-                          style={{ background: "rgba(168,85,247,0.15)", color: "var(--text-purple)" }}
+                          style={{ background: "var(--icon-accent-bg)", color: "var(--text-purple)" }}
                         >
                           {(job.title || job.role || "J").charAt(0).toUpperCase()}
                         </div>

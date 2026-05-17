@@ -30,7 +30,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(168,85,247,0.3)" }}
+            style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
           >
             <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
           </div>
@@ -64,7 +64,7 @@ export default function Dashboard() {
             </span>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-              style={{ background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.3)", color: "var(--text-purple)" }}
+              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-purple)" }}
             >
               {avatarLetter}
             </div>
@@ -87,8 +87,8 @@ export default function Dashboard() {
         className="relative overflow-hidden rounded-2xl border mb-4 sm:mb-8 p-5 sm:p-10"
         style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}
       >
-        <div className="absolute top-0 left-0 w-56 h-56 pointer-events-none" style={{ background: "rgba(124,58,237,0.25)", filter: "blur(100px)" }} />
-        <div className="absolute bottom-0 right-0 w-56 h-56 pointer-events-none" style={{ background: "rgba(79,70,229,0.2)", filter: "blur(100px)" }} />
+        <div className="absolute top-0 left-0 w-56 h-56 pointer-events-none" style={{ background: "var(--icon-accent-bg)", filter: "blur(100px)" }} />
+        <div className="absolute bottom-0 right-0 w-56 h-56 pointer-events-none" style={{ background: "var(--icon-accent-bg)", filter: "blur(100px)" }} />
         <div className="relative z-10">
           <h1 className="text-xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
             Welcome back, <span style={{ color: "var(--text-purple)" }}>{userName}</span>

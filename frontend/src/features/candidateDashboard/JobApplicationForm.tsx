@@ -186,7 +186,7 @@ export const JobApplicationForm = ({
             style={{
               background: "var(--accent)",
               border: "none",
-              color: "white",
+              color: "var(--accent-text)",
               padding: "0.75rem 2rem",
               borderRadius: "0.5rem",
               cursor: "pointer",
@@ -486,7 +486,7 @@ export const JobApplicationForm = ({
                   cursor: "pointer",
                   border: `1px solid ${!useNewResume ? "var(--accent)" : "var(--border)"}`,
                   background: !useNewResume
-                    ? "rgba(124,58,237,0.08)"
+                    ? "var(--icon-accent-bg)"
                     : "transparent",
                   transition: "all 0.15s",
                 }}
@@ -543,7 +543,7 @@ export const JobApplicationForm = ({
                 alignItems: "center",
                 justifyContent: "center",
                 background: useNewResume
-                  ? "rgba(124,58,237,0.05)"
+                  ? "var(--icon-accent-bg)"
                   : "rgba(255,255,255,0.02)",
                 cursor: "pointer",
                 transition: "all 0.15s",
@@ -654,7 +654,7 @@ export const JobApplicationForm = ({
               style={{
                 background: "var(--accent)",
                 border: "none",
-                color: "white",
+                color: "var(--accent-text)",
                 padding: "0.75rem 2rem",
                 borderRadius: "0.5rem",
                 cursor: submitting ? "not-allowed" : "pointer",

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Lock, Eye, EyeOff, CheckCircle, ArrowLeft } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import Button from "./components/Button";
+import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
 
 const ResetPassword = () => {

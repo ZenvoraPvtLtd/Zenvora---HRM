@@ -53,14 +53,14 @@ const CandidateSidebar = ({
     alignItems: "center",
     justifyContent: isCollapsed ? "center" : "flex-start",
     gap: isCollapsed ? "0" : "0.625rem",
-    padding: isCollapsed ? "0.75rem 0" : "0.625rem 0.75rem",
+    padding: isCollapsed ? "0.75rem 0.5rem" : "0.65rem 0.75rem",
     borderRadius: "0.5rem",
     marginBottom: "0.25rem",
     textDecoration: "none",
-    fontSize: "0.875rem",
-    fontWeight: isActive ? 600 : 400,
-    color: isActive ? "var(--text-purple)" : "var(--text-secondary)",
-    background: isActive ? "rgba(168, 85, 247, 0.12)" : "transparent",
+    fontSize: "0.9375rem",
+    fontWeight: isActive ? 700 : 500,
+    color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
+    background: isActive ? "var(--bg-hover)" : "transparent",
     transition: "all 0.15s ease",
   });
 
@@ -95,9 +95,9 @@ const CandidateSidebar = ({
               <div
                 style={{
                   width: "2rem", height: "2rem",
-                  background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                  background: "var(--logo-bg)",
                   borderRadius: "0.5rem", display: "flex", alignItems: "center",
-                  justifyContent: "center", color: "white", fontWeight: 700,
+                  justifyContent: "center", color: "var(--logo-text)", fontWeight: 700,
                   fontSize: "0.875rem", flexShrink: 0,
                 }}
               >
@@ -130,9 +130,9 @@ const CandidateSidebar = ({
             <div
               style={{
                 width: "2rem", height: "2rem",
-                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                background: "var(--logo-bg)",
                 borderRadius: "0.5rem", display: "flex", alignItems: "center",
-                justifyContent: "center", color: "white", fontWeight: 700, fontSize: "0.875rem",
+                justifyContent: "center", color: "var(--logo-text)", fontWeight: 700, fontSize: "0.875rem",
               }}
             >
               Z
@@ -148,7 +148,7 @@ const CandidateSidebar = ({
             <div
               style={{
                 width: "38px", height: "38px", borderRadius: "50%",
-                background: "rgba(168,85,247,0.15)", border: "1px solid rgba(168,85,247,0.3)",
+                background: "var(--icon-accent-bg)", border: "1px solid var(--border)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 color: "var(--text-purple)", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0,
               }}
@@ -173,11 +173,11 @@ const CandidateSidebar = ({
       )}
 
       {/* Nav */}
-      <nav style={{ flex: 1, overflowY: "auto", padding: isCollapsed ? "1rem 0.5rem" : "1rem 0.75rem" }}>
+      <nav style={{ flex: 1, overflowY: "auto", padding: isCollapsed ? "1rem 0.75rem" : "1rem 0.75rem" }}>
         {navSections.map((section) => (
           <div key={section.label} style={{ marginBottom: "1rem" }}>
             {!isCollapsed ? (
-              <p style={{ fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", color: "var(--text-secondary)", padding: "0 0.5rem", marginBottom: "0.5rem", opacity: 0.6 }}>
+              <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--text-secondary)", padding: "0 0.5rem", marginBottom: "0.5rem", opacity: 0.7 }}>
                 {section.label}
               </p>
             ) : (
@@ -195,7 +195,7 @@ const CandidateSidebar = ({
               >
                 {({ isActive }) => (
                   <>
-                    <span style={{ color: isActive ? "var(--text-purple)" : "var(--text-secondary)", flexShrink: 0, display: "flex" }}>
+                    <span style={{ color: isActive ? "var(--text-primary)" : "var(--text-secondary)", flexShrink: 0, display: "flex" }}>
                       {item.icon}
                     </span>
                     {!isCollapsed && <span>{item.label}</span>}
@@ -208,7 +208,7 @@ const CandidateSidebar = ({
       </nav>
 
       {/* Bottom: theme toggle + profile + logout */}
-      <div style={{ padding: isCollapsed ? "1rem 0.5rem" : "1rem 0.75rem", borderTop: "1px solid var(--border)", flexShrink: 0 }}>
+      <div style={{ padding: isCollapsed ? "1rem 0.75rem" : "1rem 0.75rem", borderTop: "1px solid var(--border)", flexShrink: 0 }}>
         {/* Theme toggle */}
         <button
           onClick={toggle}
@@ -217,10 +217,10 @@ const CandidateSidebar = ({
             display: "flex", alignItems: "center",
             justifyContent: isCollapsed ? "center" : "flex-start",
             gap: isCollapsed ? "0" : "0.625rem",
-            padding: isCollapsed ? "0.75rem 0" : "0.625rem 0.75rem",
+            padding: isCollapsed ? "0.75rem 0.5rem" : "0.625rem 0.75rem",
             borderRadius: "0.5rem", width: "100%",
             background: "transparent", border: "none",
-            fontSize: "0.875rem", color: "var(--text-secondary)", cursor: "pointer", marginBottom: "0.25rem",
+            fontSize: "0.9375rem", fontWeight: 500, color: "var(--text-secondary)", cursor: "pointer", marginBottom: "0.25rem",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-hover)")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
@@ -237,7 +237,7 @@ const CandidateSidebar = ({
         >
           {({ isActive }) => (
             <>
-              <span style={{ color: isActive ? "var(--text-purple)" : "var(--text-secondary)", flexShrink: 0, display: "flex" }}>
+              <span style={{ color: isActive ? "var(--text-primary)" : "var(--text-secondary)", flexShrink: 0, display: "flex" }}>
                 <UserCircle size={18} />
               </span>
               {!isCollapsed && <span>Profile</span>}
@@ -252,10 +252,10 @@ const CandidateSidebar = ({
             display: "flex", alignItems: "center",
             justifyContent: isCollapsed ? "center" : "flex-start",
             gap: isCollapsed ? "0" : "0.625rem",
-            padding: isCollapsed ? "0.75rem 0" : "0.625rem 0.75rem",
+            padding: isCollapsed ? "0.75rem 0.5rem" : "0.625rem 0.75rem",
             borderRadius: "0.5rem", width: "100%",
             background: "transparent", border: "none",
-            fontSize: "0.875rem", color: "#ef4444", cursor: "pointer", marginTop: "0.25rem",
+            fontSize: "0.9375rem", fontWeight: 500, color: "#ef4444", cursor: "pointer", marginTop: "0.25rem",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.08)")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
@@ -344,9 +344,9 @@ const CandidateLayout = () => {
             <div
               style={{
                 width: "1.75rem", height: "1.75rem",
-                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                background: "var(--logo-bg)",
                 borderRadius: "0.375rem", display: "flex", alignItems: "center",
-                justifyContent: "center", color: "white", fontWeight: 700, fontSize: "0.75rem",
+                justifyContent: "center", color: "var(--logo-text)", fontWeight: 700, fontSize: "0.75rem",
               }}
             >
               Z

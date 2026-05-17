@@ -49,9 +49,9 @@ export const JobsPage = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <div
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center"
-            style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(168,85,247,0.3)" }}
+            style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
           >
-            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
+            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-primary)" }} />
           </div>
           <h1 className="text-lg sm:text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
             Job Recommendations
@@ -93,8 +93,8 @@ export const JobsPage = () => {
             style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}
           >
             {/* Logo */}
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #a855f7, #3b82f6)" }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm"
+              style={{ background: "var(--logo-bg)", color: "var(--logo-text)" }}>
               Z
             </div>
 
@@ -121,7 +121,7 @@ export const JobsPage = () => {
                 <span
                   key={tag}
                   className="px-3 py-1 rounded-full text-xs font-medium"
-                  style={{ background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.2)", color: "var(--text-purple)" }}
+                  style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
                 >
                   {tag}
                 </span>
@@ -139,8 +139,8 @@ export const JobsPage = () => {
               </button>
               <button
                 onClick={() => setApplyingForJobId(job.id)}
-                className="flex-1 py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(to right, #a855f7, #3b82f6)", border: "none", cursor: "pointer" }}
+                className="flex-1 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ background: "var(--accent)", color: "var(--accent-text)", border: "none", cursor: "pointer" }}
               >
                 Apply Now
               </button>

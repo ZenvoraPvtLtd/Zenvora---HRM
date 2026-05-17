@@ -117,7 +117,7 @@ export default function Profile() {
         <div style={{ position: 'relative' }}>
           <div style={{ 
             width: '100px', height: '100px', borderRadius: '50%', 
-            background: 'linear-gradient(to bottom right, #a855f7, #3b82f6)', 
+            background: 'var(--logo-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
             color: 'white', fontWeight: 'bold', fontSize: '2.5rem', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
           }}>

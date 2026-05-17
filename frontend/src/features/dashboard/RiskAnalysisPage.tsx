@@ -88,16 +88,16 @@ export default function RiskAnalysisPage({ results = mockResults }: RiskAnalysis
     Review: { background: "rgba(234,179,8,0.1)", border: "1px solid rgba(234,179,8,0.2)", color: "#eab308" },
     Reject: { background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444" },
   };
-  const decisionStyle = decisionStyles[candidate.decision] ?? { background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.2)", color: "var(--text-purple)" };
+  const decisionStyle = decisionStyles[candidate.decision] ?? { background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-purple)" };
 
   const card: React.CSSProperties = { background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: "1.5rem" };
 
   const navBtn: React.CSSProperties = {
     width: 40, height: 40, borderRadius: "0.75rem",
-    border: "1px solid rgba(168,85,247,0.2)",
+    border: "1px solid var(--border)",
     background: "var(--bg-secondary)",
     display: "flex", alignItems: "center", justifyContent: "center",
-    cursor: "pointer", color: "#a855f7",
+    cursor: "pointer", color: "var(--text-purple)",
   };
 
   return (
@@ -107,7 +107,7 @@ export default function RiskAnalysisPage({ results = mockResults }: RiskAnalysis
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div className="flex-1">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(168,85,247,0.3)" }}>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center" style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}>
               <Shield className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
@@ -147,7 +147,7 @@ export default function RiskAnalysisPage({ results = mockResults }: RiskAnalysis
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="shrink-0">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center" style={{ background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.2)" }}>
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center" style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}>
               <FileText className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: "var(--text-purple)" }} />
             </div>
           </div>

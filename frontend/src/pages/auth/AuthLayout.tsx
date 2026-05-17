@@ -1,8 +1,8 @@
 
 import { ShieldCheck, Cloud, Sun, Moon } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import IconButton from "./components/IconButton";
-import HoverableCard from "./components/HoverableCard";
+import IconButton from "../../components/IconButton";
+import HoverableCard from "../../components/HoverableCard";
 import { featureCards } from "./constants";
 
 interface Props {
@@ -34,7 +34,10 @@ export const AuthLayout = ({ children, fullWidth = false, noShadow = false }: Pr
           <div className="flex items-start justify-between mb-8">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
+                  style={{ background: 'var(--logo-bg)', color: 'var(--logo-text)' }}
+                >
                   Z
                 </div>
                 <span
@@ -66,76 +69,20 @@ export const AuthLayout = ({ children, fullWidth = false, noShadow = false }: Pr
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <ellipse
-                cx="60"
-                cy="60"
-                rx="55"
-                ry="20"
-                stroke="#6366f1"
-                strokeWidth="1"
-                strokeDasharray="4 3"
-                opacity="0.4"
-              />
-              <ellipse
-                cx="60"
-                cy="60"
-                rx="55"
-                ry="20"
-                stroke="#6366f1"
-                strokeWidth="1"
-                strokeDasharray="4 3"
-                opacity="0.4"
-                transform="rotate(60 60 60)"
-              />
-              <ellipse
-                cx="60"
-                cy="60"
-                rx="55"
-                ry="20"
-                stroke="#6366f1"
-                strokeWidth="1"
-                strokeDasharray="4 3"
-                opacity="0.4"
-                transform="rotate(120 60 60)"
-              />
+              <ellipse cx="60" cy="60" rx="55" ry="20" stroke="currentColor" strokeWidth="1" strokeDasharray="4 3" opacity="0.2" />
+              <ellipse cx="60" cy="60" rx="55" ry="20" stroke="currentColor" strokeWidth="1" strokeDasharray="4 3" opacity="0.2" transform="rotate(60 60 60)" />
+              <ellipse cx="60" cy="60" rx="55" ry="20" stroke="currentColor" strokeWidth="1" strokeDasharray="4 3" opacity="0.2" transform="rotate(120 60 60)" />
               <path
                 d="M60 18 L88 30 L88 58 C88 76 74 90 60 96 C46 90 32 76 32 58 L32 30 Z"
-                fill="url(#shieldGrad)"
-                opacity="0.9"
+                fill="currentColor"
+                opacity="0.85"
               />
-              <rect
-                x="50"
-                y="56"
-                width="20"
-                height="15"
-                rx="2"
-                fill="white"
-                opacity="0.9"
-              />
-              <path
-                d="M54 56 L54 51 C54 47.5 66 47.5 66 51 L66 56"
-                stroke="white"
-                strokeWidth="2.5"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <circle cx="60" cy="63" r="2" fill="#6366f1" />
-              <circle cx="15" cy="60" r="3" fill="#818cf8" opacity="0.8" />
-              <circle cx="105" cy="45" r="2.5" fill="#60a5fa" opacity="0.8" />
-              <circle cx="80" cy="102" r="2.5" fill="#818cf8" opacity="0.8" />
-              <defs>
-                <linearGradient
-                  id="shieldGrad"
-                  x1="32"
-                  y1="18"
-                  x2="88"
-                  y2="96"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop offset="0%" stopColor="#7c3aed" />
-                  <stop offset="100%" stopColor="#4f46e5" />
-                </linearGradient>
-              </defs>
+              <rect x="50" y="56" width="20" height="15" rx="2" fill="var(--bg-secondary)" opacity="0.95" />
+              <path d="M54 56 L54 51 C54 47.5 66 47.5 66 51 L66 56" stroke="var(--bg-secondary)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+              <circle cx="60" cy="63" r="2" fill="var(--bg-secondary)" opacity="0.7" />
+              <circle cx="15" cy="60" r="3" fill="currentColor" opacity="0.3" />
+              <circle cx="105" cy="45" r="2.5" fill="currentColor" opacity="0.3" />
+              <circle cx="80" cy="102" r="2.5" fill="currentColor" opacity="0.3" />
             </svg>
           </div>
         </div>
@@ -157,14 +104,14 @@ export const AuthLayout = ({ children, fullWidth = false, noShadow = false }: Pr
           className={`flex flex-wrap items-center justify-center gap-6 mt-6 text-xs ${theme.bottomBar}`}
         >
           <span className="flex items-center gap-1.5">
-            <ShieldCheck size={12} className="text-purple-500" /> 256-bit SSL
+            <ShieldCheck size={12} className="auth-accent-icon" /> 256-bit SSL
             Encryption
           </span>
           <span className="flex items-center gap-1.5">
-            <ShieldCheck size={12} className="text-purple-500" /> GDPR Compliant
+            <ShieldCheck size={12} className="auth-accent-icon" /> GDPR Compliant
           </span>
           <span className="flex items-center gap-1.5">
-            <Cloud size={12} className="text-purple-500" /> Regular Backups
+            <Cloud size={12} className="auth-accent-icon" /> Regular Backups
           </span>
           <span className="flex items-center gap-1.5">
             <svg
@@ -175,7 +122,7 @@ export const AuthLayout = ({ children, fullWidth = false, noShadow = false }: Pr
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
-              className="text-purple-500"
+              className="auth-accent-icon"
             >
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />

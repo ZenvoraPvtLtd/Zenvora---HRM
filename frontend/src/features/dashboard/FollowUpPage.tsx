@@ -77,7 +77,7 @@ export default function FollowUpPage() {
               <span
                 className="px-2 py-0.5 rounded-full text-xs"
                 style={{
-                  background: activeTab === tab.key ? "rgba(168,85,247,0.1)" : "var(--bg-hover)",
+                  background: activeTab === tab.key ? "var(--icon-accent-bg)" : "var(--bg-hover)",
                   color: activeTab === tab.key ? "var(--text-purple)" : "var(--text-secondary)",
                 }}
               >

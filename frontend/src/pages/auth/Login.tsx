@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import Button from "./components/Button";
+import Button from "../../components/button/Button";
 import { AuthLayout } from "../auth/AuthLayout";
 
 import { getDashboardPath, storeAuthUser } from "../../utils/auth";
@@ -57,8 +57,8 @@ const Login = () => {
     <AuthLayout>
       {/* Heading */}
       <div className="mb-8">
-        <h2 className={`text-4xl font-bold mb-2 ${theme.heading}`}>
-          Welcome Back! 👋
+        <h2 className={`text-4xl font-bold mb-2 tracking-tight ${theme.heading}`}>
+          Welcome Back! 
         </h2>
         <p className={theme.subtext}>Login to continue to your account</p>
       </div>
@@ -68,7 +68,7 @@ const Login = () => {
         <button
           type="button"
         onClick={handleGoogleLogin}
-        className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+        className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
       >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path
@@ -94,7 +94,7 @@ const Login = () => {
         <button
           type="button"
           onClick={handleMicrosoftLogin}
-          className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+          className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path fill="#F25022" d="M1 1h10v10H1z" />
@@ -117,7 +117,7 @@ const Login = () => {
       <form onSubmit={formik.handleSubmit} className="space-y-5">
         {/* Email */}
         <div>
-          <label className={`text-sm mb-2 block ${theme.label}`}>
+          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
             Email Address
           </label>
           <div className="relative">
@@ -133,7 +133,7 @@ const Login = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
           </div>
           {formik.touched.email && formik.errors.email && (
@@ -144,7 +144,7 @@ const Login = () => {
         {/* Password */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className={`text-sm ${theme.label}`}>Password</label>
+            <label className={`text-base font-semibold ${theme.label}`}>Password</label>
          
           </div>
           <div className="relative">
@@ -160,7 +160,7 @@ const Login = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full border rounded-xl px-12 py-3 outline-none transition-all ${theme.input}`}
+              className={`w-full border rounded-xl px-12 py-3.5 outline-none transition-all text-base ${theme.input}`}
             />
             <button
               type="button"
@@ -186,7 +186,8 @@ const Login = () => {
               type="checkbox"
               checked={formik.values.rememberMe}
               onChange={formik.handleChange}
-              className="w-4 h-4 rounded accent-purple-500"
+              className="w-4 h-4 rounded"
+              style={{ accentColor: 'var(--accent)' }}
             />
             <span className={`text-sm ${theme.checkLabel}`}>Remember me</span>
           </label>
