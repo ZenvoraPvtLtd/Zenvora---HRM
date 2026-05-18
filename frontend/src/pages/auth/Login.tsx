@@ -6,13 +6,21 @@ import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
-import AuthLayout from "./AuthLayout";
+import { AuthLayout } from "../auth/AuthLayout";
 
 const Login = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/oauth/google";
+  };
+
+  const handleMicrosoftLogin = () => {
+    window.location.href = "http://localhost:5000/api/oauth/microsoft";
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -31,8 +39,12 @@ const Login = () => {
           email: values.email,
           password: values.password,
         });
-        localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/dashboard");
+        const { accessToken, user } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        if (user?.name) localStorage.setItem("userName", user.name);
+        if (user?.email) localStorage.setItem("userEmail", user.email);
+        if (user?.role) localStorage.setItem("userRole", user.role);
+        navigate(user?.role === "candidate" ? "/candidate" : "/");
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {
@@ -55,8 +67,9 @@ const Login = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <button
           type="button"
-          className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
-        >
+        onClick={handleGoogleLogin}
+        className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
+      >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path
               fill="#4285F4"
@@ -80,6 +93,7 @@ const Login = () => {
 
         <button
           type="button"
+          onClick={handleMicrosoftLogin}
           className="bg-white text-black rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-300 shadow-sm cursor-pointer"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
@@ -131,12 +145,7 @@ const Login = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className={`text-sm ${theme.label}`}>Password</label>
-            {/* <Link
-              to="/forgot-password"
-              className={`text-sm font-medium ${theme.forgotLink}`}
-            >
-              Forgot?
-            </Link> */}
+         
           </div>
           <div className="relative">
             <Lock
@@ -197,7 +206,13 @@ const Login = () => {
         )}
 
         {/* Submit */}
-        <Button type="submit" loading={formik.isSubmitting} loadingText="Signing In...">Sign In</Button>
+        <Button
+          type="submit"
+          loading={formik.isSubmitting}
+          loadingText="Signing In..."
+        >
+          Sign In
+        </Button>
       </form>
 
       {/* Security Badges */}

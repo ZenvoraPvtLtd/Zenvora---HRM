@@ -27,6 +27,7 @@ export interface AppTheme {
   selectOption: string;
   strengthBg: string;
   termsText: string;
+  link: string;
 }
 
 export const darkTheme: AppTheme = {
@@ -59,6 +60,7 @@ export const darkTheme: AppTheme = {
   selectOption: "bg-[#0B102F]",
   strengthBg: "bg-white/10",
   termsText: "text-gray-300",
+  link: "text-purple-500 hover:text-purple-400",
 };
 
 export const lightTheme: AppTheme = {
@@ -68,8 +70,7 @@ export const lightTheme: AppTheme = {
   card: "bg-white border-slate-200 shadow-xl",
   logo: "text-slate-800",
   tagline: "text-slate-500",
-  toggleBtn:
-    "bg-slate-100 border-slate-300 text-black hover:text-black",
+  toggleBtn: "bg-slate-100 border-slate-300 text-black hover:text-black",
   heading: "text-slate-800",
   subtext: "text-slate-500",
   label: "text-slate-600",
@@ -92,4 +93,5 @@ export const lightTheme: AppTheme = {
   selectOption: "bg-white",
   strengthBg: "bg-slate-200",
   termsText: "text-slate-600",
+  link: "text-purple-500 hover:text-purple-400",
 };
