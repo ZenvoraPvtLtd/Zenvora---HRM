@@ -170,8 +170,8 @@ export default function JobsPage({
               onClick={() => setActiveTab(tab.key)}
               className="py-4 shrink-0 cursor-pointer text-sm font-medium transition-colors border-b-2 flex items-center gap-2"
               style={{
-                borderBottomColor: activeTab === tab.key ? "var(--text-purple)" : "transparent",
-                color: activeTab === tab.key ? "var(--text-purple)" : "var(--text-secondary)",
+                borderBottomColor: activeTab === tab.key ? "var(--accent)" : "transparent",
+                color: activeTab === tab.key ? "var(--accent)" : "var(--text-secondary)",
               }}
             >
               {tab.label}
@@ -179,7 +179,7 @@ export default function JobsPage({
                 className="px-2 py-0.5 rounded-full text-xs"
                 style={{
                   background: activeTab === tab.key ? "var(--icon-accent-bg)" : "var(--bg-hover)",
-                  color: activeTab === tab.key ? "var(--text-purple)" : "var(--text-secondary)",
+                  color: activeTab === tab.key ? "var(--accent)" : "var(--text-secondary)",
                 }}
               >
                 {tab.count}
@@ -214,7 +214,7 @@ export default function JobsPage({
             <button
               onClick={() => navigate("/createjobs/create")}
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ background: "var(--text-purple)", color: "#fff", border: "none", cursor: "pointer" }}
+              style={{ background: "var(--accent)", color: "var(--accent-text)", border: "none", cursor: "pointer" }}
             >
               <Plus size={16} /> Create Job
             </button>
@@ -270,7 +270,7 @@ export default function JobsPage({
                       <div className="flex items-center gap-3">
                         <div
                           className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-semibold text-sm"
-                          style={{ background: "var(--icon-accent-bg)", color: "var(--text-purple)" }}
+                          style={{ background: "var(--icon-accent-bg)", color: "var(--accent)" }}
                         >
                           {(job.title || job.role || "J").charAt(0).toUpperCase()}
                         </div>
@@ -314,7 +314,7 @@ export default function JobsPage({
                             onClick={() => handleEditJob(job.id)}
                             className="p-1.5 rounded-lg transition-colors"
                             style={{ color: "var(--text-secondary)", border: "1px solid var(--border)", background: "transparent", cursor: "pointer" }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-purple)")}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
                             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
                             title="Edit"
                           >

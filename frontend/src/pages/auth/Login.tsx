@@ -7,8 +7,9 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import { AuthLayout } from "../auth/AuthLayout";
-
 import { getDashboardPath, storeAuthUser } from "../../utils/auth";
+
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,6 +46,9 @@ const Login = () => {
         localStorage.setItem("accessToken", accessToken);
         storeAuthUser(user);
         navigate(getDashboardPath(user?.role), { replace: true });
+        localStorage.setItem("accessToken", response.data.accessToken);
+        storeAuthUser(response.data.user);
+        navigate(getDashboardPath(response.data.user?.role), { replace: true });
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {
@@ -57,8 +61,14 @@ const Login = () => {
     <AuthLayout>
       {/* Heading */}
       <div className="mb-8">
-        <h2 className={`text-4xl font-bold mb-2 tracking-tight ${theme.heading}`}>
-          Welcome Back! 
+        <h2
+          className={`text-4xl font-bold mb-2 tracking-tight ${theme.heading}`}
+        >
+          {" "}
+        </h2>
+        Welcome Back!
+        <h2 className={`text-4xl font-bold mb-2 ${theme.heading}`}>
+          Welcome Back!
         </h2>
         <p className={theme.subtext}>Login to continue to your account</p>
       </div>
@@ -67,9 +77,9 @@ const Login = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <button
           type="button"
-        onClick={handleGoogleLogin}
-        className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
-      >
+          onClick={handleGoogleLogin}
+          className="bg-white text-black border border-gray-300 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" className="shrink-0">
             <path
               fill="#4285F4"
@@ -117,7 +127,9 @@ const Login = () => {
       <form onSubmit={formik.handleSubmit} className="space-y-5">
         {/* Email */}
         <div>
-          <label className={`text-base font-semibold mb-2 block ${theme.label}`}>
+          <label
+            className={`text-base font-semibold mb-2 block ${theme.label}`}
+          >
             Email Address
           </label>
           <div className="relative">
@@ -144,8 +156,9 @@ const Login = () => {
         {/* Password */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className={`text-base font-semibold ${theme.label}`}>Password</label>
-         
+            <label className={`text-base font-semibold ${theme.label}`}>
+              Password
+            </label>
           </div>
           <div className="relative">
             <Lock
@@ -187,7 +200,7 @@ const Login = () => {
               checked={formik.values.rememberMe}
               onChange={formik.handleChange}
               className="w-4 h-4 rounded"
-              style={{ accentColor: 'var(--accent)' }}
+              style={{ accentColor: "var(--accent)" }}
             />
             <span className={`text-sm ${theme.checkLabel}`}>Remember me</span>
           </label>

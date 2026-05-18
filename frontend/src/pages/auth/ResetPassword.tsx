@@ -7,6 +7,7 @@ import { Lock, Eye, EyeOff, CheckCircle, ArrowLeft } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
+import API_BASE_URL from "../../config/apiConfig";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const ResetPassword = () => {
       setApiError(null);
       setApiSuccess(null);
       try {
-        const response = await axios.put(`/api/auth/reset-password/${token}`, {
+        const response = await axios.put(`${API_BASE_URL}/api/auth/reset-password/${token}`, {
           password: values.password,
         });
         setApiSuccess(response.data.message || "Password reset successfully!");

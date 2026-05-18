@@ -94,7 +94,7 @@ export default function CandidateDashboard() {
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
             style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
           >
-            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
+            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--accent)" }} />
           </div>
           <h1 className="text-base sm:text-2xl font-bold tracking-tight truncate" style={{ color: "var(--text-primary)" }}>
             Dashboard
@@ -123,7 +123,7 @@ export default function CandidateDashboard() {
             </span>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-purple)" }}
+              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--accent)" }}
             >
               {avatarLetter}
             </div>
@@ -143,7 +143,7 @@ export default function CandidateDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4 sm:mb-8">
         <div>
           <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
-            Welcome back, <span style={{ color: "var(--text-purple)" }}>{userName}</span>
+            Welcome back, <span style={{ color: "var(--accent)" }}>{userName}</span>
           </h2>
           <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
             Here is the status of your applications.
@@ -170,7 +170,7 @@ export default function CandidateDashboard() {
           {/* Application Status Tracker */}
           <div className="rounded-2xl p-4 sm:p-6" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
             <div className="flex items-center gap-2 mb-5 sm:mb-6">
-              <Briefcase size={20} style={{ color: "var(--text-purple)" }} />
+              <Briefcase size={20} style={{ color: "var(--accent)" }} />
               <h2 className="text-base sm:text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
                 Frontend Developer Application
               </h2>
@@ -179,7 +179,7 @@ export default function CandidateDashboard() {
             {/* Desktop Progress Steps */}
             <div className="hidden sm:flex relative justify-between items-center mb-8">
               <div className="absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 z-0" style={{ background: "var(--border)" }} />
-              <div className="absolute top-1/2 left-0 w-3/4 h-0.5 -translate-y-1/2 z-0" style={{ background: "var(--text-purple)" }} />
+              <div className="absolute top-1/2 left-0 w-3/4 h-0.5 -translate-y-1/2 z-0" style={{ background: "var(--accent)" }} />
               {[
                 { label: "Applied", done: true },
                 { label: "Screening", done: true },
@@ -191,14 +191,14 @@ export default function CandidateDashboard() {
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center text-sm"
                     style={{
-                      background: step.done ? "var(--text-purple)" : step.active ? "var(--bg-secondary)" : "var(--bg-hover)",
-                      color: step.done ? "#fff" : step.active ? "var(--text-purple)" : "var(--text-secondary)",
-                      border: step.active ? "2px solid var(--text-purple)" : "none",
+                      background: step.done ? "var(--accent)" : step.active ? "var(--bg-secondary)" : "var(--bg-hover)",
+                      color: step.done ? "#fff" : step.active ? "var(--accent)" : "var(--text-secondary)",
+                      border: step.active ? "2px solid var(--accent)" : "none",
                     }}
                   >
-                    {step.done ? <CheckCircle size={16} /> : step.active ? <div className="w-2 h-2 rounded-full" style={{ background: "var(--text-purple)" }} /> : index + 1}
+                    {step.done ? <CheckCircle size={16} /> : step.active ? <div className="w-2 h-2 rounded-full" style={{ background: "var(--accent)" }} /> : index + 1}
                   </div>
-                  <span className="text-xs whitespace-nowrap" style={{ color: step.active ? "var(--text-purple)" : "var(--text-secondary)", fontWeight: step.active ? 600 : 400 }}>
+                  <span className="text-xs whitespace-nowrap" style={{ color: step.active ? "var(--accent)" : "var(--text-secondary)", fontWeight: step.active ? 600 : 400 }}>
                     {step.label}
                   </span>
                 </div>
@@ -208,11 +208,11 @@ export default function CandidateDashboard() {
             {/* Mobile Progress Bar */}
             <div className="block sm:hidden mb-5">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold" style={{ color: "var(--text-purple)" }}>Interview</span>
+                <span className="text-sm font-semibold" style={{ color: "var(--accent)" }}>Interview</span>
                 <span className="text-xs" style={{ color: "var(--text-secondary)" }}>Step 4 of 5</span>
               </div>
               <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: "var(--bg-hover)" }}>
-                <div className="h-full rounded-full" style={{ width: "75%", background: "var(--text-purple)" }} />
+                <div className="h-full rounded-full" style={{ width: "75%", background: "var(--accent)" }} />
               </div>
             </div>
 
@@ -220,7 +220,7 @@ export default function CandidateDashboard() {
               className="rounded-xl p-3 sm:p-4 flex items-start sm:items-center gap-3"
               style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
             >
-              <Clock size={16} style={{ color: "var(--text-purple)", flexShrink: 0 }} />
+              <Clock size={16} style={{ color: "var(--accent)", flexShrink: 0 }} />
               <p className="text-sm" style={{ color: "var(--text-primary)" }}>
                 Your application is currently under review for the interview stage.
               </p>
@@ -233,7 +233,7 @@ export default function CandidateDashboard() {
             <div className="rounded-2xl p-4 sm:p-6 flex flex-col justify-between" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <Video size={20} style={{ color: "var(--text-purple)" }} />
+                  <Video size={20} style={{ color: "var(--accent)" }} />
                   <h2 className="text-base sm:text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Upcoming Interview</h2>
                 </div>
                 <div className="flex items-center gap-3 sm:gap-4 mb-4">
@@ -254,7 +254,7 @@ export default function CandidateDashboard() {
               </div>
               <button
                 className="w-full py-2.5 sm:py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-sm sm:text-base transition-opacity hover:opacity-90"
-                style={{ background: "var(--btn-primary-bg)", color: "#fff", border: "none", cursor: "pointer" }}
+                style={{ background: "var(--accent)", color: "var(--accent-text)", border: "none", cursor: "pointer" }}
               >
                 <Video size={16} /> Join Video Call
               </button>
@@ -264,7 +264,7 @@ export default function CandidateDashboard() {
             <div className="rounded-2xl p-4 sm:p-6 flex flex-col justify-between" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <FileText size={20} style={{ color: "var(--text-purple)" }} />
+                  <FileText size={20} style={{ color: "var(--accent)" }} />
                   <h2 className="text-base sm:text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Resume</h2>
                 </div>
 
@@ -279,14 +279,14 @@ export default function CandidateDashboard() {
 
                 {resumeLoading ? (
                   <div className="flex justify-center items-center py-6">
-                    <Loader2 size={24} className="animate-spin" style={{ color: "var(--text-purple)" }} />
+                    <Loader2 size={24} className="animate-spin" style={{ color: "var(--accent)" }} />
                   </div>
                 ) : resume ? (
                   <div
                     className="rounded-xl p-4 flex flex-col items-center gap-2 mb-4"
                     style={{ border: "1px dashed var(--border)", background: "var(--icon-accent-bg)" }}
                   >
-                    <FileText size={28} style={{ color: "var(--text-purple)" }} />
+                    <FileText size={28} style={{ color: "var(--accent)" }} />
                     <p className="font-semibold text-sm text-center break-all" style={{ color: "var(--text-primary)" }}>{resume.originalName}</p>
                     <p className="text-xs" style={{ color: "var(--text-secondary)" }}>Uploaded {formatDate(resume.uploadedAt)}</p>
                   </div>
@@ -296,7 +296,7 @@ export default function CandidateDashboard() {
                     className="rounded-xl p-5 sm:p-6 flex flex-col items-center gap-2 mb-4 cursor-pointer transition-colors"
                     style={{ border: "1px dashed var(--border)", background: "var(--icon-accent-bg)" }}
                   >
-                    {uploading ? <Loader2 size={28} className="animate-spin" style={{ color: "var(--text-purple)" }} /> : <Upload size={28} style={{ color: "var(--text-purple)" }} />}
+                    {uploading ? <Loader2 size={28} className="animate-spin" style={{ color: "var(--accent)" }} /> : <Upload size={28} style={{ color: "var(--accent)" }} />}
                     <p className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>{uploading ? "Uploading..." : "Upload Resume"}</p>
                     <p className="text-xs" style={{ color: "var(--text-secondary)" }}>PDF, DOC, DOCX — max 5 MB</p>
                   </div>
@@ -308,21 +308,21 @@ export default function CandidateDashboard() {
                   <a
                     href={`${BASE_URL}${resume.url}`} target="_blank" rel="noopener noreferrer"
                     className="flex-1 py-2 rounded-lg flex items-center justify-center transition-colors"
-                    style={{ border: "1px solid var(--border)", color: "var(--text-purple)" }}
+                    style={{ border: "1px solid var(--border)", color: "var(--accent)" }}
                   >
                     <Eye size={15} />
                   </a>
                   <a
                     href={`${BASE_URL}${resume.url}`} download={resume.originalName}
                     className="flex-1 py-2 rounded-lg flex items-center justify-center transition-colors"
-                    style={{ border: "1px solid var(--border)", color: "var(--text-purple)" }}
+                    style={{ border: "1px solid var(--border)", color: "var(--accent)" }}
                   >
                     <Download size={15} />
                   </a>
                   <button
                     onClick={() => fileInputRef.current?.click()} disabled={uploading}
                     className="flex-1 py-2 rounded-lg flex items-center justify-center gap-1 text-xs sm:text-sm font-medium transition-colors"
-                    style={{ background: "var(--icon-accent-bg)", color: "var(--text-purple)", border: "none", cursor: "pointer" }}
+                    style={{ background: "var(--icon-accent-bg)", color: "var(--accent)", border: "none", cursor: "pointer" }}
                   >
                     {uploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />} Update
                   </button>
@@ -375,7 +375,7 @@ export default function CandidateDashboard() {
           {/* Assessment Results */}
           <div className="rounded-2xl p-4 sm:p-6" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
             <div className="flex items-center gap-2 mb-4">
-              <CheckCircle size={20} style={{ color: "var(--text-purple)" }} />
+              <CheckCircle size={20} style={{ color: "var(--accent)" }} />
               <h2 className="text-base sm:text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Recent Results</h2>
             </div>
             <div className="flex flex-col gap-4">

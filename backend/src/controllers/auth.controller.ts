@@ -16,9 +16,8 @@ import {
 
 import { hashPassword } from "../utils/hashPassword";
 
-/* ======================================================
-   REGISTER
-====================================================== */
+  //  REGISTER
+
 
 export const register = async (
   req: Request,
@@ -78,9 +77,9 @@ export const register = async (
   }
 };
 
-/* ======================================================
-   LOGIN
-====================================================== */
+
+  //  LOGIN
+
 
 export const login = async (
   req: Request,
@@ -121,9 +120,7 @@ export const login = async (
   }
 };
 
-/* ======================================================
-   REFRESH TOKEN
-====================================================== */
+  //  REFRESH TOKEN
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
@@ -146,9 +143,7 @@ export const refreshToken = async (req: Request, res: Response) => {
   }
 };
 
-/* ======================================================
-   FORGOT PASSWORD
-====================================================== */
+//    FORGOT PASSWORD
 
 export const forgotPassword = async (
   req: Request,
@@ -173,9 +168,7 @@ export const forgotPassword = async (
       });
     }
 
-    /* ===============================
-       FIND USER
-    =============================== */
+    //     FIND USER
 
     const user = await User.findOne({ email });
 
@@ -183,7 +176,8 @@ export const forgotPassword = async (
       // Don't reveal if user exists or not for security
       return res.status(200).json({
         success: true,
-        message: "If an account with that email exists, a password reset link has been sent.",
+        message:
+          "If an account with that email exists, a password reset link has been sent.",
       });
     }
 
@@ -191,13 +185,12 @@ export const forgotPassword = async (
     if (!user.password) {
       return res.status(200).json({
         success: true,
-        message: "If an account with that email exists, a password reset link has been sent.",
+        message:
+          "If an account with that email exists, a password reset link has been sent.",
       });
     }
 
-    /* ===============================
-       GENERATE SECURE TOKEN
-    =============================== */
+    //       GENERATE SECURE TOKEN
 
     const resetToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto
@@ -211,15 +204,11 @@ export const forgotPassword = async (
 
     await user.save({ validateBeforeSave: false });
 
-    /* ===============================
-       CREATE RESET URL
-    =============================== */
+    //    CREATE RESET URL
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    /* ===============================
-       SEND RESET EMAIL WHEN CREDENTIALS EXIST
-    =============================== */
+    //  SEND RESET EMAIL WHEN CREDENTIALS EXIST
 
     // Always send email if SMTP credentials are configured.
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -236,7 +225,7 @@ export const forgotPassword = async (
         });
 
         const mailOptions = {
-          from: `"${process.env.APP_NAME || 'ZenvoraHRM'}" <${process.env.EMAIL_USER}>`,
+          from: `"${process.env.APP_NAME || "ZenvoraHRM"}" <${process.env.EMAIL_USER}>`,
           to: user.email,
           subject: "Password Reset Request - ZenvoraHRM",
           html: `
@@ -255,7 +244,7 @@ export const forgotPassword = async (
               <div style="background: white; border: 1px solid #ddd; border-radius: 0 0 10px 10px; padding: 30px;">
                 <h2 style="color: #333; margin-top: 0;">Reset Your Password</h2>
 
-                <p>Hello ${user.name || 'User'},</p>
+                <p>Hello ${user.name || "User"},</p>
 
                 <p>You have requested to reset your password for your ZenvoraHRM account. Click the button below to create a new password:</p>
 
@@ -307,10 +296,7 @@ export const forgotPassword = async (
         });
       }
     }
-
-    /* ===============================
-       DEVELOPMENT MODE: LOG TO CONSOLE
-    =============================== */
+    //    DEVELOPMENT MODE: LOG TO CONSOLE
 
     console.log("🔐 PASSWORD RESET REQUEST");
     console.log("📧 Email:", email);
@@ -320,7 +306,8 @@ export const forgotPassword = async (
 
     return res.status(200).json({
       success: true,
-      message: "Password reset link generated. Check server console for the reset URL.",
+      message:
+        "Password reset link generated. Check server console for the reset URL.",
       resetUrl: resetUrl, // Include in development response
     });
   } catch (error: any) {
@@ -332,9 +319,7 @@ export const forgotPassword = async (
   }
 };
 
-/* ======================================================
-   RESET PASSWORD
-====================================================== */
+  //  RESET PASSWORD
 
 export const resetPassword = async (
   req: Request,
@@ -366,9 +351,8 @@ export const resetPassword = async (
       });
     }
 
-    /* ===============================
-       HASH TOKEN AND FIND USER
-    =============================== */
+        //  HASH TOKEN AND FIND USER
+   
 
     const hashedToken = crypto
       .createHash("sha256")
@@ -395,9 +379,8 @@ export const resetPassword = async (
       });
     }
 
-    /* ===============================
-       UPDATE PASSWORD
-    =============================== */
+  
+      //  UPDATE PASSWORD
 
     const hashedPassword = await hashPassword(password);
 

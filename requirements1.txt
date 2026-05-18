@@ -1,0 +1,105 @@
+# ============================================================
+# ZENVORA HRM - Project Requirements
+# ============================================================
+# Node.js >= 18.x required
+# npm >= 9.x required
+# ============================================================
+
+
+# ============================================================
+# BACKEND (backend/package.json)
+# Runtime: Node.js + Express + TypeScript
+# ============================================================
+
+# --- Production Dependencies ---
+bcryptjs@^3.0.3               # Password hashing
+cookie-parser@^1.4.7          # Parse HTTP cookies
+cors@^2.8.6                   # Cross-Origin Resource Sharing
+crypto@^1.0.1                 # Cryptographic utilities
+dotenv@^17.4.2                # Environment variable loading
+express@^5.2.1                # Web framework
+jsonwebtoken@^9.0.3           # JWT authentication tokens
+mongodb@^7.2.0                # MongoDB driver
+mongoose@^9.6.2               # MongoDB ODM (Object Document Mapper)
+multer@^2.1.1                 # File upload handling
+nodemailer@^8.0.7             # Email sending
+pass@^0.2.0                   # Passport utility
+passport@^0.7.0               # Authentication middleware
+passport-google-oauth20@^2.0.0  # Google OAuth 2.0 strategy
+passport-microsoft@^2.1.0    # Microsoft OAuth strategy
+
+# --- Dev Dependencies ---
+@types/bcryptjs@^3.0.0
+@types/cookie-parser@^1.4.10
+@types/cors@^2.8.19
+@types/express@^5.0.6
+@types/jsonwebtoken@^9.0.10
+@types/multer@^2.1.0
+@types/node@^25.7.0
+@types/nodemailer@^8.0.0
+@types/passport@^1.0.17
+@types/passport-google-oauth20@^2.0.17
+nodemon@^3.1.14               # Auto-restart on file changes (dev)
+ts-node-dev@^2.0.0            # TypeScript dev server
+typescript@^6.0.3             # TypeScript compiler
+
+
+# ============================================================
+# FRONTEND (frontend/package.json)
+# Runtime: Vite + React 19 + TypeScript + Tailwind CSS
+# ============================================================
+
+# --- Production Dependencies ---
+react@^19.2.6                 # UI library
+react-dom@^19.2.6             # React DOM renderer
+react-router-dom@^7.15.0      # Client-side routing
+axios@^1.16.0                 # HTTP client for API calls
+formik@^2.4.9                 # Form state management
+react-hook-form@^7.75.0       # Lightweight form management (alternative)
+yup@^1.7.1                    # Schema-based form validation
+tailwindcss@^4.3.0            # Utility-first CSS framework
+@tailwindcss/vite@^4.3.0      # Tailwind CSS Vite integration
+lucide-react@^1.14.0          # Icon library for React
+
+# --- Dev Dependencies ---
+vite@^8.0.12                  # Build tool and dev server
+@vitejs/plugin-react@^6.0.1   # React Fast Refresh plugin for Vite
+typescript@~6.0.2             # TypeScript compiler
+eslint@^10.3.0                # JavaScript/TypeScript linter
+eslint-plugin-react-hooks@^7.1.1   # Lint rules for React Hooks
+eslint-plugin-react-refresh@^0.5.2 # Lint rules for React Fast Refresh
+typescript-eslint@^8.59.2     # TypeScript-aware ESLint rules
+@types/react@^19.2.14         # TypeScript types for React
+@types/react-dom@^19.2.3      # TypeScript types for React DOM
+@types/node@^24.12.3          # TypeScript types for Node.js
+@eslint/js@^10.0.1            # ESLint core JS configuration
+globals@^17.6.0               # Global variable definitions for ESLint
+
+
+# ============================================================
+# EXTERNAL SERVICES / ENVIRONMENT REQUIREMENTS
+# ============================================================
+# - MongoDB (local or Atlas cloud instance)
+# - Google OAuth credentials (CLIENT_ID + CLIENT_SECRET)
+# - Microsoft OAuth credentials (CLIENT_ID + CLIENT_SECRET)
+# - SMTP server credentials (for nodemailer / email sending)
+# - JWT_SECRET environment variable
+# - NODE_ENV (development | production)
+# ============================================================
+
+
+# ============================================================
+# INSTALL INSTRUCTIONS
+# ============================================================
+#
+# Backend:
+#   cd backend
+#   npm install
+#   npm run dev
+#
+# Frontend:
+#   cd frontend
+#   npm install
+#   npm run dev
+#
+# ============================================================

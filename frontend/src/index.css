@@ -78,6 +78,29 @@ body {
   color: var(--text-purple-hover);
 }
 
+/* Global primary button */
+.btn-primary {
+  background: var(--accent) !important;
+  color: var(--accent-text) !important;
+  border: none !important;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Ghost / outline button */
+.btn-ghost {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-ghost:hover { background: var(--bg-hover) !important; }
+
 /* Layout container */
 .app-container {
   display: flex;

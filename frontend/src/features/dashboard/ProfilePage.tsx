@@ -135,7 +135,7 @@ export default function Profile() {
         <div style={{ flex: 1 }}>
           <h2 style={{ fontSize: '1.5rem', margin: '0 0 0.25rem 0', color: 'var(--text-primary)' }}>{userInfo.firstName} {userInfo.lastName}</h2>
           <div className="display-flex-badges" style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-purple)', fontSize: '0.875rem', fontWeight: '500', justifyContent: 'inherit' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--accent)', fontSize: '0.875rem', fontWeight: '500', justifyContent: 'inherit' }}>
               <Briefcase size={16} /> {userInfo.role}
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-secondary)', fontSize: '0.875rem', justifyContent: 'inherit' }}>
@@ -156,7 +156,7 @@ export default function Profile() {
             {!editMode.personal ? (
               <button 
                 onClick={() => handleEdit('personal')}
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.5rem', borderRadius: '50%', display: 'flex', cursor: 'pointer' }}
+                style={{ background: 'var(--bg-hover)', border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.5rem', borderRadius: '50%', display: 'flex', cursor: 'pointer' }}
                 title="Edit Personal Info"
               >
                 <Pencil size={16} />
@@ -211,7 +211,7 @@ export default function Profile() {
               {!editMode.contact ? (
                 <button 
                   onClick={() => handleEdit('contact')}
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.5rem', borderRadius: '50%', display: 'flex', cursor: 'pointer' }}
+                  style={{ background: 'var(--bg-hover)', border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '0.5rem', borderRadius: '50%', display: 'flex', cursor: 'pointer' }}
                   title="Edit Contact Info"
                 >
                   <Pencil size={16} />
@@ -247,7 +247,7 @@ export default function Profile() {
           {/* Job Details Card (Read Only usually) */}
           <div className="card" style={{ padding: '2rem' }}>
             <h3 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-              <Briefcase size={18} style={{ color: 'var(--text-purple)' }}/> Employment Details
+              <Briefcase size={18} style={{ color: 'var(--accent)' }}/> Employment Details
             </h3>
             
             <div className="profile-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>

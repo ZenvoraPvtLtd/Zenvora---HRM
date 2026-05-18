@@ -42,8 +42,7 @@ export const loginUser = async (
     throw new Error("Invalid credentials");
   }
 
-  // IMPORTANT:
-  // OAuth users may not have password
+   // OAuth users may not have password
   if (!user.password) {
     throw new Error(
       "This account uses Google/Microsoft login"

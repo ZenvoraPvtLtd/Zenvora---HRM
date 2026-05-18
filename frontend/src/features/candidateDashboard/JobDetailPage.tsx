@@ -500,7 +500,7 @@ export const JobDetailPage = () => {
         onClick={() => navigate("/candidatedashboard/jobs")}
         className="flex items-center gap-2 mb-6 text-sm font-medium transition-colors"
         style={{ background: "transparent", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-purple)")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
       >
         <ArrowLeft className="w-4 h-4" /> Back to Jobs
@@ -524,7 +524,7 @@ export const JobDetailPage = () => {
               {[
                 { icon: <DollarSign className="w-4 h-4" style={{ color: "#10b981" }} />, label: "Salary", value: job.salary },
                 { icon: <MapPin className="w-4 h-4" style={{ color: "#f97316" }} />, label: "Location", value: job.location },
-                { icon: <Briefcase className="w-4 h-4" style={{ color: "var(--text-purple)" }} />, label: "Type", value: job.type },
+                { icon: <Briefcase className="w-4 h-4" style={{ color: "var(--accent)" }} />, label: "Type", value: job.type },
                 { icon: <Award className="w-4 h-4" style={{ color: "#22d3ee" }} />, label: "Level", value: job.level },
               ].map(({ icon, label, value }) => (
                 <div key={label} className="flex items-center gap-2">
@@ -545,7 +545,7 @@ export const JobDetailPage = () => {
         {/* About */}
         <div style={card}>
           <div className="flex items-center gap-2 mb-4">
-            <Briefcase className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <Briefcase className="w-5 h-5" style={{ color: "var(--accent)" }} />
             <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>About the Role</h2>
           </div>
           <p className="text-sm leading-7" style={{ color: "var(--text-secondary)" }}>{job.fullDescription}</p>
@@ -554,7 +554,7 @@ export const JobDetailPage = () => {
         {/* Responsibilities */}
         <div style={card}>
           <div className="flex items-center gap-2 mb-4">
-            <Target className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <Target className="w-5 h-5" style={{ color: "var(--accent)" }} />
             <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Responsibilities</h2>
           </div>
           <ul className="flex flex-col gap-3">
@@ -570,7 +570,7 @@ export const JobDetailPage = () => {
         {/* Requirements */}
         <div style={card}>
           <div className="flex items-center gap-2 mb-4">
-            <Award className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <Award className="w-5 h-5" style={{ color: "var(--accent)" }} />
             <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Requirements</h2>
           </div>
           <ul className="flex flex-col gap-3">
@@ -586,7 +586,7 @@ export const JobDetailPage = () => {
         {/* Company Overview */}
         <div style={card}>
           <div className="flex items-center gap-2 mb-4">
-            <Briefcase className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <Briefcase className="w-5 h-5" style={{ color: "var(--accent)" }} />
             <h3 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>About Zenvora Tech</h3>
           </div>
           <p className="text-sm leading-6 mb-4" style={{ color: "var(--text-secondary)" }}>
@@ -610,7 +610,7 @@ export const JobDetailPage = () => {
         {/* Why Join Us */}
         <div style={card}>
           <div className="flex items-center gap-2 mb-4">
-            <Target className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <Target className="w-5 h-5" style={{ color: "var(--accent)" }} />
             <h3 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Why Join Us?</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

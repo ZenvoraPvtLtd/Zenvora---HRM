@@ -40,8 +40,8 @@ export default function FollowUpPage() {
   });
 
   const tabStyle = (key: string) => ({
-    borderBottomColor: activeTab === key ? "var(--text-purple)" : "transparent",
-    color: activeTab === key ? "var(--text-purple)" : "var(--text-secondary)",
+    borderBottomColor: activeTab === key ? "var(--accent)" : "transparent",
+    color: activeTab === key ? "var(--accent)" : "var(--text-secondary)",
   });
 
   return (
@@ -78,7 +78,7 @@ export default function FollowUpPage() {
                 className="px-2 py-0.5 rounded-full text-xs"
                 style={{
                   background: activeTab === tab.key ? "var(--icon-accent-bg)" : "var(--bg-hover)",
-                  color: activeTab === tab.key ? "var(--text-purple)" : "var(--text-secondary)",
+                  color: activeTab === tab.key ? "var(--accent)" : "var(--text-secondary)",
                 }}
               >
                 {tab.count}
@@ -110,15 +110,7 @@ export default function FollowUpPage() {
           </div>
 
           <button
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
-            style={{
-              border: "1px solid var(--border)",
-              color: "var(--text-secondary)",
-              background: "transparent",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-hover)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm"
           >
             Export CSV <Download size={15} />
           </button>

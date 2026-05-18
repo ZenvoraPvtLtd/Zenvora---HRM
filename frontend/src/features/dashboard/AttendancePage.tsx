@@ -145,18 +145,18 @@ export default function Attendance() {
           <div
             onClick={() => setActiveTab('permission')}
             style={{
-              padding: '1.25rem 0', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)',
-              borderBottom: activeTab === 'permission' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'permission' ? 'var(--accent)' : 'var(--text-secondary)',
+              borderBottom: activeTab === 'permission' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Permission Request <span style={{ background: activeTab === 'permission' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'permission' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>11</span>
+            Permission Request <span style={{ background: activeTab === 'permission' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'permission' ? 'var(--accent)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>11</span>
           </div>
           <div
             onClick={() => setActiveTab('schedule')}
             style={{
-              padding: '1.25rem 0', color: activeTab === 'schedule' ? 'var(--text-purple)' : 'var(--text-secondary)',
-              borderBottom: activeTab === 'schedule' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'schedule' ? 'var(--accent)' : 'var(--text-secondary)',
+              borderBottom: activeTab === 'schedule' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
@@ -165,8 +165,8 @@ export default function Attendance() {
           <div
             onClick={() => setActiveTab('activity')}
             style={{
-              padding: '1.25rem 0', color: activeTab === 'activity' ? 'var(--text-purple)' : 'var(--text-secondary)',
-              borderBottom: activeTab === 'activity' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'activity' ? 'var(--accent)' : 'var(--text-secondary)',
+              borderBottom: activeTab === 'activity' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
@@ -184,18 +184,17 @@ export default function Attendance() {
               style={{
                 width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem',
                 borderRadius: '0.5rem', border: '1px solid var(--border)',
-                background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)',
+                background: 'var(--bg-primary)', color: 'var(--text-primary)',
                 outline: 'none', fontSize: '0.875rem'
               }}
             />
           </div>
 
-          <div style={{
-            border: '1px solid var(--border)', color: 'var(--text-primary)',
-            display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+          <button className="btn-primary" style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem',
+          }}>
             Export CSV <Download size={16} />
-          </div>
+          </button>
         </div>
 
         {/* Table */}
@@ -204,11 +203,11 @@ export default function Attendance() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: '600' }}>
                 <th style={{ padding: '1rem 0', fontWeight: '600' }}><input type="checkbox" style={{ marginRight: '0.5rem' }} /> Employee Name</th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock - In & Out <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Break Time <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock Location <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Paid Time <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Overtime <span style={{ fontSize: '0.6rem', color: 'var(--text-purple)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock - In & Out <span style={{ fontSize: '0.6rem', color: 'var(--accent)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Break Time <span style={{ fontSize: '0.6rem', color: 'var(--accent)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Clock Location <span style={{ fontSize: '0.6rem', color: 'var(--accent)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Paid Time <span style={{ fontSize: '0.6rem', color: 'var(--accent)' }}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Overtime <span style={{ fontSize: '0.6rem', color: 'var(--accent)' }}>↑↓</span></th>
                 <th style={{ padding: '1rem 0', fontWeight: '600', textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
@@ -236,13 +235,13 @@ export default function Attendance() {
                   </td>
                   <td style={{
                     padding: '1rem 0', fontSize: '0.875rem',
-                    color: record.isBreakActive ? 'var(--text-purple)' : 'var(--text-primary)',
+                    color: record.isBreakActive ? 'var(--accent)' : 'var(--text-primary)',
                     fontWeight: record.isBreakActive ? 600 : 'normal'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       {getBreakTimeToDisplay(record) > 0 ? formatDuration(getBreakTimeToDisplay(record)) : '--'}
                       {record.isBreakActive && (
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--text-purple)', boxShadow: '0 0 8px var(--text-purple)', animation: 'pulse 2s infinite' }} />
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 2s infinite' }} />
                       )}
                     </div>
                   </td>
@@ -268,7 +267,7 @@ export default function Attendance() {
                         <>
                           <div
                             onClick={() => handleToggleBreak(record.id)}
-                            style={{ border: '1px solid var(--border)', color: record.isBreakActive ? 'var(--text-purple)' : 'var(--text-primary)', borderColor: record.isBreakActive ? 'var(--text-purple)' : 'var(--border)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', cursor: 'pointer' }}
+                            style={{ border: '1px solid var(--border)', color: record.isBreakActive ? 'var(--accent)' : 'var(--text-primary)', borderColor: record.isBreakActive ? 'var(--accent)' : 'var(--border)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', padding: '0.375rem 0.75rem', borderRadius: '2rem', cursor: 'pointer' }}
                           >
                             {record.isBreakActive ? <Square size={14} /> : <Play size={14} />}
                             {record.isBreakActive ? 'End Break' : 'Break'}

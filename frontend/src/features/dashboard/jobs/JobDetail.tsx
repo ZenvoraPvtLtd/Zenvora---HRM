@@ -78,7 +78,7 @@ export const JobDetail = ({
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-              <JobLogo letter={job.logoLetter || job.title.charAt(0)} bg={job.logoBg || 'var(--text-purple)'} size={32} />
+              <JobLogo letter={job.logoLetter || job.title.charAt(0)} bg={job.logoBg || 'var(--accent)'} size={32} />
               <Bookmark size={16} style={{ color: selectedJobId === job.id ? 'var(--accent)' : 'var(--text-secondary)' }}/>
             </div>
             <h4 style={{ margin: '0 0 0.375rem 0', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)' }}>{job.title}</h4>
@@ -106,7 +106,7 @@ export const JobDetail = ({
 
         <div className="profile-header-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <JobLogo letter={selectedJob.logoLetter || selectedJob.title.charAt(0)} bg={selectedJob.logoBg || 'var(--text-purple)'} size={64} />
+            <JobLogo letter={selectedJob.logoLetter || selectedJob.title.charAt(0)} bg={selectedJob.logoBg || 'var(--accent)'} size={64} />
             <div>
               <h1 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', color: 'var(--text-primary)' }}>{selectedJob.title}</h1>
               <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{selectedJob.department || selectedJob.company} • {selectedJob.posted || 'Posted recently'}</div>
@@ -117,7 +117,7 @@ export const JobDetail = ({
             {!isAdmin && (
               <>
                 <button style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Book Slot</button>
-                <button onClick={onApply} style={{ background: 'var(--accent)', border: 'none', color: 'white', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Apply Now</button>
+                <button onClick={onApply} style={{ background: 'var(--accent)', border: 'none', color: 'var(--accent-text)', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>Apply Now</button>
               </>
             )}
           </div>

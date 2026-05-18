@@ -7,9 +7,26 @@ import {
   uploadCandidateResume,
   getCandidateResume,
   deleteCandidateResume,
+  submitCandidateApplication,
+  getCandidateApplications,
 } from "../controllers/candidate.controller";
 
 const router = express.Router();
+
+router.get(
+  "/applications",
+  protect,
+  authorizeRoles("admin", "hr"),
+  getCandidateApplications
+);
+
+router.post(
+  "/applications",
+  protect,
+  authorizeRoles("candidate"),
+  uploadResume.single("resume"),
+  submitCandidateApplication
+);
 
 router.post(
   "/resume",

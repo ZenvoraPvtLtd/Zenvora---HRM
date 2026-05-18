@@ -32,7 +32,7 @@ export default function Dashboard() {
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
             style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)" }}
           >
-            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--text-purple)" }} />
+            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "var(--accent)" }} />
           </div>
           <h1 className="text-base sm:text-2xl font-bold tracking-tight truncate" style={{ color: "var(--text-primary)" }}>
             Dashboard
@@ -64,7 +64,7 @@ export default function Dashboard() {
             </span>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--text-purple)" }}
+              style={{ background: "var(--icon-accent-bg)", border: "1px solid var(--border)", color: "var(--accent)" }}
             >
               {avatarLetter}
             </div>
@@ -91,7 +91,7 @@ export default function Dashboard() {
         <div className="absolute bottom-0 right-0 w-56 h-56 pointer-events-none" style={{ background: "var(--icon-accent-bg)", filter: "blur(100px)" }} />
         <div className="relative z-10">
           <h1 className="text-xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
-            Welcome back, <span style={{ color: "var(--text-purple)" }}>{userName}</span>
+            Welcome back, <span style={{ color: "var(--accent)" }}>{userName}</span>
           </h1>
           <p className="mt-1 text-xs sm:text-sm" style={{ color: "var(--text-secondary)" }}>
             Here's an overview of your recruitment metrics.
@@ -161,7 +161,7 @@ export default function Dashboard() {
         <div className="rounded-2xl p-4 sm:p-6" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <div className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>Upcoming Interviews</div>
-            <span className="text-xs font-medium cursor-pointer" style={{ color: "var(--text-purple)" }}>View all</span>
+            <span className="text-xs font-medium cursor-pointer" style={{ color: "var(--accent)" }}>View all</span>
           </div>
           <div className="flex flex-col gap-4">
             {[
@@ -181,7 +181,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-xs flex items-center gap-1 justify-end" style={{ color: "var(--text-purple)" }}>
+                  <div className="text-xs flex items-center gap-1 justify-end" style={{ color: "var(--accent)" }}>
                     <Calendar size={12} /> {interview.date.split(",")[0]}
                   </div>
                   <div className="text-xs flex items-center gap-1 justify-end mt-0.5" style={{ color: "var(--text-secondary)" }}>
@@ -200,7 +200,7 @@ export default function Dashboard() {
         <div className="rounded-2xl p-4 sm:p-6" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <div className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>Recent Activity</div>
-            <span className="text-xs font-medium cursor-pointer" style={{ color: "var(--text-purple)" }}>View all</span>
+            <span className="text-xs font-medium cursor-pointer" style={{ color: "var(--accent)" }}>View all</span>
           </div>
           <div className="flex flex-col gap-4">
             {[

@@ -1,5 +1,6 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import {
+  clearAuthStorage,
   getDashboardPath,
   getStoredUserRole,
   isCandidateRole,
@@ -11,6 +12,7 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+  const location = useLocation();
   const token = localStorage.getItem('accessToken');
   const role = getStoredUserRole();
 
@@ -19,7 +21,8 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   }
 
   if (!role) {
-    return <Navigate to="/login" replace />;
+    clearAuthStorage();
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
   if (allowedRoles === 'hr' && !isHrRole(role)) {

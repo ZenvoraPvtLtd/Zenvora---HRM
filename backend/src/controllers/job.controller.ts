@@ -100,10 +100,18 @@ const buildJobPayload = (body: any, isUpdate = false) => {
   return payload;
 };
 
+const getStatusCode = (error: any) => {
+  return error.message?.startsWith("Invalid") ||
+    error.message?.startsWith("Please")
+    ? 400
+    : 500;
+};
+
 export const getJobs = async (_req: AuthRequest, res: Response) => {
   try {
     const jobs = await Job.find()
       .populate("createdBy", "name email role")
+      .select("-__v")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -121,7 +129,9 @@ export const getJobs = async (_req: AuthRequest, res: Response) => {
 
 export const getJobById = async (req: AuthRequest, res: Response) => {
   try {
-    const job = await Job.findById(req.params.id).populate("createdBy", "name email role");
+    const job = await Job.findById(req.params.id)
+      .populate("createdBy", "name email role")
+      .select("-__v");
 
     if (!job) {
       return res.status(404).json({
@@ -153,7 +163,6 @@ export const createJob = async (req: AuthRequest, res: Response) => {
     }
 
     const payload = buildJobPayload(req.body);
-
     const job = await Job.create({
       ...payload,
       openings: payload.openings || 1,
@@ -166,9 +175,7 @@ export const createJob = async (req: AuthRequest, res: Response) => {
       job,
     });
   } catch (error: any) {
-    const statusCode = error.message?.startsWith("Invalid") || error.message?.startsWith("Please")
-      ? 400
-      : 500;
+    const statusCode = getStatusCode(error);
 
     res.status(statusCode).json({
       success: false,
@@ -185,7 +192,7 @@ export const updateJob = async (req: AuthRequest, res: Response) => {
     const job = await Job.findByIdAndUpdate(req.params.id, payload, {
       new: true,
       runValidators: true,
-    });
+    }).select("-__v");
 
     if (!job) {
       return res.status(404).json({
@@ -199,7 +206,7 @@ export const updateJob = async (req: AuthRequest, res: Response) => {
       job,
     });
   } catch (error: any) {
-    const statusCode = error.message?.startsWith("Invalid") ? 400 : 500;
+    const statusCode = getStatusCode(error);
 
     res.status(statusCode).json({
       success: false,

@@ -23,6 +23,8 @@ import ResultsReview from '../features/dashboard/ResultsReviewPage';
 import Profile from '../features/dashboard/ProfilePage';
 import FollowUpPage from '../features/dashboard/FollowUpPage';
 
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -30,25 +32,27 @@ const AppRoutes = () => {
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/oauth/callback" element={<OAuthCallback />} />
 
-      <Route path="/risk" element={<RiskAnalysis />} />
-      {/* Public routes — redirect to / if already logged in */}
+      {/* Public routes: redirect to / if already logged in */}
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
-      {/* Protected routes — redirect to /login if not logged in */}
+      {/* Protected routes: redirect to /login if not logged in */}
       <Route element={<ProtectedRoute allowedRoles="hr" />}>
         {/* HR/Admin Dashboard Portal */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="createjobs" element={<Jobs />} />
           <Route path="createjobs/create" element={<CreateJobPage />} />
+          <Route path="jobs" element={<Jobs />} />
+          <Route path="jobs/create" element={<CreateJobPage />} />
           <Route path="candidates" element={<Candidates />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="results" element={<ResultsReview />} />
           <Route path="follow-up" element={<FollowUpPage />} />
+          <Route path="risk" element={<RiskAnalysis />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>

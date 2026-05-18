@@ -65,7 +65,7 @@ function ResultsReviewPage() {
       case 'Hire': return { bg: 'rgba(16, 185, 129, 0.1)', color: '#10b981', icon: <UserCheck size={16} /> };
       case 'Hold': return { bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', icon: <Clock size={16} /> };
       case 'Reject': return { bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', icon: <XCircle size={16} /> };
-      default: return { bg: 'rgba(255, 255, 255, 0.1)', color: '#fff', icon: null };
+      default: return { bg: 'var(--icon-accent-bg)', color: 'var(--text-primary)', icon: null };
     }
   };
 
@@ -102,7 +102,7 @@ function ResultsReviewPage() {
             style={{
               width: '100%', padding: '0.75rem 1rem 0.75rem 2.5rem',
               borderRadius: '0.5rem', border: '1px solid var(--border)',
-              background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)', outline: 'none'
+              background: 'var(--bg-primary)', color: 'var(--text-primary)', outline: 'none'
             }}
           />
         </div>
@@ -112,8 +112,8 @@ function ResultsReviewPage() {
               key={type}
               onClick={() => setFilterType(type)}
               style={{
-                background: filterType === type ? 'var(--icon-accent-bg)' : 'transparent',
-                color: filterType === type ? 'var(--text-purple)' : 'var(--text-secondary)',
+                background: filterType === type ? 'var(--accent)' : 'transparent',
+                color: filterType === type ? 'var(--accent-text)' : 'var(--text-secondary)',
                 border: `1px solid ${filterType === type ? 'var(--accent)' : 'var(--border)'}`,
                 padding: '0.5rem 1rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem'
               }}
@@ -175,7 +175,7 @@ function ResultsReviewPage() {
               </div>
 
               {/* Evaluator Notes */}
-              <div style={{ marginTop: 'auto', background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '0.5rem', borderLeft: '3px solid var(--accent)' }}>
+              <div style={{ marginTop: 'auto', background: 'var(--bg-hover)', padding: '1rem', borderRadius: '0.5rem', borderLeft: '3px solid var(--accent)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.8125rem', marginBottom: '0.5rem', fontWeight: 600 }}>
                   <MessageSquare size={14} /> Evaluator Notes
                 </div>
@@ -187,7 +187,7 @@ function ResultsReviewPage() {
               {/* Actions */}
               <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)' }}>
                 {review.recommendation === 'Hire' && (
-                  <button style={{ flex: 1, background: '#10b981', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <button className="btn-primary" style={{ flex: 1, padding: '0.75rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Award size={16} /> Send Offer Letter
                   </button>
                 )}

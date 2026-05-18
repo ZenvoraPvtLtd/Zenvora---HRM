@@ -57,18 +57,18 @@ export default function Interviews() {
           <div 
             onClick={() => setActiveTab('upcoming')}
             style={{ 
-              padding: '1.25rem 0', color: activeTab === 'upcoming' ? 'var(--text-purple)' : 'var(--text-secondary)', 
-              borderBottom: activeTab === 'upcoming' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'upcoming' ? 'var(--accent)' : 'var(--text-secondary)', 
+              borderBottom: activeTab === 'upcoming' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
-            Upcoming Interviews <span style={{ background: activeTab === 'upcoming' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'upcoming' ? 'var(--text-purple)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>15</span>
+            Upcoming Interviews <span style={{ background: activeTab === 'upcoming' ? 'var(--icon-accent-bg)' : 'var(--bg-hover)', color: activeTab === 'upcoming' ? 'var(--accent)' : 'var(--text-secondary)', padding: '0.125rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>15</span>
           </div>
           <div 
             onClick={() => setActiveTab('completed')}
             style={{ 
-              padding: '1.25rem 0', color: activeTab === 'completed' ? 'var(--text-purple)' : 'var(--text-secondary)', 
-              borderBottom: activeTab === 'completed' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'completed' ? 'var(--accent)' : 'var(--text-secondary)', 
+              borderBottom: activeTab === 'completed' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
@@ -77,8 +77,8 @@ export default function Interviews() {
           <div 
             onClick={() => setActiveTab('cancelled')}
             style={{ 
-              padding: '1.25rem 0', color: activeTab === 'cancelled' ? 'var(--text-purple)' : 'var(--text-secondary)', 
-              borderBottom: activeTab === 'cancelled' ? '2px solid var(--text-purple)' : '2px solid transparent',
+              padding: '1.25rem 0', color: activeTab === 'cancelled' ? 'var(--accent)' : 'var(--text-secondary)', 
+              borderBottom: activeTab === 'cancelled' ? '2px solid var(--accent)' : '2px solid transparent',
               fontWeight: '500', fontSize: '0.875rem', display: 'flex', gap: '0.5rem', alignItems: 'center', cursor: 'pointer', marginBottom: '-1px'
             }}
           >
@@ -96,18 +96,17 @@ export default function Interviews() {
               style={{ 
                 width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem', 
                 borderRadius: '0.5rem', border: '1px solid var(--border)', 
-                background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)',
+                background: 'var(--bg-primary)', color: 'var(--text-primary)',
                 outline: 'none', fontSize: '0.875rem'
               }} 
             />
           </div>
           
-          <div style={{ 
-            border: '1px solid var(--border)', color: 'var(--text-primary)',
-            display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background 0.2s',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+          <button className="btn-primary" style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem',
+          }}>
             Export CSV <Download size={16} />
-          </div>
+          </button>
         </div>
 
         {/* Table */}
@@ -117,8 +116,8 @@ export default function Interviews() {
               <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: '600' }}>
                 <th style={{ padding: '1rem 0', fontWeight: '600' }}>ID</th>
                 <th style={{ padding: '1rem 0', fontWeight: '600' }}>Candidate</th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Date & Time <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
-                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Duration <span style={{fontSize:'0.6rem', color:'var(--text-purple)'}}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Date & Time <span style={{fontSize:'0.6rem', color:'var(--accent)'}}>↑↓</span></th>
+                <th style={{ padding: '1rem 0', fontWeight: '600' }}>Duration <span style={{fontSize:'0.6rem', color:'var(--accent)'}}>↑↓</span></th>
                 <th style={{ padding: '1rem 0', fontWeight: '600' }}>Interview Type</th>
                 <th style={{ padding: '1rem 0', fontWeight: '600', textAlign: 'center' }}>Action</th>
               </tr>

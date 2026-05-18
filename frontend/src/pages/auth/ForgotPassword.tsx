@@ -7,6 +7,7 @@ import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import Button from "../../components/button/Button";
 import AuthLayout from "./AuthLayout";
+import API_BASE_URL from "../../config/apiConfig";
 
 const ForgotPassword = () => {
   const { theme } = useTheme();
@@ -24,7 +25,7 @@ const ForgotPassword = () => {
       setApiError(null);
       setApiSuccess(null);
       try {
-        const response = await axios.post("/api/auth/forgot-password", {
+        const response = await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, {
           email: values.email,
         });
         setApiSuccess(response.data.message || "Password reset email sent successfully!");

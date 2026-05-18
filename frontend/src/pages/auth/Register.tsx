@@ -95,7 +95,6 @@ const Register = () => {
           role: values.role,
           password: values.password,
         };
-        await axios.post("/api/auth/register", payload);
         const response = await axios.post("/api/auth/register", payload);
         localStorage.setItem("accessToken", response.data.accessToken);
         storeAuthUser(response.data.user);

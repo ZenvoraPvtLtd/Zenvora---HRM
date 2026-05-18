@@ -5,6 +5,7 @@ import {
   Users,
   Video,
   BarChart3,
+  ShieldAlert,
   UserCircle,
   Briefcase,
   CalendarCheck,
@@ -32,6 +33,7 @@ const navSections = [
       { to: '/interviews', icon: <Video size={18} />, label: 'Interviews' },
       { to: '/attendance', icon: <CalendarCheck size={18} />, label: 'Attendance' },
       { to: '/results', icon: <BarChart3 size={18} />, label: 'Results Review' },
+      { to: '/risk', icon: <ShieldAlert size={18} />, label: 'Risk Analysis' },
     ],
   },
 ];
@@ -163,7 +165,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, userName, userEmail, isLoggedIn,
                 width: '38px', height: '38px', borderRadius: '50%',
                 background: 'var(--icon-accent-bg)', border: '1px solid var(--border)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: 'var(--text-purple)', fontWeight: 700, fontSize: '0.875rem', flexShrink: 0,
+                color: 'var(--accent)', fontWeight: 700, fontSize: '0.875rem', flexShrink: 0,
               }}
             >
               {avatarLetter}

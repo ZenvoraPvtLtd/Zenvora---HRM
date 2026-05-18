@@ -150,7 +150,7 @@ const CandidateSidebar = ({
                 width: "38px", height: "38px", borderRadius: "50%",
                 background: "var(--icon-accent-bg)", border: "1px solid var(--border)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                color: "var(--text-purple)", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0,
+                color: "var(--text-primary)", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0,
               }}
             >
               {avatarLetter}
@@ -173,7 +173,7 @@ const CandidateSidebar = ({
       )}
 
       {/* Nav */}
-      <nav style={{ flex: 1, overflowY: "auto", padding: isCollapsed ? "1rem 0.75rem" : "1rem 0.75rem" }}>
+      <nav style={{ flex: 1, overflowY: "auto", padding: "1rem 0.75rem" }}>
         {navSections.map((section) => (
           <div key={section.label} style={{ marginBottom: "1rem" }}>
             {!isCollapsed ? (
@@ -208,8 +208,7 @@ const CandidateSidebar = ({
       </nav>
 
       {/* Bottom: theme toggle + profile + logout */}
-      <div style={{ padding: isCollapsed ? "1rem 0.75rem" : "1rem 0.75rem", borderTop: "1px solid var(--border)", flexShrink: 0 }}>
-        {/* Theme toggle */}
+      <div style={{ padding: "1rem 0.75rem", borderTop: "1px solid var(--border)", flexShrink: 0 }}>
         <button
           onClick={toggle}
           title={isDark ? "Switch to light mode" : "Switch to dark mode"}
