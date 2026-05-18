@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import Button from "../../components/button/Button";
+import Button from "./components/Button";
 import AuthLayout from "./AuthLayout";
 
 const ForgotPassword = () => {

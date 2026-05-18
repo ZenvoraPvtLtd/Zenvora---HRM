@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../../context/ThemeContext";
 
 interface HoverableCardProps {
   title: string;

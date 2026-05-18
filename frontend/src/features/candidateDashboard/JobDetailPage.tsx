@@ -1,17 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Briefcase,
-  MapPin,
-  DollarSign,
-  Award,
-  ArrowLeft,
-  CheckCircle2,
-  Target,
-} from "lucide-react";
-import { darkTheme, lightTheme } from "../../styles/theme";
-import { useTheme } from "../../context/ThemeContext";
-import AuthLayout from "../../pages/auth/AuthLayout";
-import { ASSETS } from "../../constants/assets";
+import { Briefcase, MapPin, DollarSign, Award, ArrowLeft, CheckCircle2, Target } from "lucide-react";
 
 const jobsData = [
   {
@@ -20,7 +8,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹12LPA",
     location: "Bangalore, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Mid Level",
     desc: "Build cutting-edge web applications from start to finish, utilizing your expertise in both front-end and back-end technologies.",
@@ -61,7 +48,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹18LPA",
     location: "Hyderabad, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Senior",
     desc: "Design and implement machine learning models and AI pipelines to solve complex real-world problems at scale.",
@@ -102,7 +88,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹10LPA",
     location: "Pune, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Mid Level",
     desc: "Craft intuitive and visually stunning user interfaces that delight users and drive engagement across platforms.",
@@ -143,7 +128,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹11LPA",
     location: "Chennai, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Mid Level",
     desc: "Build performant, accessible React applications with a keen eye for design and seamless user experiences.",
@@ -184,7 +168,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹14LPA",
     location: "Noida, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Senior",
     desc: "Architect and maintain robust server-side systems, APIs, and microservices powering high-traffic products.",
@@ -225,7 +208,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹8LPA",
     location: "Mumbai, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Junior",
     desc: "Drive brand growth through data-driven campaigns, content strategy, and digital marketing initiatives.",
@@ -266,7 +248,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹9LPA",
     location: "Delhi, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Mid Level",
     desc: "Lead talent acquisition, employee engagement, and HR operations to build a thriving workplace culture.",
@@ -307,7 +288,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹35K/month",
     location: "Remote, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Internship",
     level: "Entry",
     desc: "Explore cutting-edge AI research topics, assist with experiments, and contribute to published work.",
@@ -345,7 +325,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹30K/month",
     location: "Remote, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Internship",
     level: "Entry",
     desc: "Gain hands-on experience building full-stack features alongside senior engineers in an agile environment.",
@@ -383,7 +362,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹15LPA",
     location: "Gurgaon, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Senior",
     desc: "Streamline CI/CD pipelines, manage cloud infrastructure, and ensure platform reliability at scale.",
@@ -424,7 +402,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹20LPA",
     location: "Bangalore, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Senior",
     desc: "Own the product roadmap, collaborate with cross-functional teams, and ship features users love.",
@@ -465,7 +442,6 @@ const jobsData = [
     company: "Zenvora Tech",
     salary: "₹7LPA",
     location: "Ahmedabad, India",
-    logo: ASSETS.ZENVORA_LOGO,
     type: "Full Time",
     level: "Junior",
     desc: "Create compelling visual assets for digital and print media that communicate brand identity effectively.",
@@ -502,246 +478,153 @@ const jobsData = [
   },
 ];
 
-export const JobDetails = () => {
+export const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isDark } = useTheme();
-  const theme = isDark ? darkTheme : lightTheme;
-
   const job = jobsData.find((j) => j.id === parseInt(id || "0"));
+
+  const card = { background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: "1rem", padding: "1.5rem" };
 
   if (!job) {
     return (
-      <AuthLayout fullWidth>
-        <div
-          className={`px-6 py-10 max-w-7xl mx-auto rounded-xl ${theme.page}`}
-        >
-          <p className={`text-lg ${theme.heading}`}>Job not found</p>
-        </div>
-      </AuthLayout>
+      <div className="px-4 sm:px-6 py-6 max-w-7xl mx-auto">
+        <p style={{ color: "var(--text-primary)" }}>Job not found</p>
+      </div>
     );
   }
 
   return (
-    <AuthLayout fullWidth>
-      <div className={`px-6 py-10 max-w-7xl mx-auto rounded-xl ${theme.page}`}>
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/jobs")}
-          className={`flex items-center gap-2 mb-6 ${theme.subtext} hover:${theme.heading} transition`}
-        >
-          <ArrowLeft className="w-5 h-5" />
-          Back to Jobs
-        </button>
+    <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-6">
+      {/* Back */}
+      <button
+        onClick={() => navigate("/candidatedashboard/jobs")}
+        className="flex items-center gap-2 mb-6 text-sm font-medium transition-colors"
+        style={{ background: "transparent", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-purple)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
+      >
+        <ArrowLeft className="w-4 h-4" /> Back to Jobs
+      </button>
 
-        {/* Header Card */}
-        <div
-          className={`${theme.card} rounded-3xl p-4 sm:p-6 shadow-[0_0_40px_rgba(124,58,237,0.08)] border border-purple-500/20 mb-6`}
-        >
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <div className="w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-4xl sm:text-5xl">
-                Z
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <h1
-                className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${theme.heading} mb-2`}
-              >
-                {job.title}
-              </h1>
-              <p className={`text-lg sm:text-xl ${theme.subtext} mb-4`}>
-                {job.company}
-              </p>
-
-              {/* Key Info Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
-                  <div>
-                    <p className={`text-xs ${theme.subtext}`}>Salary</p>
-                    <p className={`font-semibold ${theme.heading}`}>
-                      {job.salary}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
-                  <div>
-                    <p className={`text-xs ${theme.subtext}`}>Location</p>
-                    <p className={`font-semibold ${theme.heading}`}>
-                      {job.location}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-                  <div>
-                    <p className={`text-xs ${theme.subtext}`}>Type</p>
-                    <p className={`font-semibold ${theme.heading}`}>
-                      {job.type}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
-                  <div>
-                    <p className={`text-xs ${theme.subtext}`}>Level</p>
-                    <p className={`font-semibold ${theme.heading}`}>
-                      {job.level}
-                    </p>
-                  </div>
-                </div>
-              </div>
+      {/* Header Card */}
+      <div style={{ ...card, marginBottom: "1.5rem" }}>
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <div className="shrink-0">
+            <div
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center text-white font-bold text-4xl sm:text-5xl"
+              style={{ background: "linear-gradient(135deg, #a855f7, #3b82f6)" }}
+            >
+              Z
             </div>
           </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="space-y-4 sm:space-y-6">
-          {/* Description */}
-          <div
-            className={`${theme.card} rounded-3xl p-4 sm:p-6 border border-purple-500/20`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Briefcase className="w-5 h-5 text-purple-400" />
-              <h2
-                className={`text-xl sm:text-2xl font-semibold ${theme.heading}`}
-              >
-                About the Role
-              </h2>
-            </div>
-            <p className={`${theme.label} leading-7`}>{job.fullDescription}</p>
-          </div>
-
-          {/* Responsibilities */}
-          <div
-            className={`${theme.card} rounded-3xl p-4 sm:p-6 border border-purple-500/20`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-5 h-5 text-purple-400" />
-              <h2
-                className={`text-xl sm:text-2xl font-semibold ${theme.heading}`}
-              >
-                Responsibilities
-              </h2>
-            </div>
-            <ul className="space-y-3">
-              {job.responsibilities.map((resp, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className={`${theme.label} text-sm sm:text-base`}>
-                    {resp}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Requirements */}
-          <div
-            className={`${theme.card} rounded-3xl p-4 sm:p-6 border border-purple-500/20`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Award className="w-5 h-5 text-purple-400" />
-              <h2
-                className={`text-xl sm:text-2xl font-semibold ${theme.heading}`}
-              >
-                Requirements
-              </h2>
-            </div>
-            <ul className="space-y-3">
-              {job.requirements.map((req, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className={`${theme.label} text-sm sm:text-base`}>
-                    {req}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Overview */}
-          <div
-            className={`${theme.card} rounded-3xl p-4 sm:p-6 border border-purple-500/20`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Briefcase className="w-5 h-5 text-purple-400" />
-              <h3
-                className={`text-xl sm:text-2xl font-semibold ${theme.heading}`}
-              >
-                About Zenvora Tech
-              </h3>
-            </div>
-            <p className={`${theme.label} text-sm leading-6 mb-4`}>
-              Zenvora Tech is a leading technology company specializing in
-              innovative solutions for digital transformation. We're committed
-              to fostering a culture of excellence, creativity, and continuous
-              learning.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className={`p-4 rounded-lg ${theme.toggleBtn}`}>
-                <p className={`${theme.subtext} text-xs mb-2`}>Founded</p>
-                <p className={`font-semibold ${theme.heading} text-lg`}>2015</p>
-              </div>
-              <div className={`p-4 rounded-lg ${theme.toggleBtn}`}>
-                <p className={`${theme.subtext} text-xs mb-2`}>Team Size</p>
-                <p className={`font-semibold ${theme.heading} text-lg`}>500+</p>
-              </div>
-              <div className={`p-4 rounded-lg ${theme.toggleBtn}`}>
-                <p className={`${theme.subtext} text-xs mb-2`}>Headquarters</p>
-                <p className={`font-semibold ${theme.heading} text-lg`}>
-                  India
-                </p>
-              </div>
-              <div className={`p-4 rounded-lg ${theme.toggleBtn}`}>
-                <p className={`${theme.subtext} text-xs mb-2`}>Status</p>
-                <p
-                  className={`font-semibold ${theme.heading} text-lg text-green-400`}
-                >
-                  Growing
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Why Join Us */}
-          <div
-            className={`${theme.card} rounded-3xl p-4 sm:p-6 border border-purple-500/20`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-5 h-5 text-purple-400" />
-              <h3
-                className={`text-xl sm:text-2xl font-semibold ${theme.heading}`}
-              >
-                Why Join Us?
-              </h3>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>{job.title}</h1>
+            <p className="text-base sm:text-lg mb-4" style={{ color: "var(--text-secondary)" }}>{job.company}</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                "Work with cutting-edge technologies",
-                "Collaborative and inclusive culture",
-                "Career growth and development",
-                "Innovation-focused environment",
-                "Competitive compensation",
-              ].map((reason, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className={`${theme.label} text-sm`}>{reason}</span>
+                { icon: <DollarSign className="w-4 h-4" style={{ color: "#10b981" }} />, label: "Salary", value: job.salary },
+                { icon: <MapPin className="w-4 h-4" style={{ color: "#f97316" }} />, label: "Location", value: job.location },
+                { icon: <Briefcase className="w-4 h-4" style={{ color: "var(--text-purple)" }} />, label: "Type", value: job.type },
+                { icon: <Award className="w-4 h-4" style={{ color: "#22d3ee" }} />, label: "Level", value: job.level },
+              ].map(({ icon, label, value }) => (
+                <div key={label} className="flex items-center gap-2">
+                  {icon}
+                  <div>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{label}</p>
+                    <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{value}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </AuthLayout>
+
+      {/* Sections */}
+      <div className="flex flex-col gap-4 sm:gap-5">
+        {/* About */}
+        <div style={card}>
+          <div className="flex items-center gap-2 mb-4">
+            <Briefcase className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>About the Role</h2>
+          </div>
+          <p className="text-sm leading-7" style={{ color: "var(--text-secondary)" }}>{job.fullDescription}</p>
+        </div>
+
+        {/* Responsibilities */}
+        <div style={card}>
+          <div className="flex items-center gap-2 mb-4">
+            <Target className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Responsibilities</h2>
+          </div>
+          <ul className="flex flex-col gap-3">
+            {job.responsibilities.map((resp, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#10b981" }} />
+                <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{resp}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Requirements */}
+        <div style={card}>
+          <div className="flex items-center gap-2 mb-4">
+            <Award className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <h2 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Requirements</h2>
+          </div>
+          <ul className="flex flex-col gap-3">
+            {job.requirements.map((req, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#3b82f6" }} />
+                <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{req}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Company Overview */}
+        <div style={card}>
+          <div className="flex items-center gap-2 mb-4">
+            <Briefcase className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <h3 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>About Zenvora Tech</h3>
+          </div>
+          <p className="text-sm leading-6 mb-4" style={{ color: "var(--text-secondary)" }}>
+            Zenvora Tech is a leading technology company specializing in innovative solutions for digital transformation. We're committed to fostering a culture of excellence, creativity, and continuous learning.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "Founded", value: "2015" },
+              { label: "Team Size", value: "500+" },
+              { label: "Headquarters", value: "India" },
+              { label: "Status", value: "Growing", green: true },
+            ].map(({ label, value, green }) => (
+              <div key={label} className="p-3 rounded-xl" style={{ background: "var(--bg-hover)" }}>
+                <p className="text-xs mb-1" style={{ color: "var(--text-secondary)" }}>{label}</p>
+                <p className="font-semibold" style={{ color: green ? "#10b981" : "var(--text-primary)" }}>{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Why Join Us */}
+        <div style={card}>
+          <div className="flex items-center gap-2 mb-4">
+            <Target className="w-5 h-5" style={{ color: "var(--text-purple)" }} />
+            <h3 className="text-lg sm:text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Why Join Us?</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {["Work with cutting-edge technologies", "Collaborative and inclusive culture", "Career growth and development", "Innovation-focused environment", "Competitive compensation", "Flexible work arrangements"].map((reason, idx) => (
+              <div key={idx} className="flex items-start gap-3">
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#3b82f6" }} />
+                <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{reason}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default JobDetails;
+export default JobDetailPage;

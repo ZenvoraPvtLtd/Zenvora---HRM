@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { JobSearch } from '../../components/jobRecomendation/JobSearch';
+import { JobSearch } from '../../features/candidateDashboard/JobSearch';
 import { JobCard } from './components/JobCard';
 import { JobDetail } from './components/JobDetail';
 import { JobForm, type JobFormData } from './components/JobForm';

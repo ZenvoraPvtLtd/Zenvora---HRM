@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { JobForm, type JobFormData } from './components/JobForm';
+import { JobForm, type JobFormData } from './JobForm';
 import {
   createJob,
   createEmptyJobForm,
@@ -37,7 +37,7 @@ export default function CreateJobPage() {
         newJob={newJob}
         setNewJob={setNewJob}
         handleCreateJob={handleCreateJob}
-        setIsCreatingJob={() => navigate('/jobs')}
+        setIsCreatingJob={() => navigate('/createjobs')}
       />
     </>
   );

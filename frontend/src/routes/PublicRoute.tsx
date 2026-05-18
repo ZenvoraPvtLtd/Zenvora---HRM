@@ -1,6 +1,5 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { getDashboardPath, getStoredUserRole } from '../utils/auth';
-
+import { Navigate, Outlet } from "react-router-dom";
+import { getStoredUserRole, getDashboardPath } from "../utils/auth";
 
 const PublicRoute = () => {
   const token = localStorage.getItem('accessToken');

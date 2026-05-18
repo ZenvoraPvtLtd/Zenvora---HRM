@@ -5,9 +5,10 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import Button from "../../components/button/Button";
- import { getDashboardPath, storeAuthUser } from "../../utils/auth";
+import Button from "./components/Button";
 import { AuthLayout } from "../auth/AuthLayout";
+
+import { getDashboardPath, storeAuthUser } from "../../utils/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,11 +17,11 @@ const Login = () => {
   const [apiError, setApiError] = useState<string | null>(null);
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/oauth/google";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/oauth/google`;
   };
 
   const handleMicrosoftLogin = () => {
-    window.location.href = "http://localhost:5000/api/oauth/microsoft";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/oauth/microsoft`;
   };
 
   const formik = useFormik({
@@ -40,16 +41,10 @@ const Login = () => {
           email: values.email,
           password: values.password,
         });
-        localStorage.setItem("accessToken", response.data.accessToken);
-        storeAuthUser(response.data.user);
-        navigate(getDashboardPath(response.data.user?.role), { replace: true });
         const { accessToken, user } = response.data;
         localStorage.setItem("accessToken", accessToken);
-        if (user?.name) localStorage.setItem("userName", user.name);
-        if (user?.email) localStorage.setItem("userEmail", user.email);
-        if (user?.phoneNumber) localStorage.setItem("userPhone", user.phoneNumber);
-        if (user?.role) localStorage.setItem("userRole", user.role);
-        navigate(user?.role === "candidate" ? "/candidate" : "/");
+        storeAuthUser(user);
+        navigate(getDashboardPath(user?.role), { replace: true });
       } catch (error: any) {
         setApiError(error?.response?.data?.message || "Login failed. Please try again.");
       } finally {

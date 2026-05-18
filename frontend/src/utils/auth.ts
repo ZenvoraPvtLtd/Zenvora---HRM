@@ -9,7 +9,7 @@ type StoredUser = {
 const HR_ROLES: UserRole[] = ["admin", "hr", "employee"];
 
 export const getDashboardPath = (role?: string | null) => {
-  return role === "candidate" ? "/candidate" : "/";
+  return role === "candidate" ? "/candidatedashboard" : "/";
 };
 
 export const isHrRole = (role?: string | null) => {

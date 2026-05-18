@@ -1,8 +1,8 @@
 
 import { ShieldCheck, Cloud, Sun, Moon } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
-import IconButton from "../../components/button/IconButton";
-import HoverableCard from "../../components/card/HoverableCard";
+import IconButton from "./components/IconButton";
+import HoverableCard from "./components/HoverableCard";
 import { featureCards } from "./constants";
 
 interface Props {

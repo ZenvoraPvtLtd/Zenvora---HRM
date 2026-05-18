@@ -11,7 +11,7 @@ export const registerUser = async (
   role: UserRole,
   phoneNumber?: string
 ) => {
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
 
   if (existingUser) {
     throw new Error("User already exists");
@@ -36,7 +36,7 @@ export const loginUser = async (
   password: string
 ) => {
   // Find user
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
 
   if (!user) {
     throw new Error("Invalid credentials");
